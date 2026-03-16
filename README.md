@@ -6,7 +6,7 @@
 ![Espressif](https://img.shields.io/badge/Espressif-ESP8266-E7352C?style=flat-square&logo=espressif&logoColor=white)
 ![PlatformIO](https://img.shields.io/badge/PlatformIO-6.1.5-FF6B35?style=flat-square&logo=platformio)
 ![Arduino](https://img.shields.io/badge/Arduino-IDE-00979D?style=flat-square&logo=arduino)
-![Vue.js](https://img.shields.io/badge/Vue.js-3-42b883?style=flat-square&logo=vuedotjs&logoColor=white)
+![Nuxt](https://img.shields.io/badge/Nuxt-3-00DC82?style=flat-square&logo=nuxt&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
 </div>
@@ -23,7 +23,7 @@ LED Matrix Bitcoin Ticker is a dynamic **cryptocurrency display system** that tr
 - 🌐 **WiFi Connectivity**: Fetches live data from financial APIs
 - 🎛️ **Web-Based Configuration**: User-friendly web interface for setup and customization
 - 🔧 **Customizable Display**: Adjustable scroll speed, pinout, and data selection
-- 📱 **Responsive Web App**: Modern Vue.js interface for device management
+- 📱 **Responsive Web App**: Modern Nuxt interface for device management
 - ⚡ **Low-Power Operation**: Efficient ESP8266-based design for continuous monitoring
 
 ---
@@ -53,8 +53,8 @@ LED Matrix Bitcoin Ticker consists of three main components:
 - Configurable number of modules for expanded display
 - Displays Bitcoin price, changes, and statistics
 
-### 🎨 Web Configuration App (Vue.js)
-- Modern web application for device setup and management
+### 🎨 Web Configuration App (Nuxt)
+- Modern Nuxt application for device setup and management
 - WiFi credential input and API key configuration
 - Data selection and display customization options
 
@@ -70,8 +70,7 @@ LED Matrix Bitcoin Ticker consists of three main components:
 ## 🛠️ Tech Stack
 
 ### 🎨 Frontend (Configuration Web App)
-- **Vue 3** - Progressive JavaScript framework
-- **Vite** - Fast build tool and development server
+- **Nuxt 3** - Vue framework for routed frontend applications
 - **Tailwind CSS** - Utility-first CSS framework
 - **PostCSS** - CSS processing tool
 
@@ -191,5 +190,4 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 - 🌐 **ESP8266 Community** for WiFi and HTTP libraries
 - 📄 **bblanchon** for ArduinoJson and StreamUtils libraries
 - 🖥️ **me-no-dev** for the ESPAsyncWebServer library
-- 🎨 **Vue.js Team** for the progressive framework
-- ⚡ **Vite Team** for the fast build tool
+- 🎨 **Nuxt Team** for the application framework

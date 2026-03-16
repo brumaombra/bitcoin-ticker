@@ -1,6 +1,10 @@
 {
     "compilerOptions": {
+        "baseUrl": ".",
         "paths": {
+            "~/*": [
+                "./src/*"
+            ],
             "@/*": [
                 "./src/*"
             ]
@@ -8,6 +12,8 @@
     },
     "exclude": [
         "node_modules",
+        ".nuxt",
+        ".output",
         "dist"
     ]
 }
