@@ -1,15 +1,8 @@
+import tailwindcss from '@tailwindcss/vite';
+
 export default defineNuxtConfig({
-    compatibilityDate: '2026-03-16',
-    devtools: {
-        enabled: true
-    },
-    srcDir: 'src/',
-    dir: {
-        public: '../public'
-    },
     ssr: false,
-    modules: ['@nuxtjs/tailwindcss'],
-    css: ['~/assets/main.css'],
+
     app: {
         head: {
             title: 'Bitcoin Ticker',
@@ -28,11 +21,35 @@ export default defineNuxtConfig({
             ]
         }
     },
+
     runtimeConfig: {
         public: {
             espBaseUrl: ''
         }
     },
+
+    css: [
+        '~/assets/main.css'
+    ],
+
+    vite: {
+        plugins: [
+            tailwindcss()
+        ]
+    },
+
+    devtools: {
+        enabled: false
+    },
+
+    srcDir: 'src/',
+
+    dir: {
+        public: '../public'
+    },
+
+    compatibilityDate: '2026-03-16',
+
     nitro: {
         prerender: {
             routes: ['/', '/app', '/app/wifi', '/app/settings', '/app/apiKey']
