@@ -1,4 +1,7 @@
 <script setup>
+import { useAppUi } from '~/composables/useAppUi.js';
+import { useDeviceApi } from '~/composables/useDeviceApi.js';
+
 const { saveApiKey } = useDeviceApi();
 const { setBusy, showMessage } = useAppUi();
 

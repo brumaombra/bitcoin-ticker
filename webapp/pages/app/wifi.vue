@@ -1,4 +1,8 @@
 <script setup>
+import { useAppUi } from '~/composables/useAppUi.js';
+import { useDeviceApi } from '~/composables/useDeviceApi.js';
+import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
+
 const globalStore = useGlobalStore();
 const { connectToWiFi, getNetworks } = useDeviceApi();
 const { setBusy, showMessage } = useAppUi();

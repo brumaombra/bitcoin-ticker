@@ -1,3 +1,5 @@
+import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
+
 export const useAppUi = () => {
     const globalStore = useGlobalStore();
 

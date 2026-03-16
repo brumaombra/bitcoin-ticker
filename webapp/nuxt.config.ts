@@ -42,11 +42,11 @@ export default defineNuxtConfig({
         enabled: false
     },
 
-    compatibilityDate: '2026-03-16',
-
     nitro: {
         prerender: {
             routes: ['/', '/app', '/app/wifi', '/app/settings', '/app/apiKey']
         }
-    }
+    },
+
+    compatibilityDate: '2026-03-16'
 });

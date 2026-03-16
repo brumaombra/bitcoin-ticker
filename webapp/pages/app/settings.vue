@@ -1,4 +1,9 @@
 <script setup>
+import ToggleSwitch from '~/components/ToggleSwitch.vue';
+import { useAppUi } from '~/composables/useAppUi.js';
+import { useDeviceApi } from '~/composables/useDeviceApi.js';
+import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
+
 const globalStore = useGlobalStore();
 const { saveSettings } = useDeviceApi();
 const { setBusy, showMessage } = useAppUi();
