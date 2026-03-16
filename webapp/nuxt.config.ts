@@ -42,12 +42,6 @@ export default defineNuxtConfig({
         enabled: false
     },
 
-    srcDir: 'src/',
-
-    dir: {
-        public: '../public'
-    },
-
     compatibilityDate: '2026-03-16',
 
     nitro: {
