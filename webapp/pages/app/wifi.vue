@@ -3,17 +3,15 @@ import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
 import Input from '~/components/ui/Input.vue';
 import Select from '~/components/ui/Select.vue';
-import { useAppUi } from '~/composables/useAppUi.js';
-import { useDeviceApi } from '~/composables/useDeviceApi.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
+import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
+import { setBusy, showMessage } from '~/composables/useUtils.js';
 
 definePageMeta({
     layout: 'private'
 });
 
 const globalStore = useGlobalStore();
-const { connectToWiFi, getNetworks } = useDeviceApi();
-const { setBusy, showMessage } = useAppUi();
 
 const ssid = ref('');
 const password = ref('');

@@ -3,17 +3,15 @@ import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
 import Select from '~/components/ui/Select.vue';
 import ToggleSwitch from '~/components/ui/ToggleSwitch.vue';
-import { useAppUi } from '~/composables/useAppUi.js';
-import { useDeviceApi } from '~/composables/useDeviceApi.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
+import { saveSettings } from '~/composables/useDeviceApi.js';
+import { setBusy, showMessage } from '~/composables/useUtils.js';
 
 definePageMeta({
     layout: 'private'
 });
 
 const globalStore = useGlobalStore();
-const { saveSettings } = useDeviceApi();
-const { setBusy, showMessage } = useAppUi();
 
 const settings = computed(() => globalStore.value.settings);
 

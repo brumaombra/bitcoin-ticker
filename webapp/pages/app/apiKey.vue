@@ -2,15 +2,12 @@
 import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
 import Input from '~/components/ui/Input.vue';
-import { useAppUi } from '~/composables/useAppUi.js';
-import { useDeviceApi } from '~/composables/useDeviceApi.js';
+import { saveApiKey } from '~/composables/useDeviceApi.js';
+import { setBusy, showMessage } from '~/composables/useUtils.js';
 
 definePageMeta({
     layout: 'private'
 });
-
-const { saveApiKey } = useDeviceApi();
-const { setBusy, showMessage } = useAppUi();
 
 const apiKey = ref('');
 

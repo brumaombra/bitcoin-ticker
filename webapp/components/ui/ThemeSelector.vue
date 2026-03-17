@@ -1,14 +1,15 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { useTheme } from '~/composables/useTheme.js';
+
 import CustomIcon from '~/components/ui/CustomIcon.vue';
 import Dropdown from '~/components/ui/Dropdown.vue';
 import DropdownMenu from '~/components/ui/DropdownMenu.vue';
 import IconButton from '~/components/ui/IconButton.vue';
-
-const { currentTheme, setTheme, themes } = useTheme();
+import { getCurrentTheme, getThemes, setTheme } from '~/composables/useUtils.js';
 
 const isOpen = ref(false);
+const currentTheme = getCurrentTheme();
+const themes = getThemes();
 
 const themeOptions = computed(() => {
     return themes.value.map(theme => ({

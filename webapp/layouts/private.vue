@@ -1,12 +1,10 @@
 <script setup>
 import AppShell from '~/components/ui/AppShell.vue';
-import { useAppUi } from '~/composables/useAppUi.js';
-import { useDeviceApi } from '~/composables/useDeviceApi.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
+import { getNetworks, getSettings } from '~/composables/useDeviceApi.js';
+import { setBusy, showMessage } from '~/composables/useUtils.js';
 
 const globalStore = useGlobalStore();
-const { getNetworks, getSettings } = useDeviceApi();
-const { setBusy, showMessage } = useAppUi();
 
 const sidebarItems = [
     {

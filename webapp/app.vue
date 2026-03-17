@@ -1,13 +1,10 @@
 <script setup>
 import Busy from '~/components/Busy.vue';
 import MessageModal from '~/components/MessageModal.vue';
-import { useTheme } from '~/composables/useTheme.js';
-import { useAppUi } from '~/composables/useAppUi.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
+import { closeMessage, initializeTheme } from '~/composables/useUtils.js';
 
 const globalStore = useGlobalStore();
-const { closeMessage } = useAppUi();
-const { initializeTheme } = useTheme();
 
 onMounted(() => {
     initializeTheme();

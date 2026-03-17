@@ -10,114 +10,118 @@ const buildDeviceUrl = (baseUrl, path, query = null) => {
     return `${normalizedBaseUrl}${path}${searchParams}`;
 };
 
-export const useDeviceApi = () => {
+const getDeviceBaseUrl = () => {
     const runtimeConfig = useRuntimeConfig();
-    const baseUrl = runtimeConfig.public.espBaseUrl;
+    return runtimeConfig.public.espBaseUrl;
+};
 
-    const getNetworks = async () => {
-        try {
-            const data = await $fetch(buildDeviceUrl(baseUrl, '/networks'));
-            return Array.isArray(data.networks) ? data.networks : [];
-        } catch (error) {
-            console.error(error);
-            return [];
-        }
-    };
+export const getNetworks = async () => {
+    const baseUrl = getDeviceBaseUrl();
 
-    const getSettings = async () => {
-        try {
-            const data = await $fetch(buildDeviceUrl(baseUrl, '/settings'));
-            return data || {};
-        } catch (error) {
-            console.error(error);
-            return {};
-        }
-    };
+    try {
+        const data = await $fetch(buildDeviceUrl(baseUrl, '/networks'));
+        return Array.isArray(data.networks) ? data.networks : [];
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+};
 
-    const saveSettings = async settings => {
-        try {
-            const data = await $fetch(buildDeviceUrl(baseUrl, '/settings'), {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: settings
-            });
+export const getSettings = async () => {
+    const baseUrl = getDeviceBaseUrl();
 
-            return data.status === 'OK';
-        } catch (error) {
-            console.error(error);
-            throw new Error('An error occurred while saving the settings');
-        }
-    };
+    try {
+        const data = await $fetch(buildDeviceUrl(baseUrl, '/settings'));
+        return data || {};
+    } catch (error) {
+        console.error(error);
+        return {};
+    }
+};
 
-    const saveApiKey = async apiKey => {
-        try {
-            const data = await $fetch(buildDeviceUrl(baseUrl, '/apiKey', { apiKey }));
-            return data.status === 'OK';
-        } catch (error) {
-            console.error(error);
-            throw new Error('An error occurred while saving the API key');
-        }
-    };
+export const saveSettings = async settings => {
+    const baseUrl = getDeviceBaseUrl();
 
-    const checkWiFiConnectionPolling = async () => {
-        return new Promise((resolve, reject) => {
-            const maxAttempts = 30;
-            let attempts = 0;
-            const polling = window.setInterval(async () => {
-                try {
-                    attempts += 1;
-
-                    if (attempts > maxAttempts) {
-                        window.clearInterval(polling);
-                        reject(new Error('Connection timeout'));
-                        return;
-                    }
-
-                    const data = await $fetch(buildDeviceUrl(baseUrl, '/checkConnection'));
-                    switch (data.status) {
-                        case connectionStatus.WIFI_TRY:
-                            return;
-                        case connectionStatus.WIFI_OK:
-                            window.clearInterval(polling);
-                            resolve(true);
-                            return;
-                        case connectionStatus.WIFI_KO:
-                            window.clearInterval(polling);
-                            reject(new Error('Connection failed'));
-                            return;
-                        default:
-                            throw new Error('Unknown status');
-                    }
-                } catch (error) {
-                    window.clearInterval(polling);
-                    reject(new Error('An error occurred while checking the WiFi connection'));
-                }
-            }, 1000);
+    try {
+        const data = await $fetch(buildDeviceUrl(baseUrl, '/settings'), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: settings
         });
-    };
 
-    const connectToWiFi = async (ssid, password) => {
-        try {
-            const data = await $fetch(buildDeviceUrl(baseUrl, '/connect', { ssid, password }));
+        return data.status === 'OK';
+    } catch (error) {
+        console.error(error);
+        throw new Error('An error occurred while saving the settings');
+    }
+};
 
-            if (data.status === connectionStatus.WIFI_TRY) {
-                return await checkWiFiConnectionPolling();
+export const saveApiKey = async apiKey => {
+    const baseUrl = getDeviceBaseUrl();
+
+    try {
+        const data = await $fetch(buildDeviceUrl(baseUrl, '/apiKey', { apiKey }));
+        return data.status === 'OK';
+    } catch (error) {
+        console.error(error);
+        throw new Error('An error occurred while saving the API key');
+    }
+};
+
+const checkWiFiConnectionPolling = async () => {
+    const baseUrl = getDeviceBaseUrl();
+
+    return new Promise((resolve, reject) => {
+        const maxAttempts = 30;
+        let attempts = 0;
+        const polling = window.setInterval(async () => {
+            try {
+                attempts += 1;
+
+                if (attempts > maxAttempts) {
+                    window.clearInterval(polling);
+                    reject(new Error('Connection timeout'));
+                    return;
+                }
+
+                const data = await $fetch(buildDeviceUrl(baseUrl, '/checkConnection'));
+                switch (data.status) {
+                    case connectionStatus.WIFI_TRY:
+                        return;
+                    case connectionStatus.WIFI_OK:
+                        window.clearInterval(polling);
+                        resolve(true);
+                        return;
+                    case connectionStatus.WIFI_KO:
+                        window.clearInterval(polling);
+                        reject(new Error('Connection failed'));
+                        return;
+                    default:
+                        throw new Error('Unknown status');
+                }
+            } catch (error) {
+                window.clearInterval(polling);
+                reject(new Error('An error occurred while checking the WiFi connection'));
             }
+        }, 1000);
+    });
+};
 
-            throw new Error('Failed to connect to WiFi');
-        } catch (error) {
-            console.error(error);
-            throw new Error('An error occurred while connecting to the Wi-Fi network');
+export const connectToWiFi = async (ssid, password) => {
+    const baseUrl = getDeviceBaseUrl();
+
+    try {
+        const data = await $fetch(buildDeviceUrl(baseUrl, '/connect', { ssid, password }));
+
+        if (data.status === connectionStatus.WIFI_TRY) {
+            return await checkWiFiConnectionPolling();
         }
-    };
 
-    return {
-        connectToWiFi,
-        getNetworks,
-        getSettings,
-        saveApiKey,
-        saveSettings
-    };
+        throw new Error('Failed to connect to WiFi');
+    } catch (error) {
+        console.error(error);
+        throw new Error('An error occurred while connecting to the Wi-Fi network');
+    }
 };

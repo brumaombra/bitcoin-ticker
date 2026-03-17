@@ -1,4 +1,5 @@
 <script setup>
+import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
 import Navbar from '~/components/ui/navbar/Navbar.vue';
 
 const props = defineProps({
@@ -9,6 +10,8 @@ const props = defineProps({
 
 <template>
     <div class="relative min-h-screen bg-[var(--bg-main-light)] text-[var(--text-primary-light)] dark:bg-[var(--bg-main-dark)] dark:text-[var(--text-primary-dark)]">
+        <BackgroundGrid />
+
         <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(247,147,26,0.14),transparent_30%),linear-gradient(180deg,transparent,rgba(0,0,0,0.02))] dark:bg-[radial-gradient(circle_at_top_left,rgba(247,147,26,0.16),transparent_28%),linear-gradient(180deg,transparent,rgba(255,255,255,0.02))]"></div>
 
         <Navbar :brand-name="props.brandName" :sidebar-items="props.sidebarItems" />
