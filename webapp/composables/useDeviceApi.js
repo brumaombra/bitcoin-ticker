@@ -37,7 +37,7 @@ export const getSettings = async () => {
 
     try {
         const data = await $fetch(buildDeviceUrl(baseUrl, '/settings'));
-        return data || {};
+        return data && typeof data === 'object' ? data : {};
     } catch (error) {
         console.error(error);
         return {};

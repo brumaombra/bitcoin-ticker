@@ -13,6 +13,7 @@ const globalStore = useGlobalStore();
 const initializeApp = async () => {
     globalStore.value.networksList = await getNetworks();
     globalStore.value.settings = await getSettings();
+    globalStore.value.settingsLoaded = true; // Mark as loaded
 };
 
 // Show a short splash screen while fetching initial data

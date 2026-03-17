@@ -36,7 +36,7 @@ definePageMeta({
 </script>
 
 <template>
-    <div class="mx-auto flex w-full max-w-5xl flex-col gap-6 lg:flex-row">
+    <div class="mx-auto flex w-full flex-col gap-6 lg:flex-row">
         <!-- Page intro -->
         <div class="w-full lg:max-w-sm">
             <Card>

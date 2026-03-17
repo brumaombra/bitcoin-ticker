@@ -30,7 +30,7 @@ const sidebarItems = [{
 
 // Load device data once for the private area
 const ensureDeviceData = async () => {
-    if (globalStore.value.settings && globalStore.value.networksList.length > 0) {
+    if (globalStore.value.settingsLoaded && globalStore.value.networksList.length > 0) {
         return;
     }
 

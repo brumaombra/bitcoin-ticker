@@ -55,7 +55,7 @@ definePageMeta({
 </script>
 
 <template>
-    <div v-if="settings" class="mx-auto flex w-full max-w-6xl flex-col gap-6">
+    <div v-if="settings" class="mx-auto flex w-full flex-col gap-6">
         <div class="grid gap-6 xl:grid-cols-[minmax(0,320px),minmax(0,1fr)]">
             <!-- Page intro -->
             <Card>
