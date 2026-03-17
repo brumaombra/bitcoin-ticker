@@ -1,21 +1,14 @@
 <script setup>
+import { computed, ref } from 'vue';
+import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
+import { setBusy, showMessage } from '~/composables/useUtils.js';
+import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
 import Input from '~/components/ui/Input.vue';
 import Select from '~/components/ui/Select.vue';
-import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
-import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
-import { setBusy, showMessage } from '~/composables/useUtils.js';
 
-// Page metadata
-definePageMeta({
-    layout: 'private'
-});
-
-// Shared device data cache
 const globalStore = useGlobalStore();
-
-// Form state
 const ssid = ref('');
 const password = ref('');
 const isLoading = ref(false);
@@ -57,6 +50,11 @@ const refreshSSIDList = async () => {
         isLoading.value = false;
     }
 };
+
+// Page metadata
+definePageMeta({
+    layout: 'private'
+});
 </script>
 
 <template>

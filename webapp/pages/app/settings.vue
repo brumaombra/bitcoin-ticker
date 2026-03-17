@@ -1,16 +1,12 @@
 <script setup>
+import { computed } from 'vue';
+import { saveSettings } from '~/composables/useDeviceApi.js';
+import { setBusy, showMessage } from '~/composables/useUtils.js';
+import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
 import Select from '~/components/ui/Select.vue';
 import ToggleSwitch from '~/components/ui/ToggleSwitch.vue';
-import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
-import { saveSettings } from '~/composables/useDeviceApi.js';
-import { setBusy, showMessage } from '~/composables/useUtils.js';
-
-// Page metadata
-definePageMeta({
-    layout: 'private'
-});
 
 // Shared device settings
 const globalStore = useGlobalStore();
@@ -51,6 +47,11 @@ const handleSavePress = async () => {
         setBusy(false);
     }
 };
+
+// Page metadata
+definePageMeta({
+    layout: 'private'
+});
 </script>
 
 <template>

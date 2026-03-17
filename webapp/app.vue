@@ -1,8 +1,9 @@
 <script setup>
+import { onMounted } from 'vue';
+import { closeMessage, initializeTheme } from '~/composables/useUtils.js';
+import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Busy from '~/components/Busy.vue';
 import MessageModal from '~/components/MessageModal.vue';
-import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
-import { closeMessage, initializeTheme } from '~/composables/useUtils.js';
 
 // Shared global UI state
 const globalStore = useGlobalStore();

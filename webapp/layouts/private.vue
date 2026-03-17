@@ -1,4 +1,5 @@
 <script setup>
+import { onMounted } from 'vue';
 import { getNetworks, getSettings } from '~/composables/useDeviceApi.js';
 import { setBusy, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';

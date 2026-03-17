@@ -1,9 +1,10 @@
 <script setup>
-import Card from '~/components/ui/Card.vue';
-import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
-import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
+import { onMounted } from 'vue';
 import { getNetworks, getSettings } from '~/composables/useDeviceApi.js';
 import { showMessage } from '~/composables/useUtils.js';
+import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
+import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
+import Card from '~/components/ui/Card.vue';
 
 // Shared device data cache
 const globalStore = useGlobalStore();

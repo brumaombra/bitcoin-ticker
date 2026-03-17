@@ -1,11 +1,10 @@
 <script setup>
 import { computed, ref } from 'vue';
-
+import { getCurrentTheme, getThemes, setTheme } from '~/composables/useUtils.js';
 import CustomIcon from '~/components/ui/CustomIcon.vue';
 import Dropdown from '~/components/ui/Dropdown.vue';
 import DropdownMenu from '~/components/ui/DropdownMenu.vue';
 import IconButton from '~/components/ui/IconButton.vue';
-import { getCurrentTheme, getThemes, setTheme } from '~/composables/useUtils.js';
 
 // Dropdown state
 const isOpen = ref(false);

@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue';
 import CustomIcon from '~/components/ui/CustomIcon.vue';
 import IconButton from '~/components/ui/IconButton.vue';
 import BrandLogo from '~/components/ui/BrandLogo.vue';

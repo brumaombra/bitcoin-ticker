@@ -1,12 +1,14 @@
 <script setup>
-// Page metadata
-definePageMeta({
-    layout: 'private'
-});
+import { onMounted } from 'vue';
 
 // Redirect the section root to the WiFi page
 onMounted(async () => {
     await navigateTo('/app/wifi', { replace: true });
+});
+
+// Page metadata
+definePageMeta({
+    layout: 'private'
 });
 </script>
 

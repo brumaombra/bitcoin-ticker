@@ -1,14 +1,10 @@
 <script setup>
+import { computed, ref } from 'vue';
+import { saveApiKey } from '~/composables/useDeviceApi.js';
+import { setBusy, showMessage } from '~/composables/useUtils.js';
 import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
 import Input from '~/components/ui/Input.vue';
-import { saveApiKey } from '~/composables/useDeviceApi.js';
-import { setBusy, showMessage } from '~/composables/useUtils.js';
-
-// Page metadata
-definePageMeta({
-    layout: 'private'
-});
 
 // Form state
 const apiKey = ref('');
@@ -32,6 +28,11 @@ const handleSavePress = async () => {
         apiKey.value = '';
     }
 };
+
+// Page metadata
+definePageMeta({
+    layout: 'private'
+});
 </script>
 
 <template>
