@@ -47,7 +47,7 @@ const handleClose = () => {
             <div class="flex h-full flex-col border-r border-[var(--border-light)] bg-[var(--bg-card-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-card-dark)]">
                 <!-- Sidebar header -->
                 <div class="flex h-20 items-center border-b border-[var(--border-light)] px-6 dark:border-[var(--border-dark)]">
-                    <NuxtLink to="/app/wifi" @click="handleClose">
+                    <NuxtLink to="/wifi" @click="handleClose">
                         <BrandLogo :brand-name="props.brandName" />
                     </NuxtLink>
                 </div>
