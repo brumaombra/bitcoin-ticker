@@ -31,7 +31,12 @@ export default defineNuxtConfig({
 
     nitro: {
         prerender: {
-            routes: ['/', '/app', '/app/wifi', '/app/settings', '/app/apiKey']
+            routes: [
+                '/',
+                '/wifi',
+                '/settings',
+                '/api-key'
+            ]
         }
     },
 
