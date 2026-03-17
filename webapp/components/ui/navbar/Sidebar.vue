@@ -15,6 +15,14 @@ const isActiveItem = path => {
     return route.path === path;
 };
 
+const getNavigationItemClasses = path => {
+    if (isActiveItem(path)) {
+        return 'border-[var(--border-hover-light)] bg-[var(--bg-selected-light)] text-[var(--text-primary-light)] dark:border-[var(--border-hover-dark)] dark:bg-[var(--bg-selected-dark)] dark:text-[var(--text-primary-dark)]';
+    } else {
+        return 'border-[var(--border-light)] text-[var(--text-secondary-light)] hover:border-[var(--border-hover-light)] hover:bg-[var(--bg-selected-light)] hover:text-[var(--text-primary-light)] dark:border-[var(--border-dark)] dark:text-[var(--text-secondary-dark)] dark:hover:border-[var(--border-hover-dark)] dark:hover:bg-[var(--bg-selected-dark)] dark:hover:text-[var(--text-primary-dark)]';
+    }
+};
+
 const handleClose = () => {
     emits('close');
 };
@@ -41,12 +49,7 @@ const handleClose = () => {
 
                     <ul class="space-y-3">
                         <li v-for="item in props.sidebarItems" :key="item.id">
-                            <NuxtLink :to="item.path"
-                                class="group flex items-center gap-4 rounded border px-4 py-3 text-sm font-medium transition-all duration-200"
-                                :class="isActiveItem(item.path)
-                                    ? 'border-[var(--border-hover-light)] bg-[var(--bg-selected-light)] text-[var(--text-primary-light)] dark:border-[var(--border-hover-dark)] dark:bg-[var(--bg-selected-dark)] dark:text-[var(--text-primary-dark)]'
-                                    : 'border-[var(--border-light)] text-[var(--text-secondary-light)] hover:border-[var(--border-hover-light)] hover:bg-[var(--bg-selected-light)] hover:text-[var(--text-primary-light)] dark:border-[var(--border-dark)] dark:text-[var(--text-secondary-dark)] dark:hover:border-[var(--border-hover-dark)] dark:hover:bg-[var(--bg-selected-dark)] dark:hover:text-[var(--text-primary-dark)]'"
-                                @click="handleClose">
+                            <NuxtLink :to="item.path" class="group flex items-center gap-4 rounded border px-4 py-3 text-sm font-medium transition-all duration-200" :class="getNavigationItemClasses(item.path)" @click="handleClose">
                                 <div class="flex h-10 w-10 items-center justify-center rounded border border-[var(--border-light)] bg-[var(--button-secondary-light)] dark:border-[var(--border-dark)] dark:bg-[var(--button-secondary-dark)]">
                                     <img :src="item.iconSrc" :alt="item.label" class="h-5 w-5 opacity-90">
                                 </div>

@@ -1,4 +1,5 @@
 <script setup>
+import CustomIcon from '~/components/ui/CustomIcon.vue';
 import IconButton from '~/components/ui/IconButton.vue';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
 import ThemeSelector from '~/components/ui/ThemeSelector.vue';
@@ -27,9 +28,7 @@ const handleCloseSidebar = () => {
         <nav class="mx-auto flex h-full max-w-6xl items-center justify-between px-3 sm:px-6 lg:px-8">
             <div class="xl:hidden">
                 <IconButton aria-label="Open navigation" @click="handleToggleSidebar">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                    </svg>
+                    <CustomIcon icon="menu" class="h-5 w-5" />
                 </IconButton>
             </div>
 
