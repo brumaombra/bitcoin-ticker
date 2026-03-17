@@ -1,6 +1,13 @@
 <script setup>
+import Button from '~/components/ui/Button.vue';
+import Card from '~/components/ui/Card.vue';
+import Input from '~/components/ui/Input.vue';
 import { useAppUi } from '~/composables/useAppUi.js';
 import { useDeviceApi } from '~/composables/useDeviceApi.js';
+
+definePageMeta({
+    layout: 'private'
+});
 
 const { saveApiKey } = useDeviceApi();
 const { setBusy, showMessage } = useAppUi();
@@ -27,25 +34,40 @@ const handleSavePress = async () => {
 </script>
 
 <template>
-    <div class="flex justify-center">
-        <div class="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
-            <div class="mb-6">
-                <div class="mb-6 flex justify-center">
-                    <img src="/key.svg" alt="Bitcoin logo" class="h-16 w-16">
-                </div>
-                <h1 class="text-center text-3xl font-bold text-gray-800">Insert the API key</h1>
-            </div>
-
-            <form @submit.prevent="handleSavePress">
-                <div class="mb-4">
-                    <label for="apiKey" class="mb-2 block text-sm font-medium text-gray-700">API Key</label>
-                    <input id="apiKey" v-model="apiKey" type="text" name="apiKey" class="block w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500" placeholder="Enter your API key">
+    <div class="mx-auto flex w-full max-w-5xl flex-col gap-6 lg:flex-row">
+        <div class="w-full lg:max-w-sm">
+            <Card>
+                <div class="mb-6 flex items-center gap-4">
+                    <div class="flex h-14 w-14 items-center justify-center rounded border border-[var(--border-light)] bg-[var(--bg-selected-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)]">
+                        <img src="/svg/key.svg" alt="API key icon" class="h-7 w-7">
+                    </div>
+                    <div>
+                        <div class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">Credentials</div>
+                        <h1 class="mt-1 text-2xl font-bold">API Key</h1>
+                    </div>
                 </div>
 
-                <button type="submit" :disabled="!isFormValid" class="w-full rounded-lg border border-transparent bg-gray-800 px-4 py-3 text-sm font-medium text-white hover:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-50">
-                    Save
-                </button>
-            </form>
+                <p class="text-sm leading-6 text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">
+                    Store the market data API key used by the ticker firmware. The value is sent directly to the device configuration endpoint.
+                </p>
+            </Card>
+        </div>
+
+        <div class="min-w-0 flex-1">
+            <Card>
+                <form class="space-y-5" @submit.prevent="handleSavePress">
+                    <div>
+                        <label for="apiKey" class="mb-2 block text-sm font-medium">API key</label>
+                        <Input id="apiKey" v-model="apiKey" type="text" placeholder="Paste your API key" />
+                    </div>
+
+                    <div class="rounded border border-[var(--border-light)] bg-[var(--bg-selected-light)] px-4 py-3 text-sm text-[var(--text-secondary-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)] dark:text-[var(--text-secondary-dark)]">
+                        Use a key with enough quota for frequent polling. The current firmware expects the API key as a plain string.
+                    </div>
+
+                    <Button type="primary" class="w-full" :disabled="!isFormValid">Save API Key</Button>
+                </form>
+            </Card>
         </div>
     </div>
 </template>

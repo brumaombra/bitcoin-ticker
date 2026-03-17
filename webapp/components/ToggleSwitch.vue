@@ -10,15 +10,12 @@ defineEmits(['update:modelValue']);
 
 <template>
     <div class="flex items-center">
-        <label class="relative inline-flex items-center cursor-pointer">
-            <!-- Input element -->
-            <input type="checkbox" class="sr-only peer" :checked="modelValue" @change="$emit('update:modelValue', $event.target.checked)">
+        <label class="relative inline-flex cursor-pointer items-center">
+            <input type="checkbox" class="peer sr-only" :checked="modelValue" @change="$emit('update:modelValue', $event.target.checked)">
 
-            <!-- Background -->
-            <div class="w-11 h-6 bg-gray-200 peer-checked:bg-gray-600 rounded-full transition duration-200"></div>
+            <div class="h-7 w-12 rounded-full border border-[var(--border-light)] bg-[var(--bg-selected-light)] transition duration-200 peer-checked:border-[var(--button-primary-light)] peer-checked:bg-[var(--button-primary-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)] dark:peer-checked:border-[var(--button-primary-dark)] dark:peer-checked:bg-[var(--button-primary-dark)]"></div>
 
-            <!-- Knob -->
-            <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow peer-checked:translate-x-5 transition-transform duration-200"></div>
+            <div class="absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow transition-transform duration-200 peer-checked:translate-x-5 dark:bg-[var(--bg-card-dark)]"></div>
         </label>
     </div>
 </template>

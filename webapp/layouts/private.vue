@@ -1,5 +1,5 @@
 <script setup>
-import Navbar from '~/components/Navbar.vue';
+import AppShell from '~/components/ui/AppShell.vue';
 import { useAppUi } from '~/composables/useAppUi.js';
 import { useDeviceApi } from '~/composables/useDeviceApi.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
@@ -7,6 +7,30 @@ import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 const globalStore = useGlobalStore();
 const { getNetworks, getSettings } = useDeviceApi();
 const { setBusy, showMessage } = useAppUi();
+
+const sidebarItems = [
+    {
+        id: 'wifi',
+        path: '/app/wifi',
+        label: 'WiFi',
+        description: 'Scan networks and connect the device',
+        iconSrc: '/svg/wifi.svg'
+    },
+    {
+        id: 'settings',
+        path: '/app/settings',
+        label: 'Settings',
+        description: 'Adjust ticker visibility and behavior',
+        iconSrc: '/svg/settings.svg'
+    },
+    {
+        id: 'api-key',
+        path: '/app/apiKey',
+        label: 'API Key',
+        description: 'Provide the market data credential',
+        iconSrc: '/svg/key.svg'
+    }
+];
 
 const ensureDeviceData = async () => {
     if (globalStore.value.settings && globalStore.value.networksList.length > 0) {
@@ -37,11 +61,9 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="flex h-screen flex-col overflow-hidden bg-gray-100">
-        <Navbar />
-
-        <div class="mt-16 flex-1 overflow-y-auto px-5 py-5 md:px-0 md:pt-12">
-            <NuxtPage />
+    <AppShell brand-name="Bitcoin Ticker" :sidebar-items="sidebarItems">
+        <div class="pb-10">
+            <slot />
         </div>
-    </div>
+    </AppShell>
 </template>

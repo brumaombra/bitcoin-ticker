@@ -1,4 +1,5 @@
 <script setup>
+import Card from '~/components/ui/Card.vue';
 import { useAppUi } from '~/composables/useAppUi.js';
 import { useDeviceApi } from '~/composables/useDeviceApi.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
@@ -26,11 +27,13 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="flex min-h-screen items-center justify-center bg-gray-800">
-        <div class="text-center">
-            <img src="/bitcoin.svg" alt="Bitcoin logo" class="mx-auto mb-4 h-24 w-24 animate-spin">
-            <h1 class="text-3xl font-bold text-white">Loading...</h1>
-        </div>
+    <div class="flex min-h-screen items-center justify-center px-4">
+        <Card class="w-full max-w-md text-center">
+            <img src="/svg/bitcoin.svg" alt="Bitcoin logo" class="mx-auto mb-5 h-20 w-20 animate-spin">
+            <div class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">Initializing</div>
+            <h1 class="mt-2 text-3xl font-bold">Preparing the device panel</h1>
+            <p class="mt-3 text-sm text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">Fetching the current WiFi list and saved device settings.</p>
+        </Card>
     </div>
 </template>
 

@@ -1,7 +1,15 @@
 <script setup>
+import Button from '~/components/ui/Button.vue';
+import Card from '~/components/ui/Card.vue';
+import Input from '~/components/ui/Input.vue';
+import Select from '~/components/ui/Select.vue';
 import { useAppUi } from '~/composables/useAppUi.js';
 import { useDeviceApi } from '~/composables/useDeviceApi.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
+
+definePageMeta({
+    layout: 'private'
+});
 
 const globalStore = useGlobalStore();
 const { connectToWiFi, getNetworks } = useDeviceApi();
@@ -10,6 +18,14 @@ const { setBusy, showMessage } = useAppUi();
 const ssid = ref('');
 const password = ref('');
 const isLoading = ref(false);
+
+const networkOptions = computed(() => {
+    return globalStore.value.networksList.map(network => ({
+        value: network.ssid,
+        label: network.ssid,
+        meta: `${network.signal} dBm`
+    }));
+});
 
 const handleConnectPress = async () => {
     try {
@@ -40,47 +56,52 @@ const refreshSSIDList = async () => {
 </script>
 
 <template>
-    <div class="flex justify-center">
-        <div class="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
-            <div class="mb-6">
-                <div class="mb-6 flex justify-center">
-                    <img src="/wifi.svg" alt="Bitcoin logo" class="h-16 w-16">
-                </div>
-                <h1 class="text-center text-3xl font-bold text-gray-800">Connect to WiFi</h1>
-            </div>
-
-            <form @submit.prevent="handleConnectPress">
-                <div class="mb-4">
-                    <label for="ssid" class="mb-2 block text-sm font-medium text-gray-700">SSID</label>
-                    <div class="flex items-center">
-                        <select id="ssid" v-model="ssid" name="ssid" class="block w-full appearance-none rounded-lg border border-gray-300 bg-white bg-size-[20px] bg-position-[right_12px_center] bg-no-repeat px-4 py-3 pr-10 text-gray-900 hover:cursor-pointer focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500" style="background-image: url(&quot;data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M5.293%208.293a1%201%200%20011.414%200L10%2011.586l3.293-3.293a1%201%200%20111.414%201.414l-4%204a1%201%200%2001-1.414%200l-4-4a1%201%200%20010-1.414z%22%2F%3E%3C%2Fsvg%3E&quot;)">
-                            <option value="">Select a network</option>
-                            <option v-for="network in globalStore.networksList" :key="network.ssid" :value="network.ssid">
-                                {{ network.ssid }} ({{ network.signal }} dBm)
-                            </option>
-                        </select>
-
-                        <button type="button" class="ml-2 rounded-lg border border-transparent bg-gray-800 px-4 py-3 text-sm font-medium text-white hover:bg-gray-600" @click="refreshSSIDList">
-                            <div v-if="isLoading">
-                                <svg class="h-5 w-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                            </div>
-                            <span v-else>Refresh</span>
-                        </button>
+    <div class="mx-auto flex w-full max-w-5xl flex-col gap-6 lg:flex-row">
+        <div class="w-full lg:max-w-sm">
+            <Card>
+                <div class="mb-6 flex items-center gap-4">
+                    <div class="flex h-14 w-14 items-center justify-center rounded border border-[var(--border-light)] bg-[var(--bg-selected-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)]">
+                        <img src="/svg/wifi.svg" alt="WiFi icon" class="h-7 w-7">
+                    </div>
+                    <div>
+                        <div class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">Setup</div>
+                        <h1 class="mt-1 text-2xl font-bold">Connect to WiFi</h1>
                     </div>
                 </div>
 
-                <div class="mb-4">
-                    <label for="password" class="mb-2 block text-sm font-medium text-gray-700">Password</label>
-                    <input id="password" v-model="password" type="password" name="password" class="block w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500" placeholder="Enter your WiFi password">
-                </div>
+                <p class="text-sm leading-6 text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">
+                    Join the device to your local network so it can fetch market data and keep the LED matrix updated.
+                </p>
+            </Card>
+        </div>
 
-                <button type="submit" class="w-full rounded-lg border border-transparent bg-gray-800 px-4 py-3 text-sm font-medium text-white hover:bg-gray-600">
-                    Connect
-                </button>
-            </form>
+        <div class="min-w-0 flex-1">
+            <Card>
+                <form class="space-y-5" @submit.prevent="handleConnectPress">
+                    <div>
+                        <div class="mb-2 flex items-center justify-between gap-3">
+                            <label for="ssid" class="text-sm font-medium">Available networks</label>
+                            <Button type="secondary" :disabled="isLoading" @click="refreshSSIDList">
+                                <span v-if="isLoading">Refreshing...</span>
+                                <span v-else>Refresh</span>
+                            </Button>
+                        </div>
+
+                        <Select id="ssid" v-model="ssid" placeholder="Select a network" :option-list="networkOptions" />
+                    </div>
+
+                    <div>
+                        <label for="password" class="mb-2 block text-sm font-medium">Password</label>
+                        <Input id="password" v-model="password" type="password" placeholder="Enter the WiFi password" />
+                    </div>
+
+                    <div class="rounded border border-[var(--border-light)] bg-[var(--bg-selected-light)] px-4 py-3 text-sm text-[var(--text-secondary-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)] dark:text-[var(--text-secondary-dark)]">
+                        The device will try the credentials immediately and disable its temporary hotspot after a successful connection.
+                    </div>
+
+                    <Button type="primary" class="w-full" :disabled="!ssid || !password">Connect Device</Button>
+                </form>
+            </Card>
         </div>
     </div>
 </template>
