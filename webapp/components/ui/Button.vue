@@ -1,12 +1,15 @@
 <script setup>
+// Props
 const props = defineProps({
     type: { type: String, default: 'secondary', validator: value => ['primary', 'secondary', 'ghost'].includes(value) },
     disabled: { type: Boolean, default: false },
     text: { type: String, default: '' }
 });
 
+// Emits
 const emits = defineEmits(['click']);
 
+// Resolve the button style variant
 const getButtonClasses = () => {
     const classes = ['inline-flex min-h-12 items-center justify-center gap-2 rounded px-4 py-3 text-sm font-medium transition-all duration-300 ease-in-out'];
 
@@ -27,6 +30,7 @@ const getButtonClasses = () => {
     return classes;
 };
 
+// Emit click events only when the button is enabled
 const handleClick = event => {
     if (props.disabled) {
         return;
@@ -37,6 +41,7 @@ const handleClick = event => {
 </script>
 
 <template>
+    <!-- Button content -->
     <button type="button" :disabled="props.disabled" :class="getButtonClasses()" v-bind="$attrs" @click="handleClick">
         <slot>
             {{ props.text }}

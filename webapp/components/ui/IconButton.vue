@@ -1,11 +1,14 @@
 <script setup>
+// Props
 const props = defineProps({
     ariaLabel: { type: String, default: '' },
     disabled: { type: Boolean, default: false }
 });
 
+// Emits
 const emits = defineEmits(['click']);
 
+// Emit clicks only when the control is enabled
 const handleClick = event => {
     if (props.disabled) {
         return;
@@ -16,6 +19,7 @@ const handleClick = event => {
 </script>
 
 <template>
+    <!-- Icon button -->
     <button type="button"
         :aria-label="props.ariaLabel"
         :disabled="props.disabled"

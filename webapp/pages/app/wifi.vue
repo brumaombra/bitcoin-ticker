@@ -7,16 +7,20 @@ import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
 import { setBusy, showMessage } from '~/composables/useUtils.js';
 
+// Page metadata
 definePageMeta({
     layout: 'private'
 });
 
+// Shared device data cache
 const globalStore = useGlobalStore();
 
+// Form state
 const ssid = ref('');
 const password = ref('');
 const isLoading = ref(false);
 
+// Network options for the select control
 const networkOptions = computed(() => {
     return globalStore.value.networksList.map(network => ({
         value: network.ssid,
@@ -25,6 +29,7 @@ const networkOptions = computed(() => {
     }));
 });
 
+// Submit WiFi credentials to the device
 const handleConnectPress = async () => {
     try {
         setBusy(true);
@@ -39,6 +44,7 @@ const handleConnectPress = async () => {
     }
 };
 
+// Refresh the detected SSID list
 const refreshSSIDList = async () => {
     isLoading.value = true;
 
@@ -55,6 +61,7 @@ const refreshSSIDList = async () => {
 
 <template>
     <div class="mx-auto flex w-full max-w-5xl flex-col gap-6 lg:flex-row">
+        <!-- Page intro -->
         <div class="w-full lg:max-w-sm">
             <Card>
                 <div class="mb-6 flex items-center gap-4">
@@ -73,9 +80,11 @@ const refreshSSIDList = async () => {
             </Card>
         </div>
 
+        <!-- Connection form -->
         <div class="min-w-0 flex-1">
             <Card>
                 <form class="space-y-5" @submit.prevent="handleConnectPress">
+                    <!-- Network selector -->
                     <div>
                         <div class="mb-2 flex items-center justify-between gap-3">
                             <label for="ssid" class="text-sm font-medium">Available networks</label>
@@ -88,15 +97,18 @@ const refreshSSIDList = async () => {
                         <Select id="ssid" v-model="ssid" placeholder="Select a network" :option-list="networkOptions" />
                     </div>
 
+                    <!-- Password input -->
                     <div>
                         <label for="password" class="mb-2 block text-sm font-medium">Password</label>
                         <Input id="password" v-model="password" type="password" placeholder="Enter the WiFi password" />
                     </div>
 
+                    <!-- Connection note -->
                     <div class="rounded border border-[var(--border-light)] bg-[var(--bg-selected-light)] px-4 py-3 text-sm text-[var(--text-secondary-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)] dark:text-[var(--text-secondary-dark)]">
                         The device will try the credentials immediately and disable its temporary hotspot after a successful connection.
                     </div>
 
+                    <!-- Submit button -->
                     <Button type="primary" class="w-full" :disabled="!ssid || !password">Connect Device</Button>
                 </form>
             </Card>

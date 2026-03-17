@@ -1,20 +1,24 @@
+// WiFi connection status codes returned by the device
 const connectionStatus = Object.freeze({
     WIFI_TRY: 2,
     WIFI_OK: 1,
     WIFI_KO: 0
 });
 
+// Build a device endpoint URL with an optional query string
 const buildDeviceUrl = (baseUrl, path, query = null) => {
     const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
     const searchParams = query ? `?${new URLSearchParams(query).toString()}` : '';
     return `${normalizedBaseUrl}${path}${searchParams}`;
 };
 
+// Read the device base URL from runtime config
 const getDeviceBaseUrl = () => {
     const runtimeConfig = useRuntimeConfig();
     return runtimeConfig.public.espBaseUrl;
 };
 
+// Fetch the list of visible WiFi networks
 export const getNetworks = async () => {
     const baseUrl = getDeviceBaseUrl();
 
@@ -27,6 +31,7 @@ export const getNetworks = async () => {
     }
 };
 
+// Fetch the saved device settings
 export const getSettings = async () => {
     const baseUrl = getDeviceBaseUrl();
 
@@ -39,6 +44,7 @@ export const getSettings = async () => {
     }
 };
 
+// Persist the current device settings
 export const saveSettings = async settings => {
     const baseUrl = getDeviceBaseUrl();
 
@@ -58,6 +64,7 @@ export const saveSettings = async settings => {
     }
 };
 
+// Save the market data API key on the device
 export const saveApiKey = async apiKey => {
     const baseUrl = getDeviceBaseUrl();
 
@@ -70,6 +77,7 @@ export const saveApiKey = async apiKey => {
     }
 };
 
+// Poll the device until the WiFi connection attempt completes
 const checkWiFiConnectionPolling = async () => {
     const baseUrl = getDeviceBaseUrl();
 
@@ -109,6 +117,7 @@ const checkWiFiConnectionPolling = async () => {
     });
 };
 
+// Send WiFi credentials and wait for the final connection result
 export const connectToWiFi = async (ssid, password) => {
     const baseUrl = getDeviceBaseUrl();
 

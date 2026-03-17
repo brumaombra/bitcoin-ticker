@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 
+// Props
 const props = defineProps({
     icon: { type: String, required: true, validator: value => ['check', 'chevron-down', 'menu', 'theme-dark', 'theme-light', 'theme-system'].includes(value) },
     ariaLabel: { type: String, default: '' },
@@ -8,6 +9,7 @@ const props = defineProps({
     strokeWidth: { type: [Number, String], default: 1.8 }
 });
 
+// Resolve the viewBox for each icon family
 const viewBox = computed(() => {
     if (['check', 'chevron-down'].includes(props.icon)) {
         return '0 0 20 20';
@@ -16,6 +18,7 @@ const viewBox = computed(() => {
     return '0 0 24 24';
 });
 
+// Resolve the fill mode for the active icon
 const fill = computed(() => {
     if (['check', 'chevron-down', 'theme-dark'].includes(props.icon)) {
         return 'currentColor';
@@ -24,6 +27,7 @@ const fill = computed(() => {
     return 'none';
 });
 
+// Resolve the stroke mode for the active icon
 const stroke = computed(() => {
     if (['check', 'chevron-down', 'theme-dark'].includes(props.icon)) {
         return 'none';
@@ -32,12 +36,14 @@ const stroke = computed(() => {
     return 'currentColor';
 });
 
+// Hide the icon from assistive tech when it is decorative
 const isDecorative = computed(() => {
     return props.decorative && !props.ariaLabel;
 });
 </script>
 
 <template>
+    <!-- Icon glyph -->
     <svg :viewBox="viewBox" :fill="fill" :stroke="stroke" :stroke-width="strokeWidth" :aria-hidden="isDecorative ? 'true' : undefined" :aria-label="!isDecorative ? props.ariaLabel : undefined" :role="!isDecorative ? 'img' : undefined">
         <template v-if="props.icon === 'theme-light'">
             <circle cx="12" cy="12" r="4"></circle>

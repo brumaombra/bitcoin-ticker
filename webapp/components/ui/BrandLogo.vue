@@ -1,4 +1,5 @@
 <script setup>
+// Props
 const props = defineProps({
     brandName: { type: String, required: true },
     compact: { type: Boolean, default: false }
@@ -7,8 +8,10 @@ const props = defineProps({
 
 <template>
     <div class="flex items-center gap-3">
+        <!-- Brand mark -->
         <img src="/svg/bitcoin.svg" alt="Bitcoin logo" class="h-9 w-9">
 
+        <!-- Brand text -->
         <div v-if="!props.compact">
             <div class="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">
                 Device UI

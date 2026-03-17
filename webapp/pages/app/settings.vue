@@ -7,27 +7,34 @@ import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import { saveSettings } from '~/composables/useDeviceApi.js';
 import { setBusy, showMessage } from '~/composables/useUtils.js';
 
+// Page metadata
 definePageMeta({
     layout: 'private'
 });
 
+// Shared device settings
 const globalStore = useGlobalStore();
 
+// Reactive settings payload
 const settings = computed(() => globalStore.value.settings);
 
+// Slider percentage for matrix intensity
 const matrixIntensityPercentage = computed(() => {
     return Math.round((Number(settings.value?.matrixIntensity ?? 0) / 15) * 100);
 });
 
+// Slider percentage for scroll speed
 const scrollSpeedPercentage = computed(() => {
     return Math.round((Number(settings.value?.scrollSpeed ?? 0) / 15) * 100);
 });
 
+// Available thousands separator formats
 const separatorOptions = [
     { value: 'US', label: '21,000.00', meta: 'Comma thousands, dot decimals' },
     { value: 'EU', label: '21.000,00', meta: 'Dot thousands, comma decimals' }
 ];
 
+// Save the current settings payload
 const handleSavePress = async () => {
     if (!settings.value) {
         return;
@@ -49,6 +56,7 @@ const handleSavePress = async () => {
 <template>
     <div v-if="settings" class="mx-auto flex w-full max-w-6xl flex-col gap-6">
         <div class="grid gap-6 xl:grid-cols-[minmax(0,320px),minmax(0,1fr)]">
+            <!-- Page intro -->
             <Card>
                 <div class="mb-6 flex items-center gap-4">
                     <div class="flex h-14 w-14 items-center justify-center rounded border border-[var(--border-light)] bg-[var(--bg-selected-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)]">
@@ -65,8 +73,10 @@ const handleSavePress = async () => {
                 </p>
             </Card>
 
+            <!-- Settings form -->
             <form class="space-y-6" @submit.prevent="handleSavePress">
                 <Card>
+                    <!-- Visibility section -->
                     <div class="mb-5 flex items-center justify-between">
                         <div>
                             <h2 class="text-lg font-bold">Visibility</h2>
@@ -74,6 +84,7 @@ const handleSavePress = async () => {
                         </div>
                     </div>
 
+                    <!-- Visibility toggles -->
                     <div class="space-y-3">
                         <div class="flex items-center justify-between rounded border border-[var(--border-light)] px-4 py-3 dark:border-[var(--border-dark)]">
                             <label for="currentPrice" class="text-sm font-medium">Current price</label>
@@ -107,11 +118,13 @@ const handleSavePress = async () => {
                 </Card>
 
                 <Card>
+                    <!-- Formatting section -->
                     <div class="mb-5">
                         <h2 class="text-lg font-bold">Formatting & Motion</h2>
                         <p class="mt-1 text-sm text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">Tweak the number formatting and playback intensity for the matrix.</p>
                     </div>
 
+                    <!-- Formatting controls -->
                     <div class="space-y-6">
                         <div>
                             <label for="selectFormatType" class="mb-2 block text-sm font-medium">Thousands separator</label>
@@ -139,11 +152,13 @@ const handleSavePress = async () => {
                     </div>
                 </Card>
 
+                <!-- Submit button -->
                 <Button type="primary" class="w-full md:w-auto">Save Settings</Button>
             </form>
         </div>
     </div>
 
+    <!-- Loading state -->
     <div v-else class="mx-auto w-full max-w-xl">
         <Card theme="muted">Loading settings...</Card>
     </div>
