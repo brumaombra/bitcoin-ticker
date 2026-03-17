@@ -1,16 +1,15 @@
 <script setup>
 const props = defineProps({
-    brandName: { type: String, required: true }
+    brandName: { type: String, required: true },
+    compact: { type: Boolean, default: false }
 });
 </script>
 
 <template>
     <div class="flex items-center gap-3">
-        <div class="flex h-10 w-10 items-center justify-center rounded border border-[var(--border-light)] bg-[var(--bg-card-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-card-dark)]">
-            <img src="/svg/bitcoin.svg" alt="Bitcoin logo" class="h-6 w-6">
-        </div>
+        <img src="/svg/bitcoin.svg" alt="Bitcoin logo" class="h-9 w-9">
 
-        <div>
+        <div v-if="!props.compact">
             <div class="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">
                 Device UI
             </div>

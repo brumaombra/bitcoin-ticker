@@ -2,7 +2,7 @@
 import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
 import Select from '~/components/ui/Select.vue';
-import ToggleSwitch from '~/components/ToggleSwitch.vue';
+import ToggleSwitch from '~/components/ui/ToggleSwitch.vue';
 import { useAppUi } from '~/composables/useAppUi.js';
 import { useDeviceApi } from '~/composables/useDeviceApi.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';

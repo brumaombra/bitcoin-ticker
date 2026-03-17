@@ -1,5 +1,6 @@
 <script setup>
 import IconButton from '~/components/ui/IconButton.vue';
+import BrandLogo from '~/components/ui/BrandLogo.vue';
 import ThemeSelector from '~/components/ui/ThemeSelector.vue';
 import Sidebar from '~/components/ui/navbar/Sidebar.vue';
 
@@ -32,13 +33,8 @@ const handleCloseSidebar = () => {
                 </IconButton>
             </div>
 
-            <div class="min-w-0">
-                <div class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">
-                    Bitcoin Ticker
-                </div>
-                <div class="mt-1 text-sm font-medium text-[var(--text-primary-light)] dark:text-[var(--text-primary-dark)]">
-                    Configure your LED matrix device
-                </div>
+            <div class="flex flex-1 justify-center">
+                <BrandLogo :brand-name="props.brandName" compact />
             </div>
 
             <div class="flex items-center gap-3">
