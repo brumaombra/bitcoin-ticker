@@ -20,8 +20,8 @@ Bitcoin Ticker is a two-part project for building a WiFi-connected Bitcoin displ
 
 <p>
   <a href="#features"><strong>Features</strong></a> •
+  <a href="#architecture"><strong>Architecture</strong></a> •
   <a href="#quick-start"><strong>Quick Start</strong></a> •
-  <a href="#project-layout"><strong>Project Layout</strong></a> •
   <a href="#firmware-overview"><strong>Firmware Overview</strong></a> •
   <a href="#web-app-overview"><strong>Web App Overview</strong></a> •
   <a href="#build-and-deploy"><strong>Build and Deploy</strong></a>
@@ -31,6 +31,7 @@ Bitcoin Ticker is a two-part project for building a WiFi-connected Bitcoin displ
 
 Bitcoin Ticker is designed for a simple hardware-to-web workflow: the ESP8266 fetches Bitcoin market data, drives the LED matrix, and exposes a local configuration interface that stays aligned with the firmware settings model.
 
+<a id="features"></a>
 ## ✨ Features
 
 - Live Bitcoin data on a MAX7219 LED matrix
@@ -41,6 +42,7 @@ Bitcoin Ticker is designed for a simple hardware-to-web workflow: the ESP8266 fe
 - Nuxt 3 interface that mirrors the firmware configuration flow
 - Lightweight frontend with reusable UI primitives
 
+<a id="architecture"></a>
 ## 🏗️ Architecture
 
 Bitcoin Ticker is built around three cooperating parts:
@@ -55,6 +57,7 @@ Bitcoin Ticker is built around three cooperating parts:
 2. The firmware stores settings and fetches Bitcoin market data from external APIs.
 3. The matrix renders the current values as scrolling text.
 
+<a id="quick-start"></a>
 ## 🚀 Quick Start
 
 ### 📋 Requirements
@@ -84,6 +87,7 @@ Bitcoin Ticker is built around three cooperating parts:
 5. Adjust display settings such as visible metrics and scroll speed.
 6. Reboot or let the device refresh settings as needed.
 
+<a id="firmware-overview"></a>
 ## 🔌 Firmware Overview
 
 The firmware is responsible for the runtime behavior of the physical ticker.
@@ -104,6 +108,7 @@ Key firmware areas live under `microcontroller/src/`:
 - `storage/` for LittleFS persistence
 - `wifi/` for network connection logic
 
+<a id="web-app-overview"></a>
 ## 🌐 Web App Overview
 
 The Nuxt app provides the browser-based device configuration interface.
@@ -121,6 +126,7 @@ Important web app areas:
 - `webapp/composables/useDeviceApi.js` for device communication
 - `webapp/composables/useUtils.js` for theme and app helpers
 
+<a id="build-and-deploy"></a>
 ## 🛠️ Build and Deploy
 
 ### 🔌 Firmware
