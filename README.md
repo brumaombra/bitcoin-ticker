@@ -1,193 +1,149 @@
-
-# 💰 LED Matrix Bitcoin Ticker with ESP8266
-
 <div align="center">
 
-![Espressif](https://img.shields.io/badge/Espressif-ESP8266-E7352C?style=flat-square&logo=espressif&logoColor=white)
-![PlatformIO](https://img.shields.io/badge/PlatformIO-6.1.5-FF6B35?style=flat-square&logo=platformio)
-![Arduino](https://img.shields.io/badge/Arduino-IDE-00979D?style=flat-square&logo=arduino)
-![Nuxt](https://img.shields.io/badge/Nuxt-3-00DC82?style=flat-square&logo=nuxt&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
+# 💰 Bitcoin Ticker
+
+### Forge a real-time Bitcoin display for ESP8266 and MAX7219.
+
+Bitcoin Ticker is a two-part project for building a WiFi-connected Bitcoin display with an ESP8266 microcontroller, a MAX7219 LED matrix, and a Nuxt 3 web app for configuration.
+
+<p>
+  <a href="https://github.com/brumaombra/bitcoin-ticker"><img alt="GitHub Repo" src="https://img.shields.io/badge/github-brumaombra%2Fbitcoin--ticker-111111?logo=github"></a>
+  <img alt="ESP8266" src="https://img.shields.io/badge/esp8266-ESP8266-E7352C?logo=espressif&logoColor=white">
+  <img alt="PlatformIO" src="https://img.shields.io/badge/platformio-6.1.5-FF6B35?logo=platformio&logoColor=white">
+  <img alt="Nuxt 3" src="https://img.shields.io/badge/nuxt-3-00DC82?logo=nuxt&logoColor=white">
+  <img alt="License MIT" src="https://img.shields.io/badge/license-MIT-2563EB">
+</p>
+
+<p>
+  📡 WiFi-connected ticker • 📺 MAX7219 LED matrix output • 🎛️ Web-based setup and settings • 🔧 ESP8266 firmware • ⚡ Lightweight Nuxt UI
+</p>
+
+<p>
+  <a href="#features"><strong>Features</strong></a> •
+  <a href="#quick-start"><strong>Quick Start</strong></a> •
+  <a href="#project-layout"><strong>Project Layout</strong></a> •
+  <a href="#firmware-overview"><strong>Firmware Overview</strong></a> •
+  <a href="#web-app-overview"><strong>Web App Overview</strong></a> •
+  <a href="#build-and-deploy"><strong>Build and Deploy</strong></a>
+</p>
 
 </div>
 
----
+Bitcoin Ticker is designed for a simple hardware-to-web workflow: the ESP8266 fetches Bitcoin market data, drives the LED matrix, and exposes a local configuration interface that stays aligned with the firmware settings model.
 
-## 🎯 What is LED Matrix Bitcoin Ticker?
+## ✨ Features
 
-LED Matrix Bitcoin Ticker is a dynamic **cryptocurrency display system** that transforms an ESP8266 microcontroller and MAX7219 LED matrix into a real-time Bitcoin information ticker. It fetches and displays up-to-date Bitcoin data including current price, daily change, yearly highs/lows, and more, providing an informative and visually appealing crypto dashboard.
-
-### 🌟 Key Highlights
-
-- 📈 **Real-Time Crypto Data**: Displays comprehensive Bitcoin metrics and trends
-- 🌐 **WiFi Connectivity**: Fetches live data from financial APIs
-- 🎛️ **Web-Based Configuration**: User-friendly web interface for setup and customization
-- 🔧 **Customizable Display**: Adjustable scroll speed, pinout, and data selection
-- 📱 **Responsive Web App**: Modern Nuxt interface for device management
-- ⚡ **Low-Power Operation**: Efficient ESP8266-based design for continuous monitoring
-
----
-
-## 📸 Screenshots
-
-<div align="center">
-
-### 📱 Web Configuration Interface
-![Web page screenshot](docs/screen_full.png)
-
-</div>
-
----
+- Live Bitcoin data on a MAX7219 LED matrix
+- ESP8266 firmware with WiFi, local storage, and embedded HTTP configuration
+- Web-based configuration for WiFi credentials, API key, and display settings
+- Adjustable scroll speed, selected metrics, and matrix behavior
+- LittleFS-backed persistence for device settings
+- Nuxt 3 interface that mirrors the firmware configuration flow
+- Lightweight frontend with reusable UI primitives
 
 ## 🏗️ Architecture
 
-LED Matrix Bitcoin Ticker consists of three main components:
+Bitcoin Ticker is built around three cooperating parts:
 
-### 🔌 ESP8266 Microcontroller
-- IoT microcontroller handling WiFi connectivity and data fetching
-- Controls MAX7219 LED matrix for display output
-- Runs embedded web server for configuration
-
-### 📺 MAX7219 LED Matrix
-- Dot matrix display module for scrolling text and data
-- Configurable number of modules for expanded display
-- Displays Bitcoin price, changes, and statistics
-
-### 🎨 Web Configuration App (Nuxt)
-- Modern Nuxt application for device setup and management
-- WiFi credential input and API key configuration
-- Data selection and display customization options
+- 🔌 **ESP8266 firmware** handles WiFi, data fetching, settings storage, and the embedded HTTP server
+- 📺 **MAX7219 LED matrix** displays the live Bitcoin ticker output
+- 🌐 **Nuxt web app** provides the browser-based setup and configuration interface
 
 ### 🔄 Data Flow
 
-1. **🌐 API Fetching**: ESP8266 connects to WiFi and fetches Bitcoin data from financial APIs
-2. **📊 Data Processing**: Microcontroller processes JSON responses and formats display data
-3. **📺 Matrix Display**: Information scrolls across LED matrix with customizable speed
-4. **🎛️ Configuration**: Web app allows users to modify settings via HTTP interface
-
----
-
-## 🛠️ Tech Stack
-
-### 🎨 Frontend (Configuration Web App)
-- **Nuxt 3** - Vue framework for routed frontend applications
-- **Tailwind CSS** - Utility-first CSS framework
-- **PostCSS** - CSS processing tool
-
-### 🔧 Microcontroller (ESP8266)
-- **ESP8266** - WiFi-enabled microcontroller
-- **PlatformIO** - Professional development environment
-- **Arduino Framework** - Embedded programming framework
-
-### 📚 Libraries
-- **MD_Parola** - LED matrix text effects library
-- **MD_MAX72XX** - MAX7219 LED matrix driver
-- **ESPAsyncWebServer** - Asynchronous web server
-- **ArduinoJson** - JSON parsing library
-- **LittleFS** - Lightweight filesystem
-
----
-
-## 📋 Features
-
-### 🎯 Core Functionality
-- ✅ **Real-Time Price Display** - Live Bitcoin price updates
-- ✅ **Comprehensive Metrics** - Price, daily change, yearly high/low, opening price
-- ✅ **WiFi Auto-Connect** - Automatic network connection with stored credentials
-- ✅ **Web Configuration** - Browser-based setup and customization
-- ✅ **Data Persistence** - Settings stored in flash memory
-
-### 📊 Display Options
-- 📈 **Customizable Data** - Select which metrics to display
-- ⏱️ **Scroll Speed Control** - Adjustable text scrolling speed
-- 🔢 **Module Configuration** - Support for multiple LED matrix modules
-- 📍 **Pinout Flexibility** - Configurable hardware connections
-
-### 🎨 User Experience
-- 🌐 **Access Point Mode** - Initial setup via WiFi hotspot
-- 📱 **Mobile Friendly** - Responsive web interface
-- 🔄 **Live Updates** - Real-time data refresh
-- 🛠️ **Easy Customization** - Simple web-based configuration
-
----
+1. The web app sends configuration changes to the ESP8266 over HTTP.
+2. The firmware stores settings and fetches Bitcoin market data from external APIs.
+3. The matrix renders the current values as scrolling text.
 
 ## 🚀 Quick Start
 
-### 📋 Prerequisites
+### 📋 Requirements
 
-- 🔌 **ESP8266 Microcontroller**
-- 📺 **MAX7219 LED Matrix**
-- 🔋 **Power Supply** for ESP8266
-- 🪜 **Jumper Wires** for connections
-- 💻 **PlatformIO** extension for VS Code
-- 🌐 **WiFi Network** for internet access
+- ESP8266 board, such as NodeMCU
+- MAX7219 LED matrix module
+- Jumper wires and a stable power supply
+- VS Code with PlatformIO installed
+- A WiFi network and a Bitcoin market data API key
 
-### 🔧 Configuration
+### 🔧 Initial Setup
 
-#### Hardware Setup
+1. Open the repository in VS Code.
+2. Install the PlatformIO extension if it is not already installed.
+3. Connect the ESP8266 and MAX7219 matrix according to the pinout used in the firmware.
+4. Build and upload the firmware from the `microcontroller/` project.
+5. Build the web app from `webapp/` if you want the configuration UI separately.
+6. Flash the device and connect to its setup access point when it starts for the first time.
+7. Enter WiFi credentials and the API key through the web interface.
 
-1. 🔌 Connect the MAX7219 LED Matrix to ESP8266 using jumper wires
-2. 🔍 Verify pinout connections (CLK, DATA, CS pins)
-3. ⚡ Power the ESP8266 via USB or external supply
+### 🔄 Configuration Flow
 
-#### Software Setup
+1. The device creates a temporary access point on first boot.
+2. Connect to the AP and open the device IP address in a browser.
+3. Save WiFi credentials so the ESP8266 can join your local network.
+4. Save the API key used for market data requests.
+5. Adjust display settings such as visible metrics and scroll speed.
+6. Reboot or let the device refresh settings as needed.
 
-1. 💻 Install PlatformIO extension in VS Code
-2. 📥 Clone/download the source code repository
-3. 📂 Open project in PlatformIO
-4. 🏗️ Build and upload filesystem image (`Build Filesystem Image` → `Upload Filesystem Image`)
-5. 🚀 Build and upload firmware (`Build` → `Upload`)
+## 🔌 Firmware Overview
 
-#### Initial Configuration
+The firmware is responsible for the runtime behavior of the physical ticker.
 
-1. 🔄 After reboot, ESP8266 creates `Bitcoin-Ticker` WiFi access point
-2. 🌐 Connect to the hotspot and navigate to `192.168.4.1`
-3. 📶 Enter your WiFi credentials to connect to network
-4. 🔑 Obtain free API key from [financialmodelingprep.com](https://site.financialmodelingprep.com)
-5. ⚙️ Enter API key in the web interface
-6. 🎨 Customize display settings (data to show, scroll speed, etc.)
+- Connects the ESP8266 to WiFi
+- Persists settings in flash storage
+- Hosts the embedded HTTP server
+- Fetches and parses Bitcoin market data
+- Renders scrolling text to the MAX7219 matrix
+- Serves the embedded web UI assets
 
-## 🎯 Usage
+Key firmware areas live under `microcontroller/src/`:
 
-### 📺 Display Operation
+- `api/` for data fetching and parsing
+- `config/` for settings and validation
+- `matrix/` for LED output
+- `server/` for HTTP routes
+- `storage/` for LittleFS persistence
+- `wifi/` for network connection logic
 
-The LED matrix automatically:
-- 🌐 Connects to configured WiFi network
-- 📡 Fetches Bitcoin data from financial API
-- 📊 Processes and formats data for display
-- 🔄 Scrolls information across the matrix
-- ⏰ Updates data at regular intervals
+## 🌐 Web App Overview
 
-### 🎛️ Configuration Management
+The Nuxt app provides the browser-based device configuration interface.
 
-- 📶 **WiFi Settings**: Update network credentials via web interface
-- 🔑 **API Configuration**: Change or update API key
-- 📊 **Display Options**: Select which data points to display
-- ⏱️ **Scroll Speed**: Adjust text scrolling speed
-- 📍 **Hardware Pins**: Modify pin connections if needed
+- Mirrors the firmware settings model
+- Lets users configure WiFi and API credentials
+- Controls display behavior and matrix preferences
+- Uses reusable UI primitives under `webapp/components/ui/`
+- Shares device API helpers in `webapp/composables/`
 
-### 📊 Displayed Information
+Important web app areas:
 
-- 💰 **Current Price**: Live Bitcoin price in USD
-- 📈 **Daily Change**: Percentage change from previous day
-- 📊 **Yearly High/Low**: Annual price extremes
-- 🏁 **Opening Price**: Daily opening price
-- 📉 **Additional Metrics**: Volume, market cap, etc.
+- `webapp/pages/` for the main setup screens
+- `webapp/components/ui/` for shared interface elements
+- `webapp/composables/useDeviceApi.js` for device communication
+- `webapp/composables/useUtils.js` for theme and app helpers
 
----
+## 🛠️ Build and Deploy
+
+### 🔌 Firmware
+
+- Open `microcontroller/` in PlatformIO.
+- Build the filesystem image.
+- Upload the filesystem image.
+- Build and upload the firmware.
+
+### 🌐 Web App
+
+- Open `webapp/` in Nuxt.
+- Run the development server for local work.
+- Run the production build for deployment or embedded asset generation.
+
+### 📦 Embedded Web UI
+
+The repository includes an embedded UI export path so the web app can be packaged into firmware assets when needed.
+
+- Source: `webapp/`
+- Embedded docs: `docs/embedded-webui.md`
+- Export script: `webapp/scripts/export-embedded-static.js`
 
 ## 📄 License
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
-- 💰 **Financial Modeling Prep** for providing free financial APIs
-- 🔧 **PlatformIO** for the excellent development environment
-- 📺 **MajicDesigns** for the MD_Parola and MD_MAX72XX libraries
-- 🌐 **ESP8266 Community** for WiFi and HTTP libraries
-- 📄 **bblanchon** for ArduinoJson and StreamUtils libraries
-- 🖥️ **me-no-dev** for the ESPAsyncWebServer library
-- 🎨 **Nuxt Team** for the application framework
+MIT
