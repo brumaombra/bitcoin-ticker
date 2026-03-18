@@ -38,7 +38,7 @@ Bitcoin Ticker is designed for a simple hardware-to-web workflow: the ESP8266 fe
 - ESP8266 firmware with WiFi, local storage, and embedded HTTP configuration
 - Web-based configuration for WiFi credentials, API key, and display settings
 - Adjustable scroll speed, selected metrics, and matrix behavior
-- LittleFS-backed persistence for device settings
+- EEPROM-backed persistence for device settings
 - Nuxt 3 interface that mirrors the firmware configuration flow
 - Lightweight frontend with reusable UI primitives
 
@@ -73,8 +73,8 @@ Bitcoin Ticker is built around three cooperating parts:
 1. Open the repository in VS Code.
 2. Install the PlatformIO extension if it is not already installed.
 3. Connect the ESP8266 and MAX7219 matrix according to the pinout used in the firmware.
-4. Build and upload the firmware from the `microcontroller/` project.
-5. Build the web app from `webapp/` if you want the configuration UI separately.
+4. Run `npm run build:embedded` from `webapp/` if you need to refresh the embedded web UI bundle.
+5. Build and upload the firmware from the `microcontroller/` project.
 6. Flash the device and connect to its setup access point when it starts for the first time.
 7. Enter WiFi credentials and the API key through the web interface.
 
@@ -105,7 +105,7 @@ Key firmware areas live under `microcontroller/src/`:
 - `config/` for settings and validation
 - `matrix/` for LED output
 - `server/` for HTTP routes
-- `storage/` for LittleFS persistence
+- `storage/` for EEPROM persistence
 - `wifi/` for network connection logic
 
 <a id="web-app-overview"></a>
@@ -131,9 +131,8 @@ Important web app areas:
 
 ### 🔌 Firmware
 
+- Run `npm run build:embedded` from `webapp/` when the embedded UI changes.
 - Open `microcontroller/` in PlatformIO.
-- Build the filesystem image.
-- Upload the filesystem image.
 - Build and upload the firmware.
 
 ### 🌐 Web App

@@ -1,15 +1,54 @@
 #include "server.h"
 #include <ArduinoJson.h>
-#include <LittleFS.h>
+// #include <LittleFS.h>
 #include "../wifi/wifi.h"
 #include "../config/config.h"
 #include "../utils/utils.h"
 #include "../storage/storage.h"
 #include "../matrix/matrix.h"
 #include "../serial/serial.h"
+#include "../webui/generated_assets.h"
 
 // Global buffer for POST data
 String postData = "";
+
+// Normalize request paths so route lookups handle optional trailing slashes
+String normalizeAssetPath(const String& requestPath) {
+	if (requestPath.length() <= 1 || !requestPath.endsWith("/")) {
+		return requestPath;
+	}
+
+	return requestPath.substring(0, requestPath.length() - 1);
+}
+
+// Find the embedded asset that matches the requested route
+const EmbeddedAsset* findEmbeddedAsset(const String& requestPath) {
+	const String normalizedPath = normalizeAssetPath(requestPath);
+
+	for (size_t i = 0; i < EMBEDDED_ASSET_COUNT; i++) {
+		if (normalizedPath.equals(EMBEDDED_ASSETS[i].routePath)) {
+			return &EMBEDDED_ASSETS[i];
+		}
+	}
+
+	return NULL;
+}
+
+// Send an embedded asset from PROGMEM with the required gzip header
+bool sendEmbeddedAsset(AsyncWebServerRequest *request, const String& requestPath) {
+	const EmbeddedAsset* asset = findEmbeddedAsset(requestPath);
+	if (asset == NULL) {
+		return false;
+	}
+
+	AsyncWebServerResponse *response = request->beginResponse_P(200, asset->contentType, reinterpret_cast<PGM_P>(asset->data), asset->size);
+	if (asset->gzip) {
+		response->addHeader("Content-Encoding", "gzip");
+	}
+
+	request->send(response);
+	return true;
+}
 
 // Setup delle route
 void setupRoutes() {
@@ -17,15 +56,12 @@ void setupRoutes() {
 	DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
 	DefaultHeaders::Instance().addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
 	DefaultHeaders::Instance().addHeader("Access-Control-Allow-Headers", "Content-Type");
-	
+
 	// Static files
-	server.serveStatic("/", LittleFS, "/").setDefaultFile("index.html"); // Serve web page
-	server.onNotFound([](AsyncWebServerRequest *request) { // Page not found
-		request->send(404);
-	});
+	// server.serveStatic("/", LittleFS, "/").setDefaultFile("index.html"); // Serve web page
 
 	// Connect to WiFi
-	server.on("/connect", HTTP_GET, [](AsyncWebServerRequest *request) {
+	server.on("/api/connect", HTTP_GET, [](AsyncWebServerRequest *request) {
 		if (!request->hasParam("ssid") || !request->hasParam("password")) { // Check required fields
 			request->send(400, "application/json", "{\"status\":\"KO\"}"); // Response
 			return;
@@ -46,7 +82,7 @@ void setupRoutes() {
 	});
 
 	// Check the WiFi connection status
-	server.on("/checkConnection", HTTP_GET, [](AsyncWebServerRequest *request) {
+	server.on("/api/check-connection", HTTP_GET, [](AsyncWebServerRequest *request) {
 		char jsonResponse[20]; // JSON response
 		snprintf(jsonResponse, sizeof(jsonResponse), "{\"status\":\"%d\"}", wiFiConnectionStatus);
 		switch(wiFiConnectionStatus) {
@@ -64,7 +100,7 @@ void setupRoutes() {
 	});
 
 	// Send the list of networks
-	server.on("/networks", HTTP_GET, [](AsyncWebServerRequest *request) {
+	server.on("/api/networks", HTTP_GET, [](AsyncWebServerRequest *request) {
 		WiFi.scanNetworksAsync([request](int numNetworks) {
 			JsonDocument doc; // JSON object
 			JsonArray networks = doc["networks"].to<JsonArray>();
@@ -85,7 +121,7 @@ void setupRoutes() {
     });
 
 	// Save the API key
-	server.on("/apiKey", HTTP_GET, [](AsyncWebServerRequest *request) {
+	server.on("/api/api-key", HTTP_GET, [](AsyncWebServerRequest *request) {
 		if (!request->hasParam("apiKey")) { // Check if the API key is missing
         	request->send(400, "application/json", "{\"status\":\"KO\"}"); // Send the JSON object
         	return;
@@ -101,7 +137,7 @@ void setupRoutes() {
 	});
 
 	// Get the values visibility settings
-	server.on("/settings", HTTP_GET, [](AsyncWebServerRequest *request) {
+	server.on("/api/settings", HTTP_GET, [](AsyncWebServerRequest *request) {
 		JsonDocument doc; // JSON object
 
 		// Add the visibility settings to the JSON object
@@ -124,12 +160,12 @@ void setupRoutes() {
 	});
 
 	// POST request for preflighted requests
-	server.on("/settings", HTTP_OPTIONS, [](AsyncWebServerRequest *request) {
+	server.on("/api/settings", HTTP_OPTIONS, [](AsyncWebServerRequest *request) {
 		request->send(200);
 	});
 
 	// Save the values visibility settings
-	server.on("/settings", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+	server.on("/api/settings", HTTP_POST, [](AsyncWebServerRequest *request){}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
 		// Accumulate chunks (ESP8266 splits data in multiple chunks)
 		if (index == 0) postData = "";
 		for(size_t i = 0; i < len; i++) {
@@ -179,6 +215,15 @@ void setupRoutes() {
 			request->send(200, "application/json", "{\"status\":\"OK\"}");
 			printLogfln("Values settings changed");
 		}
+	});
+
+	// Embedded Nuxt routes and generated assets
+	server.onNotFound([](AsyncWebServerRequest *request) {
+		if (request->method() == HTTP_GET && sendEmbeddedAsset(request, request->url())) {
+			return;
+		}
+
+		request->send(404);
 	});
 }
 

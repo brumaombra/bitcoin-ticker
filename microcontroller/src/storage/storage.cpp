@@ -2,22 +2,26 @@
 #include <EEPROM.h>
 #include <StreamUtils.h>
 #include <ArduinoJson.h>
+/*
 #include <LittleFS.h>
+*/
 #include "../config/config.h"
 #include "../utils/utils.h"
 #include "../serial/serial.h"
 
 const int EEPROM_SIZE = 512; // EEPROM size
 
+/*
 // Setup LittleFS
 bool setupLittleFS() {
-	if (!LittleFS.begin()) { // Check if LittleFS is mounted
-		printLogfln("An Error has occurred while mounting LittleFS");
-		return false;
-	} else {
-		return true;
-	}
+    if (!LittleFS.begin()) { // Check if LittleFS is mounted
+        printLogfln("An Error has occurred while mounting LittleFS");
+        return false;
+    } else {
+        return true;
+    }
 }
+*/
 
 // Read data from the EEPROM
 bool readEEPROM(JsonDocument& doc) {

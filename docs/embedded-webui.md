@@ -29,15 +29,19 @@ Each generated asset contains:
 - the content type
 - gzipped file data stored in `PROGMEM`
 
-### Current Status
+### Firmware Integration
 
-This step only prepares the embedded asset bundle.
-The firmware server is not yet wired to serve `EMBEDDED_ASSETS` instead of `LittleFS`.
+- the firmware looks up incoming requests inside `EMBEDDED_ASSETS`
+- embedded files are sent from `PROGMEM`
+- gzipped assets are returned with `Content-Encoding: gzip`
+- JSON endpoints live under `/api`, so page routes and API routes do not overlap anymore
 
-### Next Step
+### Deployment Flow
 
-Update the firmware server to:
+When the web UI changes:
 
-1. look up requests inside `EMBEDDED_ASSETS`
-2. respond with `request->send_P(...)`
-3. set `Content-Encoding: gzip` for embedded files
+1. run `npm run build:embedded` from `webapp/`
+2. rebuild the firmware from `microcontroller/`
+3. upload the firmware to the ESP8266
+
+No LittleFS web asset upload step is required for the embedded UI anymore.

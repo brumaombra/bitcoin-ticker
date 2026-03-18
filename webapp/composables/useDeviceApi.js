@@ -17,7 +17,7 @@ const buildDeviceUrl = (path, query = null) => {
 // Fetch the list of visible WiFi networks
 export const getNetworks = async () => {
     try {
-        const url = buildDeviceUrl('/networks');
+        const url = buildDeviceUrl('/api/networks');
         const data = await $fetch(url);
         return data.networks || [];
     } catch (error) {
@@ -29,7 +29,7 @@ export const getNetworks = async () => {
 // Fetch the saved device settings
 export const getSettings = async () => {
     try {
-        const url = buildDeviceUrl('/settings');
+        const url = buildDeviceUrl('/api/settings');
         const data = await $fetch(url);
         return data || {};
     } catch (error) {
@@ -42,7 +42,7 @@ export const getSettings = async () => {
 export const saveSettings = async settings => {
     try {
         // Call the device API to save the settings
-        const url = buildDeviceUrl('/settings');
+        const url = buildDeviceUrl('/api/settings');
         const data = await $fetch(url, {
             method: 'POST',
             headers: {
@@ -62,7 +62,7 @@ export const saveSettings = async settings => {
 // Save the market data API key on the device
 export const saveApiKey = async apiKey => {
     try {
-        const url = buildDeviceUrl('/apiKey', { apiKey });
+        const url = buildDeviceUrl('/api/api-key', { apiKey });
         const data = await $fetch(url);
         return data.status === 'OK';
     } catch (error) {
@@ -88,7 +88,7 @@ const checkWiFiConnectionPolling = async () => {
                 }
 
                 // Call the device API to check the connection status
-                const url = buildDeviceUrl('/checkConnection');
+                const url = buildDeviceUrl('/api/check-connection');
                 const data = await $fetch(url);
                 switch (data.status) {
                     case connectionStatus.WIFI_TRY:
@@ -116,7 +116,7 @@ const checkWiFiConnectionPolling = async () => {
 export const connectToWiFi = async (ssid, password) => {
     try {
         // Call the device API to start the WiFi connection process
-        const url = buildDeviceUrl('/connect', { ssid, password });
+        const url = buildDeviceUrl('/api/connect', { ssid, password });
         const data = await $fetch(url);
 
         // If the device is trying to connect, start polling for the result
