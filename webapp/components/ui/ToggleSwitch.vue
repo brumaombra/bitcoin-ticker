@@ -1,18 +1,18 @@
 <script setup>
 // Props
-defineProps({
+const props = defineProps({
     modelValue: { type: Boolean, required: true }
 });
 
 // Emits
-defineEmits(['update:modelValue']);
+const emits = defineEmits(['update:modelValue']);
 </script>
 
 <template>
     <div class="flex items-center">
         <label class="relative inline-flex cursor-pointer items-center">
             <!-- Hidden checkbox -->
-            <input type="checkbox" class="peer sr-only" :checked="modelValue" @change="$emit('update:modelValue', $event.target.checked)">
+            <input type="checkbox" class="peer sr-only" :checked="props.modelValue" @change="emits('update:modelValue', $event.target.checked)">
 
             <!-- Track -->
             <div class="h-8 w-14 rounded border border-[var(--border-light)] bg-[var(--button-secondary-light)] transition-all duration-200 peer-checked:border-[var(--button-primary-light)] peer-checked:bg-[var(--bg-selected-light)] dark:border-[var(--border-dark)] dark:bg-[var(--button-secondary-dark)] dark:peer-checked:border-[var(--button-primary-dark)] dark:peer-checked:bg-[var(--bg-selected-dark)]"></div>

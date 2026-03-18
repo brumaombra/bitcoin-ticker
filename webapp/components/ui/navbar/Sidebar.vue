@@ -12,7 +12,6 @@ const props = defineProps({
 // Emits
 const emits = defineEmits(['close']);
 
-// Current route
 const route = useRoute();
 
 // Check if a navigation item matches the current route
@@ -54,10 +53,12 @@ const handleClose = () => {
 
                 <!-- Sidebar navigation -->
                 <nav class="flex-1 overflow-y-auto px-4 py-6">
+                    <!-- Navigation section title -->
                     <div class="mb-4 px-2 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">
                         Control Panel
                     </div>
 
+                    <!-- Navigation items -->
                     <ul class="space-y-3">
                         <li v-for="item in props.sidebarItems" :key="item.id">
                             <NuxtLink :to="item.path" class="group flex items-center gap-4 rounded border px-4 py-3 text-sm font-medium transition-all duration-200" :class="getNavigationItemClasses(item.path)" @click="handleClose">

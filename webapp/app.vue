@@ -6,7 +6,6 @@ import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Busy from '~/components/Busy.vue';
 import MessageModal from '~/components/MessageModal.vue';
 
-// Shared global UI state
 const globalStore = useGlobalStore();
 
 // Load the initial device data once for the app shell

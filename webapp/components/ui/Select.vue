@@ -1,6 +1,5 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref } from 'vue';
-
 import CustomIcon from '~/components/ui/CustomIcon.vue';
 
 // Props
@@ -15,7 +14,6 @@ const props = defineProps({
 // Emits
 const emits = defineEmits(['update:modelValue', 'change']);
 
-// Select state
 const isOpen = ref(false);
 const selectRef = ref(null);
 const selectButtonRef = ref(null);
@@ -41,19 +39,23 @@ const selectedOption = computed(() => {
 
 // Position the floating dropdown relative to the trigger
 const calculateDropdownPosition = () => {
+    // If the button reference is not available, skip positioning
     if (!selectButtonRef.value) {
         return;
     }
 
+    // Calculate the dropdown position
     const buttonRect = selectButtonRef.value.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
     const dropdownHeight = Math.min(280, Math.max(1, options.value.length) * 64);
 
+    // Find the best vertical position
     let top = buttonRect.bottom + 4;
     if (top + dropdownHeight > viewportHeight) {
         top = buttonRect.top - dropdownHeight - 4;
     }
 
+    // Update the dropdown position state
     dropdownPosition.value = {
         top,
         left: buttonRect.left,
@@ -63,12 +65,10 @@ const calculateDropdownPosition = () => {
 
 // Open the dropdown and register positioning listeners
 const openDropdown = () => {
-    if (props.disabled || isOpen.value) {
-        return;
-    }
-
+    if (props.disabled || isOpen.value) return;
     isOpen.value = true;
 
+    // Wait for the dropdown to render before calculating its position
     nextTick(() => {
         calculateDropdownPosition();
         document.addEventListener('click', handleClickOutside);
@@ -87,11 +87,13 @@ const closeDropdown = () => {
 
 // Toggle the dropdown visibility
 const toggleDropdown = () => {
+    // If already open, close it
     if (isOpen.value) {
         closeDropdown();
         return;
     }
 
+    // Otherwise, open the dropdown
     openDropdown();
 };
 
@@ -104,10 +106,7 @@ const handleClickOutside = event => {
 
 // Select an option and emit the updated value
 const selectOption = option => {
-    if (option.disabled) {
-        return;
-    }
-
+    if (option.disabled) return;
     emits('update:modelValue', option.value);
     emits('change', option.value);
     closeDropdown();
@@ -115,19 +114,18 @@ const selectOption = option => {
 
 // Resolve the trigger text color when nothing is selected
 const getSelectedValueClasses = () => {
-    if (selectedOption.value) {
-        return '';
-    }
-
+    if (selectedOption.value) return '';
     return 'text-[var(--text-secondary-light)] opacity-70 dark:text-[var(--text-secondary-dark)]';
 };
 
 // Resolve the option item classes
 const getOptionClasses = option => {
+    // Selected option
     if (option.value === props.modelValue) {
         return 'bg-[var(--bg-selected-light)] text-[var(--text-primary-light)] dark:bg-[var(--bg-selected-dark)] dark:text-[var(--text-primary-dark)]';
     }
 
+    // Regular options
     return 'text-[var(--text-primary-light)] hover:bg-[var(--bg-selected-light)] dark:text-[var(--text-primary-dark)] dark:hover:bg-[var(--bg-selected-dark)]';
 };
 
@@ -141,7 +139,7 @@ const getDropdownStyles = computed(() => {
     };
 });
 
-// Clean up any pending listeners when the component unmounts
+// On before component unmounted
 onBeforeUnmount(() => {
     closeDropdown();
 });

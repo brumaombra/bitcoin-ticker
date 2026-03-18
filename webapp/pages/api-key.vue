@@ -6,7 +6,6 @@ import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
 import Input from '~/components/ui/Input.vue';
 
-// Form state
 const apiKey = ref('');
 
 // Require a non-empty API key before submitting

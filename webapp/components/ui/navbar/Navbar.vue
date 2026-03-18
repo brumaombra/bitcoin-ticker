@@ -12,7 +12,6 @@ const props = defineProps({
     sidebarItems: { type: Array, default: () => [] }
 });
 
-// Mobile sidebar state
 const isSidebarOpen = ref(false);
 
 // Toggle the mobile sidebar
@@ -28,7 +27,10 @@ const handleCloseSidebar = () => {
 
 <template>
     <!-- Sidebar -->
-    <Sidebar :brand-name="props.brandName" :is-open="isSidebarOpen" :sidebar-items="props.sidebarItems" @close="handleCloseSidebar" />
+    <Sidebar :brand-name="props.brandName"
+        :is-open="isSidebarOpen"
+        :sidebar-items="props.sidebarItems"
+        @close="handleCloseSidebar" />
 
     <!-- Top bar -->
     <header class="sticky inset-x-0 top-0 z-30 h-20 border-b border-[var(--border-light)] bg-[color:color-mix(in_srgb,var(--bg-card-light)_84%,transparent)] backdrop-blur xl:ps-72 dark:border-[var(--border-dark)] dark:bg-[color:color-mix(in_srgb,var(--bg-card-dark)_84%,transparent)]">

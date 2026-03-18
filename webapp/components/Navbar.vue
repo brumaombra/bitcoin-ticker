@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue';
 
-// Mobile menu state
 const isOpen = ref(false);
 
 // Toggle the mobile navigation

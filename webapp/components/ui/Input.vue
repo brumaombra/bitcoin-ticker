@@ -14,17 +14,18 @@ const props = defineProps({
 // Emits
 const emits = defineEmits(['update:modelValue']);
 
-// Slot references
 const slots = useSlots();
 
 // Resolve the input classes based on available slots
 const inputClasses = computed(() => {
     const classes = ['h-[52px] w-full rounded border border-[var(--border-light)] bg-[var(--button-secondary-light)] px-4 py-3 text-sm font-medium text-[var(--text-primary-light)] outline-none transition-all duration-300 ease-in-out placeholder:text-[var(--text-secondary-light)] placeholder:opacity-60 focus:border-[var(--border-hover-light)] dark:border-[var(--border-dark)] dark:bg-[var(--button-secondary-dark)] dark:text-[var(--text-primary-dark)] dark:placeholder:text-[var(--text-secondary-dark)] dark:focus:border-[var(--border-hover-dark)] disabled:cursor-not-allowed disabled:opacity-60'];
 
+    // Add padding if suffix slot is used
     if (slots.suffix) {
         classes.push('pr-12');
     }
 
+    // Return the final class list
     return classes;
 });
 

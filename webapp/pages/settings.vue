@@ -161,6 +161,6 @@ definePageMeta({
 
     <!-- Loading state -->
     <div v-else class="mx-auto w-full max-w-xl">
-        <Card theme="muted">Loading settings...</Card>
+        <Card>Loading settings...</Card>
     </div>
 </template>

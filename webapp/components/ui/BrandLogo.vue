@@ -13,9 +13,12 @@ const props = defineProps({
 
         <!-- Brand text -->
         <div v-if="!props.compact">
+            <!-- Brand name -->
             <div class="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">
                 Device UI
             </div>
+
+            <!-- Brand name -->
             <div class="text-lg font-bold text-[var(--text-primary-light)] dark:text-[var(--text-primary-dark)]">
                 {{ props.brandName }}
             </div>

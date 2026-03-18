@@ -6,10 +6,7 @@ import Dropdown from '~/components/ui/Dropdown.vue';
 import DropdownMenu from '~/components/ui/DropdownMenu.vue';
 import IconButton from '~/components/ui/IconButton.vue';
 
-// Dropdown state
 const isOpen = ref(false);
-
-// Shared theme state
 const currentTheme = getCurrentTheme();
 const themes = getThemes();
 
@@ -26,13 +23,11 @@ const themeOptions = computed(() => {
 const getThemeIcon = theme => {
     if (theme === 'light') {
         return 'theme-light';
-    }
-
-    if (theme === 'dark') {
+    } else if (theme === 'dark') {
         return 'theme-dark';
+    } else {
+        return 'theme-system';
     }
-
-    return 'theme-system';
 };
 
 // Resolve the icon for the current theme

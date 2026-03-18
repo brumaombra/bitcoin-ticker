@@ -1,13 +1,13 @@
 <script setup>
 // Props
-defineProps({
+const props = defineProps({
     show: { type: Boolean, default: false }
 });
 </script>
 
 <template>
     <Transition name="fade">
-        <div v-if="show" class="fixed inset-0 z-50 flex items-center justify-center bg-black/35 backdrop-blur-sm">
+        <div v-if="props.show" class="fixed inset-0 z-50 flex items-center justify-center bg-black/35 backdrop-blur-sm">
             <div class="rounded border border-[var(--border-light)] bg-[color:color-mix(in_srgb,var(--bg-card-light)_92%,transparent)] px-8 py-7 shadow-2xl dark:border-[var(--border-dark)] dark:bg-[color:color-mix(in_srgb,var(--bg-card-dark)_92%,transparent)]">
                 <!-- Busy state content -->
                 <div class="flex flex-col items-center">

@@ -1,6 +1,5 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
-
 import Card from '~/components/ui/Card.vue';
 
 // Props
@@ -13,7 +12,6 @@ const props = defineProps({
 // Emits
 const emits = defineEmits(['update:open', 'close']);
 
-// Dropdown container reference
 const dropdownRef = ref(null);
 
 // Resolve the floating panel position classes
@@ -50,13 +48,13 @@ const handleEscape = event => {
     }
 };
 
-// Register dropdown listeners on mount
+// On component mounted
 onMounted(() => {
     document.addEventListener('click', handleClickOutside);
     document.addEventListener('keydown', handleEscape);
 });
 
-// Clean up listeners on unmount
+// On before component unmounted
 onBeforeUnmount(() => {
     document.removeEventListener('click', handleClickOutside);
     document.removeEventListener('keydown', handleEscape);
@@ -68,6 +66,7 @@ onBeforeUnmount(() => {
         <!-- Trigger -->
         <slot name="trigger"></slot>
 
+        <!-- Dropdown panel with transition -->
         <Transition enter-active-class="transition ease-out duration-200"
             enter-from-class="opacity-0 translate-y-1"
             enter-to-class="opacity-100 translate-y-0"
