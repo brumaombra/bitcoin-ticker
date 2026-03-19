@@ -1,6 +1,6 @@
 #include "serial.h"
 
-const bool serialDebug = false;
+const bool serialDebug = true;
 
 // Init serial
 void initSerial() {

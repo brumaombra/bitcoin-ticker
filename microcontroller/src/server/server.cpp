@@ -1,6 +1,5 @@
 #include "server.h"
 #include <ArduinoJson.h>
-// #include <LittleFS.h>
 #include "../wifi/wifi.h"
 #include "../config/config.h"
 #include "../utils/utils.h"
@@ -41,7 +40,7 @@ bool sendEmbeddedAsset(AsyncWebServerRequest *request, const String& requestPath
 		return false;
 	}
 
-	AsyncWebServerResponse *response = request->beginResponse_P(200, asset->contentType, reinterpret_cast<PGM_P>(asset->data), asset->size);
+	AsyncWebServerResponse *response = request->beginResponse_P(200, asset->contentType, asset->data, asset->size);
 	if (asset->gzip) {
 		response->addHeader("Content-Encoding", "gzip");
 	}
@@ -57,13 +56,11 @@ void setupRoutes() {
 	DefaultHeaders::Instance().addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
 	DefaultHeaders::Instance().addHeader("Access-Control-Allow-Headers", "Content-Type");
 
-	// Static files
-	// server.serveStatic("/", LittleFS, "/").setDefaultFile("index.html"); // Serve web page
-
 	// Connect to WiFi
 	server.on("/api/connect", HTTP_GET, [](AsyncWebServerRequest *request) {
-		if (!request->hasParam("ssid") || !request->hasParam("password")) { // Check required fields
-			request->send(400, "application/json", "{\"status\":\"KO\"}"); // Response
+		// Check required fields
+		if (!request->hasParam("ssid") || !request->hasParam("password")) {
+			request->send(400, "application/json", "{\"status\":\"KO\"}"); // 400 response
 			return;
 		}
 

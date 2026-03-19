@@ -2,36 +2,51 @@
 #include <EEPROM.h>
 #include <StreamUtils.h>
 #include <ArduinoJson.h>
-/*
-#include <LittleFS.h>
-*/
+#include <cstring>
 #include "../config/config.h"
 #include "../utils/utils.h"
 #include "../serial/serial.h"
 
 const int EEPROM_SIZE = 512; // EEPROM size
 
-/*
-// Setup LittleFS
-bool setupLittleFS() {
-    if (!LittleFS.begin()) { // Check if LittleFS is mounted
-        printLogfln("An Error has occurred while mounting LittleFS");
-        return false;
-    } else {
-        return true;
-    }
-}
-*/
-
-// Read data from the EEPROM
+// Read a JSON document from EEPROM by extracting the stored JSON payload.
 bool readEEPROM(JsonDocument& doc) {
-    EepromStream eepromStream(0, EEPROM_SIZE);
-	DeserializationError error = deserializeJson(doc, eepromStream);
-    if (error) {
-        printLogf("Error while reading the EEPROM: %s\n", error.c_str()); // Print the error message
+    char eepromData[EEPROM_SIZE + 1];
+    size_t jsonStart = EEPROM_SIZE;
+    size_t jsonEnd = 0;
+
+    for (size_t i = 0; i < EEPROM_SIZE; i++) {
+        const char currentByte = static_cast<char>(EEPROM.read(i));
+        eepromData[i] = currentByte;
+
+        if (jsonStart == EEPROM_SIZE && currentByte == '{') {
+            jsonStart = i;
+        }
+
+        if (jsonStart != EEPROM_SIZE && currentByte == '}') {
+            jsonEnd = i;
+        }
+
+        if (currentByte == '\0') {
+            break;
+        }
+    }
+
+    if (jsonStart == EEPROM_SIZE || jsonEnd < jsonStart) {
         return false;
     }
-    return true; // Read success
+
+    const size_t jsonLength = jsonEnd - jsonStart + 1;
+    char jsonData[EEPROM_SIZE + 1];
+    memcpy(jsonData, eepromData + jsonStart, jsonLength);
+    jsonData[jsonLength] = '\0';
+
+	DeserializationError error = deserializeJson(doc, jsonData);
+    if (error) {
+        return false;
+    }
+
+    return true;
 }
 
 // Write data to the EEPROM
@@ -65,8 +80,13 @@ bool writeEEPROM() {
 
     // Write data to EEPROM
     EepromStream eepromStream(0, EEPROM_SIZE);
-	if (!serializeJson(doc, eepromStream)) {
+    const size_t jsonSize = serializeJson(doc, eepromStream);
+    if (jsonSize == 0) {
         return false; // Error while writing on EEPROM
+    }
+
+    if (jsonSize < EEPROM_SIZE) {
+        EEPROM.write(jsonSize, '\0');
     }
 
     // Commit changes
@@ -84,8 +104,10 @@ void loadSettingFromEEPROM() {
     JsonDocument doc; // JSON object
 
     // Read the EEPROM
-	if (!readEEPROM(doc)) { 
-        return; // If error, exit the function
+	if (!readEEPROM(doc)) {
+		printLogfln("EEPROM is empty or invalid, writing default settings...");
+		writeEEPROM();
+		return;
     }
 
     // Load the API key
@@ -126,7 +148,7 @@ void loadSettingFromEEPROM() {
 
     // Load the various settings
     if (!doc["formatType"].isNull()) {
-        formatType = doc["formatType"].as<const char*>() == "US" ? FORMAT_US : FORMAT_EU;
+        formatType = strcmp(doc["formatType"].as<const char*>(), "US") == 0 ? FORMAT_US : FORMAT_EU;
     }
     if (!doc["matrixIntensity"].isNull()) {
         matrixIntensity = doc["matrixIntensity"].as<uint8_t>();

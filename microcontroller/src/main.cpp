@@ -8,7 +8,6 @@
 // Setup
 void setup() {
 	initSerial(); // Init serial
-	// setupLittleFS(); // Setup LittleFS
 	setupEEPROM(); // Setup EEPROM
 	setupServer(); // Setup server
 	manageWiFiConnection(); // Manage WiFi connection
