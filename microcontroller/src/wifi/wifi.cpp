@@ -1,9 +1,15 @@
 #include "wifi.h"
 #include <Arduino.h>
+#include <DNSServer.h>
 #include "../config/config.h"
 #include "../storage/storage.h"
 #include "../matrix/matrix.h"
 #include "../serial/serial.h"
+
+namespace {
+	DNSServer dnsServer; // DNS server for captive portal
+	constexpr byte DNS_PORT = 53; // DNS port for captive portal
+}
 
 // Connecting to WiFi
 bool connectToWiFi() {
@@ -40,11 +46,17 @@ bool setupAccessPoint() {
 	accessPointEnabled = WiFi.softAP(accessPointSSID); // Start the access point
 	if (!accessPointEnabled) // Check if enabled
 		return false; // If not enabled exit the function
+	dnsServer.start(DNS_PORT, "*", WiFi.softAPIP());
+	printLogfln("Access point ready on http://%s", WiFi.softAPIP().toString().c_str());
 	return true; // Access point enabled
 }
 
 // Manage WiFi connection
 bool manageWiFiConnection() {
+	if (accessPointEnabled) {
+		dnsServer.processNextRequest();
+	}
+
 	if (wiFiConnectionStatus == WIFI_TRY) { // Check if already trying to connect
 		if (connectToWiFi()) { // Connecting to WiFi
 			wiFiConnectionStatus = WIFI_OK; // Update connection status
@@ -62,6 +74,7 @@ bool manageWiFiConnection() {
 		
 		// Check if I need to disable the access point
 		if (disableAccessPoint && accessPointEnabled) {
+			dnsServer.stop();
 			accessPointEnabled = !WiFi.softAPdisconnect(); // Disable access point
 			if (!accessPointEnabled) { // Check if disabled
 				disableAccessPoint = false; // Mark as disabled
