@@ -70,7 +70,7 @@ export const setBusy = busy => {
 };
 
 // Open the shared message modal
-export const showMessage = (type, title, message) => {
+export const showMessage = ({ type = 'Error', title = 'Error', message = 'Internal server error' }) => {
     const globalStore = useGlobalStore();
     globalStore.value.messageModal = {
         visible: true,
@@ -90,19 +90,20 @@ export const closeMessage = () => {
 export const handleBackendErrors = ({ error, errorTranslated = '', errorMessage = '', showDialog = false }) => {
     console.error(errorMessage || 'An error occurred:', error);
 
+    // Show a user-friendly error dialog if requested
     if (showDialog) {
-        const globalStore = useGlobalStore();
-        globalStore.value.messageModal = {
-            visible: true,
+        showMessage({
             type: 'Error',
             title: 'Error',
             message: errorTranslated || errorMessage || 'Internal server error'
-        };
+        });
     }
 
+    // If the error contains a status code, rethrow it for upstream handling
     if (error?.statusCode || error?.response?.status) {
         throw error;
     }
 
+    // For other types of errors, throw a generic error with the translated message if available
     throw new Error(errorTranslated || 'Internal server error');
 };

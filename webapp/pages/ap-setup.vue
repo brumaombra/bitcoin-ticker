@@ -31,7 +31,11 @@ const handleConnectPress = async () => {
     try {
         setBusy(true);
         await connectToWiFi(ssid.value, password.value);
-        showMessage('Success', 'Success', 'You have successfully connected the device to the Wi-Fi network! The access point will be disabled. Enjoy the Bitcoin ticker!');
+        showMessage({
+            type: 'Success',
+            title: 'Success',
+            message: 'You have successfully connected the device to the Wi-Fi network! The access point will be disabled. Enjoy the Bitcoin ticker!'
+        });
     } catch (error) {
         handleBackendErrors({ error, errorTranslated: 'An error occurred while connecting to the Wi-Fi network', errorMessage: 'An error occurred while connecting to the Wi-Fi network', showDialog: true });
     } finally {
@@ -73,6 +77,7 @@ const refreshSSIDList = async () => {
                         <div class="flex h-14 w-14 items-center justify-center rounded border border-[var(--border-light)] bg-[var(--bg-selected-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)]">
                             <HugeiconsIcon :icon="Wifi01Icon" :size="28" color="currentColor" :stroke-width="1.8" aria-label="WiFi" role="img" class="h-7 w-7" />
                         </div>
+                        
                         <!-- Title copy -->
                         <div>
                             <div class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">Access point mode</div>

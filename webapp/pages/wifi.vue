@@ -29,7 +29,11 @@ const handleConnectPress = async () => {
     try {
         setBusy(true);
         await connectToWiFi(ssid.value, password.value);
-        showMessage('Success', 'Success', 'You have successfully connected the device to the Wi-Fi network! The access point will be disabled. Enjoy the Bitcoin ticker!');
+        showMessage({
+            type: 'Success',
+            title: 'Success',
+            message: 'You have successfully connected the device to the Wi-Fi network! The access point will be disabled. Enjoy the Bitcoin ticker!'
+        });
     } catch (error) {
         handleBackendErrors({ error, errorTranslated: 'An error occurred while connecting to the Wi-Fi network', errorMessage: 'An error occurred while connecting to the Wi-Fi network', showDialog: true });
     } finally {

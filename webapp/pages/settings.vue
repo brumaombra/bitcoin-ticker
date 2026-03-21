@@ -40,7 +40,11 @@ const handleSavePress = async () => {
     try {
         setBusy(true);
         await saveSettings(settings.value);
-        showMessage('Success', 'Success', 'The settings have been saved successfully!');
+        showMessage({
+            type: 'Success',
+            title: 'Success',
+            message: 'The settings have been saved successfully!'
+        });
     } catch (error) {
         handleBackendErrors({ error, errorTranslated: 'An error occurred while saving the settings', errorMessage: 'An error occurred while saving the settings', showDialog: true });
     } finally {

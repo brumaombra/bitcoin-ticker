@@ -20,7 +20,11 @@ const handleSavePress = async () => {
     try {
         setBusy(true);
         await saveApiKey(apiKey.value);
-        showMessage('Success', 'Success', 'The API key has been saved successfully!');
+        showMessage({
+            type: 'Success',
+            title: 'Success',
+            message: 'The API key has been saved successfully!'
+        });
     } catch (error) {
         handleBackendErrors({ error, errorTranslated: 'An error occurred while saving the API key', errorMessage: 'An error occurred while saving the API key', showDialog: true });
     } finally {

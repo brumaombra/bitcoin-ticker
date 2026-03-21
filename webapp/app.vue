@@ -30,7 +30,11 @@ const ensureDeviceData = async () => {
         }
     } catch (error) {
         console.error(error);
-        showMessage('Error', 'Error', 'An error occurred while loading the data');
+        showMessage({
+            type: 'Error',
+            title: 'Error',
+            message: 'An error occurred while loading the data'
+        });
     } finally {
         setBusy(false);
     }
