@@ -85,3 +85,24 @@ export const closeMessage = () => {
     const globalStore = useGlobalStore();
     globalStore.value.messageModal.visible = false;
 };
+
+// Handle backend errors with a shared message strategy
+export const handleBackendErrors = ({ error, errorTranslated = '', errorMessage = '', showDialog = false }) => {
+    console.error(errorMessage || 'An error occurred:', error);
+
+    if (showDialog) {
+        const globalStore = useGlobalStore();
+        globalStore.value.messageModal = {
+            visible: true,
+            type: 'Error',
+            title: 'Error',
+            message: errorTranslated || errorMessage || 'Internal server error'
+        };
+    }
+
+    if (error?.statusCode || error?.response?.status) {
+        throw error;
+    }
+
+    throw new Error(errorTranslated || 'Internal server error');
+};

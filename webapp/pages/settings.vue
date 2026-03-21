@@ -3,14 +3,13 @@ import { HugeiconsIcon } from '@hugeicons/vue';
 import { Settings01Icon } from '@hugeicons/core-free-icons';
 import { computed } from 'vue';
 import { saveSettings } from '~/composables/useDeviceApi.js';
-import { setBusy, showMessage } from '~/composables/useUtils.js';
+import { handleBackendErrors, setBusy, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
 import Select from '~/components/ui/Select.vue';
 import ToggleSwitch from '~/components/ui/ToggleSwitch.vue';
 
-// Shared device settings
 const globalStore = useGlobalStore();
 
 // Reactive settings payload
@@ -43,8 +42,7 @@ const handleSavePress = async () => {
         await saveSettings(settings.value);
         showMessage('Success', 'Success', 'The settings have been saved successfully!');
     } catch (error) {
-        console.error(error);
-        showMessage('Error', 'Error', 'An error occurred while saving the settings');
+        handleBackendErrors({ error, errorTranslated: 'An error occurred while saving the settings', errorMessage: 'An error occurred while saving the settings', showDialog: true });
     } finally {
         setBusy(false);
     }

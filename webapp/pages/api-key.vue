@@ -3,7 +3,7 @@ import { HugeiconsIcon } from '@hugeicons/vue';
 import { Key01Icon } from '@hugeicons/core-free-icons';
 import { computed, ref } from 'vue';
 import { saveApiKey } from '~/composables/useDeviceApi.js';
-import { setBusy, showMessage } from '~/composables/useUtils.js';
+import { handleBackendErrors, setBusy, showMessage } from '~/composables/useUtils.js';
 import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
 import Input from '~/components/ui/Input.vue';
@@ -22,8 +22,7 @@ const handleSavePress = async () => {
         await saveApiKey(apiKey.value);
         showMessage('Success', 'Success', 'The API key has been saved successfully!');
     } catch (error) {
-        console.error(error);
-        showMessage('Error', 'Error', 'An error occurred while saving the API key');
+        handleBackendErrors({ error, errorTranslated: 'An error occurred while saving the API key', errorMessage: 'An error occurred while saving the API key', showDialog: true });
     } finally {
         setBusy(false);
         apiKey.value = '';

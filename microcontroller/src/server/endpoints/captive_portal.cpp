@@ -38,12 +38,12 @@ namespace {
 		return true;
 	}
 
-	bool shouldRedirectToWifiPage(const String& requestPath) {
+	bool shouldRedirectToSetupPage(const String& requestPath) {
 		if (!accessPointEnabled) {
 			return false;
 		}
 
-		if (requestPath == "/wifi" || requestPath.startsWith("/_nuxt/") || requestPath.startsWith("/api/")) {
+		if (requestPath == "/ap-setup" || requestPath.startsWith("/_nuxt/") || requestPath.startsWith("/api/")) {
 			return false;
 		}
 
@@ -55,8 +55,8 @@ void setupCaptivePortalRoute() {
 	// Embedded Nuxt routes and generated assets
 	server.onNotFound([](AsyncWebServerRequest *request) {
 		// Redirect to Wi-Fi setup page if in AP mode
-		if ((request->method() == HTTP_GET || request->method() == HTTP_HEAD) && shouldRedirectToWifiPage(request->url())) {
-			request->redirect("/wifi");
+		if ((request->method() == HTTP_GET || request->method() == HTTP_HEAD) && shouldRedirectToSetupPage(request->url())) {
+			request->redirect("/ap-setup");
 			return;
 		}
 

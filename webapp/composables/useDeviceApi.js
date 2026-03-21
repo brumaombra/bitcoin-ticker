@@ -21,8 +21,7 @@ export const getNetworks = async () => {
         const data = await $fetch(url);
         return data.networks || [];
     } catch (error) {
-        console.error(error);
-        return [];
+        throw new Error('An error occurred while loading the Wi-Fi networks');
     }
 };
 
@@ -33,8 +32,7 @@ export const getSettings = async () => {
         const data = await $fetch(url);
         return data || {};
     } catch (error) {
-        console.error(error);
-        return {};
+        throw new Error('An error occurred while loading the settings');
     }
 };
 
@@ -54,7 +52,6 @@ export const saveSettings = async settings => {
         // Return if successful
         return data.status === 'OK';
     } catch (error) {
-        console.error(error);
         throw new Error('An error occurred while saving the settings');
     }
 };
@@ -66,7 +63,6 @@ export const saveApiKey = async apiKey => {
         const data = await $fetch(url);
         return data.status === 'OK';
     } catch (error) {
-        console.error(error);
         throw new Error('An error occurred while saving the API key');
     }
 };
@@ -127,7 +123,6 @@ export const connectToWiFi = async (ssid, password) => {
         // If the device returned an immediate failure, throw an error
         throw new Error('Failed to connect to WiFi');
     } catch (error) {
-        console.error(error);
         throw new Error('An error occurred while connecting to the Wi-Fi network');
     }
 };

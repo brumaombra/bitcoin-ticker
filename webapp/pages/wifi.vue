@@ -1,9 +1,9 @@
 <script setup>
+import { computed, ref } from 'vue';
 import { HugeiconsIcon } from '@hugeicons/vue';
 import { Wifi01Icon } from '@hugeicons/core-free-icons';
-import { computed, ref } from 'vue';
 import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
-import { setBusy, showMessage } from '~/composables/useUtils.js';
+import { handleBackendErrors, setBusy, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
@@ -15,7 +15,7 @@ const ssid = ref('');
 const password = ref('');
 const isLoading = ref(false);
 
-// Network options for the select control
+// Available network options
 const networkOptions = computed(() => {
     return globalStore.value.networksList.map(network => ({
         value: network.ssid,
@@ -31,8 +31,7 @@ const handleConnectPress = async () => {
         await connectToWiFi(ssid.value, password.value);
         showMessage('Success', 'Success', 'You have successfully connected the device to the Wi-Fi network! The access point will be disabled. Enjoy the Bitcoin ticker!');
     } catch (error) {
-        console.error(error);
-        showMessage('Error', 'Error', 'An error occurred while connecting to the Wi-Fi network, try with a different network or check the password');
+        handleBackendErrors({ error, errorTranslated: 'An error occurred while connecting to the Wi-Fi network', errorMessage: 'An error occurred while connecting to the Wi-Fi network', showDialog: true });
     } finally {
         setBusy(false);
         password.value = '';
@@ -46,8 +45,7 @@ const refreshSSIDList = async () => {
     try {
         globalStore.value.networksList = await getNetworks();
     } catch (error) {
-        console.error(error);
-        showMessage('Error', 'Error', 'An error occurred while refreshing the SSID list');
+        handleBackendErrors({ error, errorTranslated: 'An error occurred while refreshing the SSID list', errorMessage: 'An error occurred while refreshing the SSID list', showDialog: true });
     } finally {
         isLoading.value = false;
     }
@@ -64,16 +62,21 @@ definePageMeta({
         <!-- Page intro -->
         <div class="w-full lg:max-w-sm">
             <Card>
+                <!-- Intro header -->
                 <div class="mb-6 flex items-center gap-4">
+                    <!-- WiFi icon -->
                     <div class="flex h-14 w-14 items-center justify-center rounded border border-[var(--border-light)] bg-[var(--bg-selected-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)]">
                         <HugeiconsIcon :icon="Wifi01Icon" :size="28" color="currentColor" :stroke-width="1.8" aria-label="WiFi" role="img" class="h-7 w-7" />
                     </div>
+
+                    <!-- Title copy -->
                     <div>
                         <div class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">Setup</div>
                         <h1 class="mt-1 text-2xl font-bold">Connect to WiFi</h1>
                     </div>
                 </div>
 
+                <!-- Intro description -->
                 <p class="text-sm leading-6 text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">
                     Join the device to your local network so it can fetch market data and keep the LED matrix updated.
                 </p>
@@ -86,14 +89,19 @@ definePageMeta({
                 <form class="space-y-5" @submit.prevent="handleConnectPress">
                     <!-- Network selector -->
                     <div>
+                        <!-- Network header -->
                         <div class="mb-2 flex items-center justify-between gap-3">
+                            <!-- Label -->
                             <label for="ssid" class="text-sm font-medium">Available networks</label>
+
+                            <!-- Refresh button -->
                             <Button type="secondary" :disabled="isLoading" @click="refreshSSIDList">
                                 <span v-if="isLoading">Refreshing...</span>
                                 <span v-else>Refresh</span>
                             </Button>
                         </div>
 
+                        <!-- Network select -->
                         <Select id="ssid" v-model="ssid" placeholder="Select a network" :option-list="networkOptions" />
                     </div>
 
@@ -109,7 +117,7 @@ definePageMeta({
                     </div>
 
                     <!-- Submit button -->
-                    <Button type="primary" class="w-full" :disabled="!ssid || !password">Connect Device</Button>
+                    <Button type="primary" class="w-full" :disabled="!ssid || !password" @click="handleConnectPress">Connect Device</Button>
                 </form>
             </Card>
         </div>
