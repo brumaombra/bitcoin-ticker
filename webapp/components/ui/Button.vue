@@ -2,6 +2,7 @@
 // Props
 const props = defineProps({
     type: { type: String, default: 'secondary', validator: value => ['primary', 'secondary', 'ghost'].includes(value) },
+    nativeType: { type: String, default: 'button', validator: value => ['button', 'submit', 'reset'].includes(value) },
     disabled: { type: Boolean, default: false },
     text: { type: String, default: '' }
 });
@@ -42,7 +43,7 @@ const handleClick = event => {
 
 <template>
     <!-- Button content -->
-    <button type="button" :disabled="props.disabled" :class="getButtonClasses()" v-bind="$attrs" @click="handleClick">
+    <button :type="props.nativeType" :disabled="props.disabled" :class="getButtonClasses()" v-bind="$attrs" @click="handleClick">
         <slot>
             {{ props.text }}
         </slot>

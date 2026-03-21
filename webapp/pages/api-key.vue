@@ -76,7 +76,7 @@ definePageMeta({
                     </div>
 
                     <!-- Submit button -->
-                    <Button type="primary" class="w-full" :disabled="!isFormValid">Save API Key</Button>
+                    <Button type="primary" native-type="submit" class="w-full" :disabled="!isFormValid">Save API Key</Button>
                 </form>
             </Card>
         </div>

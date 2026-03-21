@@ -176,7 +176,7 @@ definePageMeta({
 
                 <!-- Form actions -->
                 <div class="flex flex-col gap-3 md:flex-row">
-                    <Button type="primary" class="w-full md:w-auto">Save Settings</Button>
+                    <Button type="primary" native-type="submit" class="w-full md:w-auto">Save Settings</Button>
                     <Button type="secondary" class="w-full md:w-auto" @click="handleResetPress">Reset Saved Settings</Button>
                 </div>
             </form>

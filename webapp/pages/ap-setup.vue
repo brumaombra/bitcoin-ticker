@@ -122,7 +122,7 @@ const refreshSSIDList = async () => {
                         </div>
 
                         <!-- Submit button -->
-                        <Button type="primary" class="w-full" :disabled="!ssid || !password" @click="handleConnectPress">Connect Device</Button>
+                        <Button type="primary" native-type="submit" class="w-full" :disabled="!ssid || !password">Connect Device</Button>
                     </form>
                 </Card>
             </div>
