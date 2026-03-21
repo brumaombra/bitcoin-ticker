@@ -34,7 +34,7 @@ const handleConnectPress = async () => {
         showMessage({
             type: 'Info',
             title: 'Device connected',
-            message: `The microcontroller connected to ${result.ssid || ssid.value}${result.ip ? ` and is available at ${result.ip}` : ''}.`
+            message: `The microcontroller connected to ${result.ssid || ssid.value} and is available at ${result.hostname} and ${result.ip}.`
         });
     } catch (error) {
         handleBackendErrors({

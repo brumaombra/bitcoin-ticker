@@ -31,6 +31,7 @@ extern char stripMessageVolume[BUF_SIZE]; // Volume
 extern AsyncWebServer server;
 extern WiFiClient client;
 extern const char accessPointSSID[];
+extern const char mdnsHostname[];
 extern char wiFiSSID[35];
 extern char wiFiPassword[70];
 extern char apiKey[35];

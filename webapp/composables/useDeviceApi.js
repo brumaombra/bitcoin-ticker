@@ -96,7 +96,8 @@ const checkWiFiConnectionPolling = async () => {
                 case connectionStatus.WIFI_OK:
                     return {
                         ssid: data?.ssid || '',
-                        ip: data?.ip || ''
+                        ip: data?.ip || '',
+                        hostname: data?.hostname || ''
                     };
                 case connectionStatus.WIFI_KO:
                     throw new Error('The Wi-Fi credentials are wrong or the network is unavailable.');

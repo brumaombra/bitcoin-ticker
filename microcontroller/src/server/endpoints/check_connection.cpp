@@ -15,6 +15,7 @@ namespace {
 		if (wiFiConnectionStatus == WIFI_OK && WiFi.status() == WL_CONNECTED) {
 			doc["ssid"] = WiFi.SSID();
 			doc["ip"] = WiFi.localIP().toString();
+			doc["hostname"] = String(mdnsHostname) + ".local";
 		}
 
 		// Serialize the JSON response to a string

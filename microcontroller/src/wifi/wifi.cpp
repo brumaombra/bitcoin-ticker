@@ -1,6 +1,7 @@
 #include "wifi.h"
 #include <Arduino.h>
 #include <DNSServer.h>
+#include <ESP8266mDNS.h>
 #include "../config/config.h"
 #include "../storage/storage.h"
 #include "../matrix/matrix.h"
@@ -9,6 +10,38 @@
 namespace {
 	DNSServer dnsServer; // DNS server for captive portal
 	constexpr byte DNS_PORT = 53; // DNS port for captive portal
+	bool mdnsActive = false;
+
+	void stopMdns() {
+		if (!mdnsActive) {
+			return;
+		}
+
+		MDNS.close();
+		mdnsActive = false;
+		printLogfln("mDNS stopped");
+	}
+
+	void startMdns() {
+		if (WiFi.status() != WL_CONNECTED) {
+			stopMdns();
+			return;
+		}
+
+		if (mdnsActive) {
+			MDNS.update();
+			return;
+		}
+
+		if (!MDNS.begin(mdnsHostname)) {
+			printLogfln("Failed to start mDNS on http://%s.local", mdnsHostname);
+			return;
+		}
+
+		MDNS.addService("http", "tcp", 80);
+		mdnsActive = true;
+		printLogfln("mDNS ready on http://%s.local", mdnsHostname);
+	}
 }
 
 // Connecting to WiFi
@@ -33,6 +66,7 @@ bool connectToWiFi() {
 	// Check if connected
     if (WiFi.status() == WL_CONNECTED) {
         printLogln(" connected!");
+		startMdns();
         return true;
     }
     
@@ -41,6 +75,7 @@ bool connectToWiFi() {
 
 // Setting up the access point
 bool setupAccessPoint() {
+	stopMdns();
 	if (accessPointEnabled) // Check if already enabled
 		return true; // If enabled exit the function
 	accessPointEnabled = WiFi.softAP(accessPointSSID); // Start the access point
@@ -84,8 +119,11 @@ bool manageWiFiConnection() {
 		// Check if connected to WiFi
 		if (WiFi.status() == WL_CONNECTED) {
 			wiFiConnectionStatus = WIFI_OK; // Update connection status
+			startMdns();
 			return true; // Connection success
 		}
+
+		stopMdns();
 		
 		// Check if credentials are already present
 		if (wiFiSSID[0] != '\0' && wiFiPassword[0] != '\0') {

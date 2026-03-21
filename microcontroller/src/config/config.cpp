@@ -17,6 +17,7 @@ char stripMessageVolume[BUF_SIZE]; // Volume
 AsyncWebServer server(80);
 WiFiClient client;
 const char accessPointSSID[] = "Bitcoin-Ticker";
+const char mdnsHostname[] = "ticker";
 char wiFiSSID[35] = "";
 char wiFiPassword[70] = "";
 char apiKey[35] = "";
