@@ -22,7 +22,7 @@ const networkOptions = computed(() => {
     return globalStore.value.networksList.map(network => ({
         value: network.ssid,
         label: network.ssid,
-        meta: `${network.signal} dBm`
+        meta: `${network.signal} dBm · Ch ${network.channel} · ${network.quality}% · ${network.secured ? 'Secured' : 'Open'}`
     }));
 });
 
