@@ -99,6 +99,23 @@ bool writeEEPROM() {
 	return true; // Write success
 }
 
+// Clear all saved data from the EEPROM
+bool clearEEPROM() {
+    // Write 0xFF to all EEPROM addresses
+    for (int i = 0; i < EEPROM_SIZE; i++) {
+        EEPROM.write(i, 0xFF);
+    }
+
+    // Commit changes
+    if (!EEPROM.commit()) {
+        return false;
+    }
+
+    // Mark as cleared
+    printLogfln("EEPROM cleared");
+    return true;
+}
+
 // Load the settings from the EEPROM
 void loadSettingFromEEPROM() {
     JsonDocument doc; // JSON object

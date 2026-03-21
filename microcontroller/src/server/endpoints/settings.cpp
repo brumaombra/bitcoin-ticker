@@ -37,6 +37,20 @@ void setupSettingsRoute() {
 		request->send(200);
 	});
 
+	// Clear all saved settings from EEPROM and restart
+	server.on("/api/reset-settings", HTTP_GET, [](AsyncWebServerRequest *request) {
+		// Clear EEPROM
+		if (!clearEEPROM()) {
+			request->send(500, "application/json", "{\"status\":\"error\",\"message\":\"Failed to clear EEPROM\"}");
+			return;
+		}
+
+		// Send response and restart
+		request->send(200, "application/json", "{\"status\":\"OK\",\"message\":\"EEPROM cleared. Restarting...\"}");
+		delay(500);
+		ESP.restart();
+	});
+
 	// Save the values visibility settings
 	server.on("/api/settings", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
 		// Accumulate chunks (ESP8266 splits data in multiple chunks)

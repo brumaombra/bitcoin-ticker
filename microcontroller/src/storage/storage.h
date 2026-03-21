@@ -6,6 +6,7 @@
 void setupEEPROM();
 bool readEEPROM(JsonDocument& doc);
 void testReadEEPROM();
+bool clearEEPROM();
 bool writeEEPROM();
 
 #endif

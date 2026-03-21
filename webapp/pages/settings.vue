@@ -2,7 +2,7 @@
 import { HugeiconsIcon } from '@hugeicons/vue';
 import { Settings01Icon } from '@hugeicons/core-free-icons';
 import { computed } from 'vue';
-import { saveSettings } from '~/composables/useDeviceApi.js';
+import { resetSettings, saveSettings } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Button from '~/components/ui/Button.vue';
@@ -47,6 +47,23 @@ const handleSavePress = async () => {
         });
     } catch (error) {
         handleBackendErrors({ error, errorTranslated: 'An error occurred while saving the settings', errorMessage: 'An error occurred while saving the settings', showDialog: true });
+    } finally {
+        setBusy(false);
+    }
+};
+
+// Reset the saved device settings and restart the firmware
+const handleResetPress = async () => {
+    try {
+        setBusy(true);
+        const result = await resetSettings();
+        showMessage({
+            type: 'Info',
+            title: 'Device restarting',
+            message: result.message || 'The device settings were cleared and the firmware is restarting.'
+        });
+    } catch (error) {
+        handleBackendErrors({ error, errorTranslated: 'An error occurred while resetting the settings', errorMessage: 'An error occurred while resetting the settings', showDialog: true });
     } finally {
         setBusy(false);
     }
@@ -157,8 +174,11 @@ definePageMeta({
                     </div>
                 </Card>
 
-                <!-- Submit button -->
-                <Button type="primary" class="w-full md:w-auto">Save Settings</Button>
+                <!-- Form actions -->
+                <div class="flex flex-col gap-3 md:flex-row">
+                    <Button type="primary" class="w-full md:w-auto">Save Settings</Button>
+                    <Button type="secondary" class="w-full md:w-auto" @click="handleResetPress">Reset Saved Settings</Button>
+                </div>
             </form>
         </div>
     </div>

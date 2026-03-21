@@ -30,14 +30,19 @@ const networkOptions = computed(() => {
 const handleConnectPress = async () => {
     try {
         setBusy(true);
-        await connectToWiFi(ssid.value, password.value);
+        const result = await connectToWiFi(ssid.value, password.value);
         showMessage({
-            type: 'Success',
-            title: 'Success',
-            message: 'You have successfully connected the device to the Wi-Fi network! The access point will be disabled. Enjoy the Bitcoin ticker!'
+            type: 'Info',
+            title: 'Device connected',
+            message: `The microcontroller connected to ${result.ssid || ssid.value}${result.ip ? ` and is available at ${result.ip}` : ''}.`
         });
     } catch (error) {
-        handleBackendErrors({ error, errorTranslated: 'An error occurred while connecting to the Wi-Fi network', errorMessage: 'An error occurred while connecting to the Wi-Fi network', showDialog: true });
+        handleBackendErrors({
+            error,
+            errorTranslated: error instanceof Error ? error.message : 'An error occurred while connecting to the Wi-Fi network',
+            errorMessage: error instanceof Error ? error.message : 'An error occurred while connecting to the Wi-Fi network',
+            showDialog: true
+        });
     } finally {
         setBusy(false);
         password.value = '';

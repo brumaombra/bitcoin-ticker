@@ -1,3 +1,5 @@
+import { delay } from '~/composables/useUtils.js';
+
 // WiFi connection status codes returned by the device
 const connectionStatus = Object.freeze({
     WIFI_TRY: 2,
@@ -56,6 +58,17 @@ export const saveSettings = async settings => {
     }
 };
 
+// Reset the saved device settings and restart the firmware
+export const resetSettings = async () => {
+    try {
+        const url = buildDeviceUrl('/api/reset-settings');
+        const data = await $fetch(url);
+        return data || {};
+    } catch (error) {
+        throw new Error('An error occurred while resetting the settings');
+    }
+};
+
 // Save the market data API key on the device
 export const saveApiKey = async apiKey => {
     try {
@@ -69,43 +82,37 @@ export const saveApiKey = async apiKey => {
 
 // Poll the device until the WiFi connection attempt completes
 const checkWiFiConnectionPolling = async () => {
-    return new Promise((resolve, reject) => {
-        const maxAttempts = 30;
-        let attempts = 0;
-        const polling = window.setInterval(async () => {
-            try {
-                attempts += 1;
+    const maxAttempts = 45;
 
-                // If we've exceeded the maximum number of attempts, stop polling and reject
-                if (attempts > maxAttempts) {
-                    window.clearInterval(polling);
-                    reject(new Error('Connection timeout'));
-                    return;
-                }
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+        try {
+            const url = buildDeviceUrl('/api/check-connection');
+            const data = await $fetch(url, { retry: 0 });
+            const status = Number(data?.status);
 
-                // Call the device API to check the connection status
-                const url = buildDeviceUrl('/api/check-connection');
-                const data = await $fetch(url);
-                switch (data.status) {
-                    case connectionStatus.WIFI_TRY:
-                        return;
-                    case connectionStatus.WIFI_OK:
-                        window.clearInterval(polling);
-                        resolve(true);
-                        return;
-                    case connectionStatus.WIFI_KO:
-                        window.clearInterval(polling);
-                        reject(new Error('Connection failed'));
-                        return;
-                    default:
-                        throw new Error('Unknown status');
-                }
-            } catch (error) {
-                window.clearInterval(polling);
-                reject(new Error('An error occurred while checking the WiFi connection'));
+            switch (status) {
+                case connectionStatus.WIFI_TRY:
+                    break;
+                case connectionStatus.WIFI_OK:
+                    return {
+                        ssid: data?.ssid || '',
+                        ip: data?.ip || ''
+                    };
+                case connectionStatus.WIFI_KO:
+                    throw new Error('The Wi-Fi credentials are wrong or the network is unavailable.');
+                default:
+                    throw new Error('The device returned an unknown Wi-Fi connection status.');
             }
-        }, 1000);
-    });
+        } catch (error) {
+            if (error instanceof Error && error.message !== 'fetch failed') {
+                throw error;
+            }
+        }
+
+        await delay(1000);
+    }
+
+    throw new Error('The device did not finish connecting to Wi-Fi in time.');
 };
 
 // Send WiFi credentials and wait for the final connection result
@@ -116,13 +123,17 @@ export const connectToWiFi = async (ssid, password) => {
         const data = await $fetch(url);
 
         // If the device is trying to connect, start polling for the result
-        if (data.status === connectionStatus.WIFI_TRY) {
+        if (Number(data.status) === connectionStatus.WIFI_TRY) {
             return await checkWiFiConnectionPolling();
         }
 
         // If the device returned an immediate failure, throw an error
         throw new Error('Failed to connect to WiFi');
     } catch (error) {
+        if (error instanceof Error) {
+            throw error;
+        }
+
         throw new Error('An error occurred while connecting to the Wi-Fi network');
     }
 };

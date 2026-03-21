@@ -69,6 +69,11 @@ export const setBusy = busy => {
     globalStore.value.busy = busy;
 };
 
+// Pause execution for a short delay
+export const delay = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+};
+
 // Open the shared message modal
 export const showMessage = ({ type = 'Error', title = 'Error', message = 'Internal server error' }) => {
     const globalStore = useGlobalStore();
