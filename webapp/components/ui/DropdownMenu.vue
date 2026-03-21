@@ -1,5 +1,6 @@
 <script setup>
-import CustomIcon from '~/components/ui/CustomIcon.vue';
+import { HugeiconsIcon } from '@hugeicons/vue';
+import { Tick01Icon } from '@hugeicons/core-free-icons';
 
 // Props
 const props = defineProps({
@@ -58,8 +59,11 @@ const handleSelect = optionKey => {
                 <span class="flex-1">{{ option.label }}</span>
 
                 <!-- Selected indicator -->
-                <CustomIcon v-if="isCurrentOption(option)"
-                    icon="check"
+                <HugeiconsIcon v-if="isCurrentOption(option)"
+                    :icon="Tick01Icon"
+                    :size="16"
+                    color="currentColor"
+                    :stroke-width="1.8"
                     class="h-4 w-4 shrink-0 text-[var(--button-primary-light)] dark:text-[var(--text-primary-dark)]" />
             </button>
         </div>

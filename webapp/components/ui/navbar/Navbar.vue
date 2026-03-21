@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
-import CustomIcon from '~/components/ui/CustomIcon.vue';
+import { HugeiconsIcon } from '@hugeicons/vue';
+import { Menu02Icon } from '@hugeicons/core-free-icons';
 import IconButton from '~/components/ui/IconButton.vue';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
 import ThemeSelector from '~/components/ui/ThemeSelector.vue';
@@ -38,7 +39,7 @@ const handleCloseSidebar = () => {
             <!-- Mobile sidebar toggle -->
             <div class="xl:hidden">
                 <IconButton aria-label="Open navigation" @click="handleToggleSidebar">
-                    <CustomIcon icon="menu" class="h-5 w-5" />
+                    <HugeiconsIcon :icon="Menu02Icon" :size="20" color="currentColor" :stroke-width="1.8" class="h-5 w-5" />
                 </IconButton>
             </div>
 

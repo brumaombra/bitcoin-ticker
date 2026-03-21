@@ -1,4 +1,6 @@
 <script setup>
+import { HugeiconsIcon } from '@hugeicons/vue';
+import { AlertCircleIcon, InformationCircleIcon, Tick01Icon } from '@hugeicons/core-free-icons';
 import Button from '~/components/ui/Button.vue';
 
 // Props
@@ -32,23 +34,17 @@ const closeModal = () => {
                             <div class="sm:flex sm:items-start">
                                 <!-- Error icon -->
                                 <div v-if="props.type === 'Error'" class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full border border-red-200 bg-red-50 sm:mx-0 sm:size-10 dark:border-red-900/50 dark:bg-red-950/30">
-                                    <svg class="size-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-                                    </svg>
+                                    <HugeiconsIcon :icon="AlertCircleIcon" :size="24" color="currentColor" :stroke-width="1.8" class="size-6 text-red-600" />
                                 </div>
 
                                 <!-- Success icon -->
                                 <div v-if="props.type === 'Success'" class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full border border-green-200 bg-green-50 sm:mx-0 sm:size-10 dark:border-green-900/50 dark:bg-green-950/30">
-                                    <svg class="size-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                    </svg>
+                                    <HugeiconsIcon :icon="Tick01Icon" :size="24" color="currentColor" :stroke-width="1.8" class="size-6 text-green-600" />
                                 </div>
 
                                 <!-- Info icon -->
                                 <div v-if="props.type === 'Info'" class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full border border-[var(--border-light)] bg-[var(--bg-selected-light)] sm:mx-0 sm:size-10 dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)]">
-                                    <svg class="size-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4v.01" />
-                                    </svg>
+                                    <HugeiconsIcon :icon="InformationCircleIcon" :size="24" color="currentColor" :stroke-width="1.8" class="size-6 text-blue-600" />
                                 </div>
 
                                 <!-- Message content -->

@@ -1,4 +1,5 @@
 <script setup>
+import { Key01Icon, Settings01Icon, Wifi01Icon } from '@hugeicons/core-free-icons';
 import AppShell from '~/components/ui/AppShell.vue';
 
 // Navigation items for the private control panel
@@ -7,19 +8,19 @@ const sidebarItems = [{
     path: '/wifi',
     label: 'WiFi',
     description: 'Scan networks and connect the device',
-    iconSrc: '/svg/wifi.svg'
+    icon: Wifi01Icon
 }, {
     id: 'settings',
     path: '/settings',
     label: 'Settings',
     description: 'Adjust ticker visibility and behavior',
-    iconSrc: '/svg/settings.svg'
+    icon: Settings01Icon
 }, {
     id: 'api-key',
     path: '/api-key',
     label: 'API Key',
     description: 'Provide the market data credential',
-    iconSrc: '/svg/key.svg'
+    icon: Key01Icon
 }];
 </script>
 

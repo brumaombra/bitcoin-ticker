@@ -1,4 +1,6 @@
 <script setup>
+import { HugeiconsIcon } from '@hugeicons/vue';
+import { Wifi01Icon } from '@hugeicons/core-free-icons';
 import { computed, ref } from 'vue';
 import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
 import { setBusy, showMessage } from '~/composables/useUtils.js';
@@ -64,7 +66,7 @@ definePageMeta({
             <Card>
                 <div class="mb-6 flex items-center gap-4">
                     <div class="flex h-14 w-14 items-center justify-center rounded border border-[var(--border-light)] bg-[var(--bg-selected-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)]">
-                        <img src="/svg/wifi.svg" alt="WiFi icon" class="h-7 w-7">
+                        <HugeiconsIcon :icon="Wifi01Icon" :size="28" color="currentColor" :stroke-width="1.8" aria-label="WiFi" role="img" class="h-7 w-7" />
                     </div>
                     <div>
                         <div class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">Setup</div>

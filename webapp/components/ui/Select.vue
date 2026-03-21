@@ -1,6 +1,7 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref } from 'vue';
-import CustomIcon from '~/components/ui/CustomIcon.vue';
+import { HugeiconsIcon } from '@hugeicons/vue';
+import { ArrowDown01Icon, Tick01Icon } from '@hugeicons/core-free-icons';
 
 // Props
 const props = defineProps({
@@ -161,7 +162,7 @@ onBeforeUnmount(() => {
             </span>
 
             <!-- Dropdown indicator -->
-            <CustomIcon icon="chevron-down" class="h-4 w-4 text-[var(--text-secondary-light)] transition-transform duration-300 dark:text-[var(--text-secondary-dark)]" :class="{ 'rotate-180': isOpen }" />
+            <HugeiconsIcon :icon="ArrowDown01Icon" :size="16" color="currentColor" :stroke-width="1.8" class="h-4 w-4 text-[var(--text-secondary-light)] transition-transform duration-300 dark:text-[var(--text-secondary-dark)]" :class="{ 'rotate-180': isOpen }" />
         </button>
 
         <Teleport to="body">
@@ -176,7 +177,7 @@ onBeforeUnmount(() => {
                         </div>
 
                         <!-- Selected indicator -->
-                        <CustomIcon v-if="option.value === props.modelValue" icon="check" class="mt-0.5 h-4 w-4 shrink-0 text-[var(--button-primary-light)] dark:text-[var(--text-primary-dark)]" />
+                        <HugeiconsIcon v-if="option.value === props.modelValue" :icon="Tick01Icon" :size="16" color="currentColor" :stroke-width="1.8" class="mt-0.5 h-4 w-4 shrink-0 text-[var(--button-primary-light)] dark:text-[var(--text-primary-dark)]" />
                     </button>
                 </div>
             </Transition>

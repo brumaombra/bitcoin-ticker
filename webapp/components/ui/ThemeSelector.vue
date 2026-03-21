@@ -1,7 +1,8 @@
 <script setup>
 import { computed, ref } from 'vue';
+import { HugeiconsIcon } from '@hugeicons/vue';
+import { ComputerIcon, Moon02Icon, Sun01Icon } from '@hugeicons/core-free-icons';
 import { getCurrentTheme, getThemes, setTheme } from '~/composables/useUtils.js';
-import CustomIcon from '~/components/ui/CustomIcon.vue';
 import Dropdown from '~/components/ui/Dropdown.vue';
 import DropdownMenu from '~/components/ui/DropdownMenu.vue';
 import IconButton from '~/components/ui/IconButton.vue';
@@ -22,11 +23,11 @@ const themeOptions = computed(() => {
 // Resolve the icon for each theme mode
 const getThemeIcon = theme => {
     if (theme === 'light') {
-        return 'theme-light';
+        return Sun01Icon;
     } else if (theme === 'dark') {
-        return 'theme-dark';
+        return Moon02Icon;
     } else {
-        return 'theme-system';
+        return ComputerIcon;
     }
 };
 
@@ -52,14 +53,14 @@ const handleSelectTheme = theme => {
         <!-- Trigger -->
         <template #trigger>
             <IconButton aria-label="Toggle theme menu" @click="toggleDropdown">
-                <CustomIcon :icon="currentThemeIcon" class="h-5 w-5" />
+                <HugeiconsIcon :icon="currentThemeIcon" :size="20" color="currentColor" :stroke-width="1.8" class="h-5 w-5" />
             </IconButton>
         </template>
 
         <!-- Theme options -->
         <DropdownMenu title="Theme" :options="themeOptions" :current="currentTheme" @select="handleSelectTheme">
             <template #option-leading="{ option }">
-                <CustomIcon :icon="option.icon" class="h-4 w-4" />
+                <HugeiconsIcon :icon="option.icon" :size="16" color="currentColor" :stroke-width="1.8" class="h-4 w-4" />
             </template>
         </DropdownMenu>
     </Dropdown>

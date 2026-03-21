@@ -11,6 +11,8 @@
         "postinstall": "nuxt prepare"
     },
     "dependencies": {
+        "@hugeicons/core-free-icons": "4.0.0",
+        "@hugeicons/vue": "1.0.5",
         "@tailwindcss/vite": "4.1.3",
         "nuxt": "3.20.2"
     },

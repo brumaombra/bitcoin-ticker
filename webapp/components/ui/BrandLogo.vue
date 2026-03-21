@@ -1,4 +1,6 @@
 <script setup>
+import BitcoinLogo from '~/components/ui/BitcoinLogo.vue';
+
 // Props
 const props = defineProps({
     brandName: { type: String, required: true },
@@ -9,7 +11,7 @@ const props = defineProps({
 <template>
     <div class="flex items-center gap-3">
         <!-- Brand mark -->
-        <img src="/svg/bitcoin.svg" alt="Bitcoin logo" class="h-9 w-9">
+        <BitcoinLogo class="h-9 w-9" />
 
         <!-- Brand text -->
         <div v-if="!props.compact">
