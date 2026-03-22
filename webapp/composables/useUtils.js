@@ -74,10 +74,10 @@ export const delay = timeout => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
-// Open the shared message modal
+// Open the shared message dialog
 export const showMessage = ({ type = 'Error', title = 'Error', message = 'Internal server error' }) => {
     const globalStore = useGlobalStore();
-    globalStore.value.messageModal = {
+    globalStore.value.messageDialog = {
         visible: true,
         type,
         title,
@@ -85,10 +85,48 @@ export const showMessage = ({ type = 'Error', title = 'Error', message = 'Intern
     };
 };
 
-// Close the shared message modal
+// Close the shared message dialog
 export const closeMessage = () => {
     const globalStore = useGlobalStore();
-    globalStore.value.messageModal.visible = false;
+    globalStore.value.messageDialog.visible = false;
+};
+
+// Open the shared confirm dialog
+export const showConfirmDialog = ({
+    title = 'Confirm action',
+    message = 'Are you sure?',
+    icon = null,
+    onConfirm = null,
+    onCancel = null,
+    confirmButton = {},
+    cancelButton = {}
+}) => {
+    const globalStore = useGlobalStore();
+    globalStore.value.confirmDialog = {
+        ...globalStore.value.confirmDialog,
+        visible: true,
+        title,
+        message,
+        icon,
+        onConfirm,
+        onCancel,
+        confirmButton: {
+            ...globalStore.value.confirmDialog.confirmButton,
+            ...confirmButton
+        },
+        cancelButton: {
+            ...globalStore.value.confirmDialog.cancelButton,
+            ...cancelButton
+        }
+    };
+};
+
+// Close the shared confirm dialog
+export const closeConfirmDialog = () => {
+    const globalStore = useGlobalStore();
+    globalStore.value.confirmDialog.visible = false;
+    globalStore.value.confirmDialog.onConfirm = null;
+    globalStore.value.confirmDialog.onCancel = null;
 };
 
 // Handle backend errors with a shared message strategy

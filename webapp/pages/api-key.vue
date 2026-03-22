@@ -3,7 +3,7 @@ import { HugeiconsIcon } from '@hugeicons/vue';
 import { Key01Icon } from '@hugeicons/core-free-icons';
 import { computed, ref } from 'vue';
 import { saveApiKey } from '~/composables/useDeviceApi.js';
-import { handleBackendErrors, setBusy, showMessage } from '~/composables/useUtils.js';
+import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
 import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
 import InfoBox from '~/components/ui/InfoBox.vue';
@@ -19,7 +19,7 @@ const isFormValid = computed(() => {
 });
 
 // Save the API key on the device
-const handleSavePress = async () => {
+const saveCurrentApiKey = async () => {
     try {
         setBusy(true);
         await saveApiKey(apiKey.value);
@@ -34,6 +34,23 @@ const handleSavePress = async () => {
         setBusy(false);
         apiKey.value = '';
     }
+};
+
+// Ask for confirmation before overwriting the stored API key
+const handleSavePress = () => {
+    showConfirmDialog({
+        title: 'Save API key',
+        message: 'Store this API key on the device and replace the current value?',
+        confirmButton: {
+            text: 'Save API key',
+            type: 'primary'
+        },
+        cancelButton: {
+            text: 'Keep editing',
+            type: 'secondary'
+        },
+        onConfirm: saveCurrentApiKey
+    });
 };
 
 // Page metadata

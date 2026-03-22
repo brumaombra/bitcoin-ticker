@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import { HugeiconsIcon } from '@hugeicons/vue';
 import { Wifi01Icon } from '@hugeicons/core-free-icons';
 import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
-import { handleBackendErrors, setBusy, showMessage } from '~/composables/useUtils.js';
+import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
@@ -30,7 +30,7 @@ const networkOptions = computed(() => {
 });
 
 // Submit WiFi credentials to the device
-const handleConnectPress = async () => {
+const connectDeviceToWiFi = async () => {
     try {
         setBusy(true);
         const result = await connectToWiFi(ssid.value, password.value);
@@ -50,6 +50,23 @@ const handleConnectPress = async () => {
         setBusy(false);
         password.value = '';
     }
+};
+
+// Ask for confirmation before disabling AP mode and joining the selected WiFi network
+const handleConnectPress = () => {
+    showConfirmDialog({
+        title: 'Connect and leave AP mode',
+        message: `Send the selected credentials for ${ssid.value} to the device, connect to that network, and disable the temporary hotspot?`,
+        confirmButton: {
+            text: 'Connect device',
+            type: 'primary'
+        },
+        cancelButton: {
+            text: 'Cancel',
+            type: 'secondary'
+        },
+        onConfirm: connectDeviceToWiFi
+    });
 };
 
 // Refresh the detected SSID list

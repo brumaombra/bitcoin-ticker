@@ -3,7 +3,7 @@ import { HugeiconsIcon } from '@hugeicons/vue';
 import { Settings01Icon } from '@hugeicons/core-free-icons';
 import { computed } from 'vue';
 import { resetSettings, saveSettings } from '~/composables/useDeviceApi.js';
-import { handleBackendErrors, setBusy, showMessage } from '~/composables/useUtils.js';
+import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
@@ -37,7 +37,7 @@ const separatorOptions = [
 ];
 
 // Save the current settings payload
-const handleSavePress = async () => {
+const saveCurrentSettings = async () => {
     if (!settings.value) {
         return;
     }
@@ -58,7 +58,7 @@ const handleSavePress = async () => {
 };
 
 // Reset the saved device settings and restart the firmware
-const handleResetPress = async () => {
+const resetSavedSettings = async () => {
     try {
         setBusy(true);
         const result = await resetSettings();
@@ -72,6 +72,40 @@ const handleResetPress = async () => {
     } finally {
         setBusy(false);
     }
+};
+
+// Ask for confirmation before saving the current settings
+const handleSavePress = () => {
+    showConfirmDialog({
+        title: 'Save settings',
+        message: 'Save the current ticker settings to the device?',
+        confirmButton: {
+            text: 'Save settings',
+            type: 'primary'
+        },
+        cancelButton: {
+            text: 'Keep editing',
+            type: 'secondary'
+        },
+        onConfirm: saveCurrentSettings
+    });
+};
+
+// Ask for confirmation before resetting the saved settings
+const handleResetPress = () => {
+    showConfirmDialog({
+        title: 'Reset saved settings',
+        message: 'Clear the saved settings and restart the firmware?',
+        confirmButton: {
+            text: 'Reset settings',
+            type: 'primary'
+        },
+        cancelButton: {
+            text: 'Cancel',
+            type: 'secondary'
+        },
+        onConfirm: resetSavedSettings
+    });
 };
 
 // Page metadata

@@ -23,11 +23,29 @@ export const useGlobalStore = () => useState('global', () => ({
     // Flag to track whether the settings have been fetched at least once
     settingsLoaded: false,
 
-    // Shared modal message state
-    messageModal: {
+    // Shared message dialog state
+    messageDialog: {
         visible: false,
         type: 'Info',
         title: 'Message',
         message: ''
+    },
+
+    // Shared confirm dialog state
+    confirmDialog: {
+        visible: false,
+        title: 'Confirm action',
+        message: '',
+        icon: null,
+        onConfirm: null,
+        onCancel: null,
+        confirmButton: {
+            type: 'primary',
+            text: 'Confirm'
+        },
+        cancelButton: {
+            type: 'secondary',
+            text: 'Cancel'
+        }
     }
 }));
