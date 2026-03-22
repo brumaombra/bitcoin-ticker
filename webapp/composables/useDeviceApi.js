@@ -7,6 +7,17 @@ const connectionStatus = Object.freeze({
     WIFI_KO: 0
 });
 
+// Translate a key through the active i18n instance when available
+const translate = (key, params = {}) => {
+    const nuxtApp = useNuxtApp();
+
+    if (typeof nuxtApp?.$i18n?.t === 'function') {
+        return nuxtApp.$i18n.t(key, params);
+    }
+
+    return key;
+};
+
 // Build a device endpoint URL with an optional query string
 const buildDeviceUrl = (path, query = null) => {
     const runtimeConfig = useRuntimeConfig();
@@ -23,7 +34,7 @@ export const getNetworks = async () => {
         const data = await $fetch(url);
         return data.networks || [];
     } catch (error) {
-        throw new Error('An error occurred while loading the Wi-Fi networks');
+        throw new Error(translate('api.loadNetworks'));
     }
 };
 
@@ -34,7 +45,7 @@ export const getSettings = async () => {
         const data = await $fetch(url);
         return data || {};
     } catch (error) {
-        throw new Error('An error occurred while loading the settings');
+        throw new Error(translate('api.loadSettings'));
     }
 };
 
@@ -54,7 +65,7 @@ export const saveSettings = async settings => {
         // Return if successful
         return data.status === 'OK';
     } catch (error) {
-        throw new Error('An error occurred while saving the settings');
+        throw new Error(translate('api.saveSettings'));
     }
 };
 
@@ -65,7 +76,7 @@ export const resetSettings = async () => {
         const data = await $fetch(url);
         return data || {};
     } catch (error) {
-        throw new Error('An error occurred while resetting the settings');
+        throw new Error(translate('api.resetSettings'));
     }
 };
 
@@ -76,7 +87,7 @@ export const saveApiKey = async apiKey => {
         const data = await $fetch(url);
         return data.status === 'OK';
     } catch (error) {
-        throw new Error('An error occurred while saving the API key');
+        throw new Error(translate('api.saveApiKey'));
     }
 };
 
@@ -100,9 +111,9 @@ const checkWiFiConnectionPolling = async () => {
                         hostname: data?.hostname || ''
                     };
                 case connectionStatus.WIFI_KO:
-                    throw new Error('The Wi-Fi credentials are wrong or the network is unavailable.');
+                    throw new Error(translate('api.wifiWrongCredentials'));
                 default:
-                    throw new Error('The device returned an unknown Wi-Fi connection status.');
+                    throw new Error(translate('api.wifiUnknownStatus'));
             }
         } catch (error) {
             if (error instanceof Error && error.message !== 'fetch failed') {
@@ -113,7 +124,7 @@ const checkWiFiConnectionPolling = async () => {
         await delay(1000);
     }
 
-    throw new Error('The device did not finish connecting to Wi-Fi in time.');
+    throw new Error(translate('api.wifiTimeout'));
 };
 
 // Send WiFi credentials and wait for the final connection result
@@ -129,12 +140,12 @@ export const connectToWiFi = async (ssid, password) => {
         }
 
         // If the device returned an immediate failure, throw an error
-        throw new Error('Failed to connect to WiFi');
+        throw new Error(translate('api.wifiFailed'));
     } catch (error) {
         if (error instanceof Error) {
             throw error;
         }
 
-        throw new Error('An error occurred while connecting to the Wi-Fi network');
+        throw new Error(translate('api.wifiConnectError'));
     }
 };

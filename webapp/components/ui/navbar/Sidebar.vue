@@ -14,6 +14,8 @@ const props = defineProps({
 const emits = defineEmits(['close']);
 
 const route = useRoute();
+const localePath = useLocalePath();
+const { t } = useI18n();
 
 // Check if a navigation item matches the current route
 const isActiveItem = path => {
@@ -47,7 +49,7 @@ const handleClose = () => {
             <div class="flex h-full flex-col border-r border-[var(--border-light)] bg-[var(--bg-card-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-card-dark)]">
                 <!-- Sidebar header -->
                 <div class="flex h-16 items-center border-b border-[var(--border-light)] px-4 my-2 sm:my-0 sm:h-20 sm:px-6 dark:border-[var(--border-dark)]">
-                    <NuxtLink to="/wifi" @click="handleClose">
+                    <NuxtLink :to="localePath('/wifi')" @click="handleClose">
                         <BrandLogo :brand-name="props.brandName" />
                     </NuxtLink>
                 </div>
@@ -56,13 +58,13 @@ const handleClose = () => {
                 <nav class="flex-1 overflow-y-auto px-3 py-4 sm:px-4 sm:py-6">
                     <!-- Navigation section title -->
                     <div class="mb-3 px-2 text-[0.65rem] font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)] sm:mb-4 sm:text-xs">
-                        Control Panel
+                        {{ t('common.controlPanel') }}
                     </div>
 
                     <!-- Navigation items -->
                     <ul class="space-y-3">
                         <li v-for="item in props.sidebarItems" :key="item.id">
-                            <NuxtLink :to="item.path" class="group flex items-center gap-3 rounded border px-3 py-2.5 text-sm font-medium transition-all duration-200 sm:gap-4 sm:px-4 sm:py-3" :class="getNavigationItemClasses(item.path)" @click="handleClose">
+                            <NuxtLink :to="localePath(item.path)" class="group flex items-center gap-3 rounded border px-3 py-2.5 text-sm font-medium transition-all duration-200 sm:gap-4 sm:px-4 sm:py-3" :class="getNavigationItemClasses(item.path)" @click="handleClose">
                                 <!-- Navigation icon -->
                                 <HugeiconsIcon :icon="item.icon" :size="18" color="currentColor" :stroke-width="1.8" :aria-label="item.label" role="img" class="h-4 w-4 shrink-0 opacity-90 transition-opacity duration-200 group-hover:opacity-100 sm:h-5 sm:w-5" />
 

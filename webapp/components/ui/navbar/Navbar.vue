@@ -4,6 +4,7 @@ import { HugeiconsIcon } from '@hugeicons/vue';
 import { Menu02Icon } from '@hugeicons/core-free-icons';
 import IconButton from '~/components/ui/IconButton.vue';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
+import LanguageSelector from '~/components/ui/LanguageSelector.vue';
 import ThemeSelector from '~/components/ui/ThemeSelector.vue';
 import Sidebar from '~/components/ui/navbar/Sidebar.vue';
 
@@ -13,6 +14,7 @@ const props = defineProps({
     sidebarItems: { type: Array, default: () => [] }
 });
 
+const { t } = useI18n();
 const isSidebarOpen = ref(false);
 
 // Toggle the mobile sidebar
@@ -38,7 +40,7 @@ const handleCloseSidebar = () => {
         <nav class="mx-auto flex h-full max-w-6xl items-center justify-between px-3 sm:px-6 lg:px-8">
             <!-- Mobile sidebar toggle -->
             <div class="xl:hidden">
-                <IconButton aria-label="Open navigation" @click="handleToggleSidebar">
+                <IconButton :aria-label="t('nav.openNavigation')" @click="handleToggleSidebar">
                     <HugeiconsIcon :icon="Menu02Icon" :size="20" color="currentColor" :stroke-width="1.8" class="h-5 w-5" />
                 </IconButton>
             </div>
@@ -50,6 +52,7 @@ const handleCloseSidebar = () => {
 
             <!-- Toolbar actions -->
             <div class="flex items-center gap-3">
+                <LanguageSelector />
                 <ThemeSelector />
             </div>
         </nav>

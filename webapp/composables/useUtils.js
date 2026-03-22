@@ -3,13 +3,24 @@ import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 
 // Available theme modes for the webapp
 const availableThemes = [
-    { id: 'light', label: 'Light' },
-    { id: 'dark', label: 'Dark' },
-    { id: 'system', label: 'System' }
+    { id: 'light' },
+    { id: 'dark' },
+    { id: 'system' }
 ];
 
 // Shared state for the active theme mode
 const getThemeStore = () => useState('theme-mode', () => 'system');
+
+// Translate a key through the active i18n instance when available
+const translate = (key, params = {}) => {
+    const nuxtApp = useNuxtApp();
+
+    if (typeof nuxtApp?.$i18n?.t === 'function') {
+        return nuxtApp.$i18n.t(key, params);
+    }
+
+    return key;
+};
 
 // Apply the resolved theme class to the document root
 const applyThemeToDocument = theme => {
@@ -75,13 +86,19 @@ export const delay = timeout => {
 };
 
 // Open the shared message dialog
-export const showMessage = ({ type = 'Error', title = 'Error', message = 'Internal server error' }) => {
+export const showMessage = ({ type = 'Error', title = '', message = '' }) => {
     const globalStore = useGlobalStore();
+    const defaultTitles = {
+        Error: translate('dialogs.errorTitle'),
+        Success: translate('dialogs.successTitle'),
+        Info: translate('dialogs.infoTitle')
+    };
+
     globalStore.value.messageDialog = {
         visible: true,
         type,
-        title,
-        message
+        title: title || defaultTitles[type] || translate('dialogs.messageTitle'),
+        message: message || translate('common.genericError')
     };
 };
 
@@ -93,8 +110,8 @@ export const closeMessage = () => {
 
 // Open the shared confirm dialog
 export const showConfirmDialog = ({
-    title = 'Confirm action',
-    message = 'Are you sure?',
+    title = '',
+    message = '',
     icon = null,
     onConfirm = null,
     onCancel = null,
@@ -105,17 +122,19 @@ export const showConfirmDialog = ({
     globalStore.value.confirmDialog = {
         ...globalStore.value.confirmDialog,
         visible: true,
-        title,
-        message,
+        title: title || translate('dialogs.confirmTitle'),
+        message: message || translate('dialogs.confirmMessage'),
         icon,
         onConfirm,
         onCancel,
         confirmButton: {
             ...globalStore.value.confirmDialog.confirmButton,
+            text: translate('dialogs.confirm'),
             ...confirmButton
         },
         cancelButton: {
             ...globalStore.value.confirmDialog.cancelButton,
+            text: translate('common.cancel'),
             ...cancelButton
         }
     };
@@ -131,14 +150,14 @@ export const closeConfirmDialog = () => {
 
 // Handle backend errors with a shared message strategy
 export const handleBackendErrors = ({ error, errorTranslated = '', errorMessage = '', showDialog = false }) => {
-    console.error(errorMessage || 'An error occurred:', error);
+    console.error(errorMessage || translate('common.genericError'), error);
 
     // Show a user-friendly error dialog if requested
     if (showDialog) {
         showMessage({
             type: 'Error',
-            title: 'Error',
-            message: errorTranslated || errorMessage || 'Internal server error'
+            title: translate('dialogs.errorTitle'),
+            message: errorTranslated || errorMessage || translate('common.genericError')
         });
     }
 
@@ -148,5 +167,5 @@ export const handleBackendErrors = ({ error, errorTranslated = '', errorMessage 
     }
 
     // For other types of errors, throw a generic error with the translated message if available
-    throw new Error(errorTranslated || 'Internal server error');
+    throw new Error(errorTranslated || translate('common.genericError'));
 };

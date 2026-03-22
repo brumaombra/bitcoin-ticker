@@ -27,25 +27,25 @@ export const useGlobalStore = () => useState('global', () => ({
     messageDialog: {
         visible: false,
         type: 'Info',
-        title: 'Message',
+        title: '',
         message: ''
     },
 
     // Shared confirm dialog state
     confirmDialog: {
         visible: false,
-        title: 'Confirm action',
+        title: '',
         message: '',
         icon: null,
         onConfirm: null,
         onCancel: null,
         confirmButton: {
             type: 'primary',
-            text: 'Confirm'
+            text: ''
         },
         cancelButton: {
             type: 'secondary',
-            text: 'Cancel'
+            text: ''
         }
     }
 }));

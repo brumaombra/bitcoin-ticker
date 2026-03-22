@@ -19,6 +19,28 @@ export default defineNuxtConfig({
         '~/assets/main.css'
     ],
 
+    modules: [
+        '@nuxtjs/i18n'
+    ],
+
+    i18n: {
+        defaultLocale: 'en',
+        strategy: 'no_prefix',
+        lazy: true,
+        langDir: 'locales',
+        detectBrowserLanguage: {
+            useCookie: true,
+            cookieKey: 'bitcoin_ticker_locale',
+            alwaysRedirect: false,
+            redirectOn: 'root',
+            fallbackLocale: 'en'
+        },
+        locales: [
+            { code: 'en', name: 'English', language: 'en-US', file: 'en.json' },
+            { code: 'it', name: 'Italiano', language: 'it-IT', file: 'it.json' }
+        ]
+    },
+
     vite: {
         plugins: [
             tailwindcss()

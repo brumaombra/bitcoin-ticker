@@ -8,6 +8,7 @@ import ConfirmDialog from '~/components/ConfirmDialog.vue';
 import MessageDialog from '~/components/MessageDialog.vue';
 
 const globalStore = useGlobalStore();
+const { t } = useI18n();
 
 // Load the initial device data once for the app shell
 const ensureDeviceData = async () => {
@@ -33,8 +34,8 @@ const ensureDeviceData = async () => {
         console.error(error);
         showMessage({
             type: 'Error',
-            title: 'Error',
-            message: 'An error occurred while loading the data'
+            title: t('dialogs.errorTitle'),
+            message: t('app.loadError')
         });
     } finally {
         setBusy(false);

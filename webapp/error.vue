@@ -4,11 +4,16 @@ import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
 import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
+import LanguageSelector from '~/components/ui/LanguageSelector.vue';
+import ThemeSelector from '~/components/ui/ThemeSelector.vue';
 
 // Props
 const props = defineProps({
     error: { type: Object, default: () => ({}) }
 });
+
+const { t } = useI18n();
+const localePath = useLocalePath();
 
 // Resolve the displayed status code
 const statusCode = computed(() => {
@@ -18,24 +23,24 @@ const statusCode = computed(() => {
 // Resolve the page title
 const title = computed(() => {
     if (statusCode.value === 404) {
-        return 'Page not found';
+        return t('errors.pageNotFound');
     }
 
-    return 'Something went wrong';
+    return t('errors.genericTitle');
 });
 
 // Resolve the supporting message
 const message = computed(() => {
     if (statusCode.value === 404) {
-        return 'The page you requested does not exist or is no longer available on this device.';
+        return t('errors.pageNotFoundMessage');
     }
 
-    return props.error?.statusMessage || 'An unexpected error interrupted the web interface.';
+    return props.error?.statusMessage || t('errors.genericMessage');
 });
 
 // Clear the error and return to the main setup flow
 const handleBackHome = async () => {
-    await clearError({ redirect: '/wifi' });
+    await clearError({ redirect: localePath('/wifi') });
 };
 </script>
 
@@ -47,15 +52,21 @@ const handleBackHome = async () => {
         <!-- Main content -->
         <main class="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
             <div class="w-full max-w-xl">
+                <!-- Toolbar -->
+                <div class="mb-4 flex justify-end gap-3">
+                    <LanguageSelector />
+                    <ThemeSelector />
+                </div>
+
                 <Card>
                     <!-- Brand -->
-                    <BrandLogo brand-name="Bitcoin Ticker" />
+                    <BrandLogo :brand-name="t('app.title')" />
 
                     <!-- Error copy -->
                     <div class="mt-8">
                         <!-- Status code -->
                         <div class="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--button-primary-light)] dark:text-[var(--button-primary-dark)]">
-                            Error {{ statusCode }}
+                            {{ t('errors.label') }} {{ statusCode }}
                         </div>
 
                         <!-- Title -->
@@ -73,7 +84,7 @@ const handleBackHome = async () => {
                     <div class="mt-8 flex flex-col gap-3 sm:flex-row">
                         <!-- Back home button -->
                         <Button type="primary" @click="handleBackHome">
-                            Back to setup
+                            {{ t('errors.backToSetup') }}
                         </Button>
                     </div>
                 </Card>

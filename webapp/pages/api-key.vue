@@ -12,6 +12,7 @@ import Input from '~/components/ui/Input.vue';
 import PageIntroCard from '~/components/ui/PageIntroCard.vue';
 
 const apiKey = ref('');
+const { t } = useI18n();
 
 // Require a non-empty API key before submitting
 const isFormValid = computed(() => {
@@ -25,11 +26,11 @@ const saveCurrentApiKey = async () => {
         await saveApiKey(apiKey.value);
         showMessage({
             type: 'Success',
-            title: 'Success',
-            message: 'The API key has been saved successfully!'
+            title: t('dialogs.successTitle'),
+            message: t('pages.apiKey.saveSuccess')
         });
     } catch (error) {
-        handleBackendErrors({ error, errorTranslated: 'An error occurred while saving the API key', errorMessage: 'An error occurred while saving the API key', showDialog: true });
+        handleBackendErrors({ error, errorTranslated: t('pages.apiKey.saveError'), errorMessage: t('pages.apiKey.saveError'), showDialog: true });
     } finally {
         setBusy(false);
         apiKey.value = '';
@@ -39,14 +40,14 @@ const saveCurrentApiKey = async () => {
 // Ask for confirmation before overwriting the stored API key
 const handleSavePress = () => {
     showConfirmDialog({
-        title: 'Save API key',
-        message: 'Store this API key on the device and replace the current value?',
+        title: t('pages.apiKey.confirmTitle'),
+        message: t('pages.apiKey.confirmMessage'),
         confirmButton: {
-            text: 'Save API key',
+            text: t('pages.apiKey.saveAction'),
             type: 'primary'
         },
         cancelButton: {
-            text: 'Keep editing',
+            text: t('common.keepEditing'),
             type: 'secondary'
         },
         onConfirm: saveCurrentApiKey
@@ -63,9 +64,9 @@ definePageMeta({
     <div class="mx-auto flex w-full flex-col gap-6 lg:flex-row">
         <!-- Page intro -->
         <div class="w-full lg:max-w-sm">
-            <PageIntroCard eyebrow="Credentials" title="API Key" description="Store the market data API key used by the ticker firmware. The value is sent directly to the device configuration endpoint.">
+            <PageIntroCard :eyebrow="t('pages.apiKey.eyebrow')" :title="t('pages.apiKey.title')" :description="t('pages.apiKey.description')">
                 <template #icon>
-                    <HugeiconsIcon :icon="Key01Icon" :size="28" color="currentColor" :stroke-width="1.8" aria-label="API key" role="img" class="h-7 w-7" />
+                    <HugeiconsIcon :icon="Key01Icon" :size="28" color="currentColor" :stroke-width="1.8" :aria-label="t('pages.apiKey.label')" role="img" class="h-7 w-7" />
                 </template>
             </PageIntroCard>
         </div>
@@ -76,17 +77,17 @@ definePageMeta({
                 <form class="space-y-5" @submit.prevent="handleSavePress">
                     <!-- API key input -->
                     <div class="space-y-2">
-                        <Label for="apiKey">API key</Label>
-                        <Input id="apiKey" v-model="apiKey" type="text" placeholder="Paste your API key" />
+                        <Label for="apiKey">{{ t('pages.apiKey.label') }}</Label>
+                        <Input id="apiKey" v-model="apiKey" type="text" :placeholder="t('pages.apiKey.placeholder')" />
                     </div>
 
                     <!-- API key guidance -->
                     <InfoBox>
-                        Use a key with enough quota for frequent polling. The current firmware expects the API key as a plain string.
+                        {{ t('pages.apiKey.note') }}
                     </InfoBox>
 
                     <!-- Submit button -->
-                    <Button type="primary" native-type="submit" class="w-full" :disabled="!isFormValid">Save API key</Button>
+                    <Button type="primary" native-type="submit" class="w-full" :disabled="!isFormValid">{{ t('pages.apiKey.saveAction') }}</Button>
                 </form>
             </Card>
         </div>

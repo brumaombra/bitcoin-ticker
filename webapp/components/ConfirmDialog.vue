@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from 'vue';
 import { HugeiconsIcon } from '@hugeicons/vue';
 import { InformationCircleIcon } from '@hugeicons/core-free-icons';
 import Button from '~/components/ui/Button.vue';
@@ -7,10 +8,10 @@ import Dialog from '~/components/ui/Dialog.vue';
 // Props
 const props = defineProps({
     show: { type: Boolean, required: true },
-    title: { type: String, default: 'Confirm action' },
+    title: { type: String, default: '' },
     message: { type: String, required: true },
-    confirmText: { type: String, default: 'Confirm' },
-    cancelText: { type: String, default: 'Cancel' },
+    confirmText: { type: String, default: '' },
+    cancelText: { type: String, default: '' },
     confirmButtonType: { type: String, default: 'primary', validator: value => ['primary', 'secondary', 'ghost'].includes(value) },
     cancelButtonType: { type: String, default: 'secondary', validator: value => ['primary', 'secondary', 'ghost'].includes(value) },
     icon: { type: Object, default: () => InformationCircleIcon }
@@ -18,6 +19,11 @@ const props = defineProps({
 
 // Emits
 const emits = defineEmits(['confirm', 'cancel', 'close', 'update:show']);
+
+const { t } = useI18n();
+const dialogTitle = computed(() => props.title || t('dialogs.confirmTitle'));
+const confirmLabel = computed(() => props.confirmText || t('dialogs.confirm'));
+const cancelLabel = computed(() => props.cancelText || t('common.cancel'));
 
 // Handle cancel press
 const handleCancelPress = () => {
@@ -44,7 +50,7 @@ const handleConfirmPress = () => {
             <!-- Message content -->
             <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                 <!-- Title -->
-                <h3 id="confirm-dialog-title" class="text-base font-semibold text-[var(--text-primary-light)] dark:text-[var(--text-primary-dark)]">{{ props.title }}</h3>
+                <h3 id="confirm-dialog-title" class="text-base font-semibold text-[var(--text-primary-light)] dark:text-[var(--text-primary-dark)]">{{ dialogTitle }}</h3>
 
                 <!-- Message -->
                 <div class="mt-2">
@@ -55,8 +61,8 @@ const handleConfirmPress = () => {
 
         <template #footer>
             <div class="flex w-full flex-col gap-3 sm:w-auto sm:ml-auto sm:flex-row-reverse">
-                <Button :type="props.confirmButtonType" class="w-full sm:w-auto" @click="handleConfirmPress">{{ props.confirmText }}</Button>
-                <Button :type="props.cancelButtonType" class="w-full sm:w-auto" @click="handleCancelPress">{{ props.cancelText }}</Button>
+                <Button :type="props.confirmButtonType" class="w-full sm:w-auto" @click="handleConfirmPress">{{ confirmLabel }}</Button>
+                <Button :type="props.cancelButtonType" class="w-full sm:w-auto" @click="handleCancelPress">{{ cancelLabel }}</Button>
             </div>
         </template>
     </Dialog>

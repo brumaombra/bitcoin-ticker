@@ -1,31 +1,34 @@
 <script setup>
+import { computed } from 'vue';
 import { Key01Icon, Settings01Icon, Wifi01Icon } from '@hugeicons/core-free-icons';
 import AppShell from '~/components/ui/AppShell.vue';
 
+const { t } = useI18n();
+
 // Navigation items for the private control panel
-const sidebarItems = [{
+const sidebarItems = computed(() => ([{
     id: 'wifi',
     path: '/wifi',
-    label: 'WiFi',
-    description: 'Scan networks and connect the device',
+    label: t('nav.wifi.label'),
+    description: t('nav.wifi.description'),
     icon: Wifi01Icon
 }, {
     id: 'settings',
     path: '/settings',
-    label: 'Settings',
-    description: 'Adjust ticker visibility and behavior',
+    label: t('nav.settings.label'),
+    description: t('nav.settings.description'),
     icon: Settings01Icon
 }, {
     id: 'api-key',
     path: '/api-key',
-    label: 'API Key',
-    description: 'Provide the market data credential',
+    label: t('nav.apiKey.label'),
+    description: t('nav.apiKey.description'),
     icon: Key01Icon
-}];
+}]));
 </script>
 
 <template>
-    <AppShell brand-name="Bitcoin Ticker" :sidebar-items="sidebarItems">
+    <AppShell :brand-name="t('app.title')" :sidebar-items="sidebarItems">
         <!-- Routed page content -->
         <div class="pb-10">
             <slot />

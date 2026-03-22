@@ -10,12 +10,13 @@ import IconButton from '~/components/ui/IconButton.vue';
 const isOpen = ref(false);
 const currentTheme = getCurrentTheme();
 const themes = getThemes();
+const { t } = useI18n();
 
 // Theme options for the dropdown menu
 const themeOptions = computed(() => {
     return themes.value.map(theme => ({
         key: theme.id,
-        label: theme.label,
+        label: t(`theme.${theme.id}`),
         icon: getThemeIcon(theme.id)
     }));
 });
@@ -52,13 +53,13 @@ const handleSelectTheme = theme => {
     <Dropdown v-model:open="isOpen" width="w-44">
         <!-- Trigger -->
         <template #trigger>
-            <IconButton aria-label="Toggle theme menu" @click="toggleDropdown">
+            <IconButton :aria-label="t('theme.toggleMenu')" @click="toggleDropdown">
                 <HugeiconsIcon :icon="currentThemeIcon" :size="20" color="currentColor" :stroke-width="1.8" class="h-5 w-5" />
             </IconButton>
         </template>
 
         <!-- Theme options -->
-        <DropdownMenu title="Theme" :options="themeOptions" :current="currentTheme" @select="handleSelectTheme">
+        <DropdownMenu :title="t('theme.title')" :options="themeOptions" :current="currentTheme" @select="handleSelectTheme">
             <template #option-leading="{ option }">
                 <HugeiconsIcon :icon="option.icon" :size="16" color="currentColor" :stroke-width="1.8" class="h-4 w-4" />
             </template>

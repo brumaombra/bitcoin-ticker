@@ -14,18 +14,21 @@ import Input from '~/components/ui/Input.vue';
 import Label from '~/components/ui/Label.vue';
 import Select from '~/components/ui/Select.vue';
 import CardHeaderWithIcon from '~/components/ui/CardHeaderWithIcon.vue';
+import LanguageSelector from '~/components/ui/LanguageSelector.vue';
+import ThemeSelector from '~/components/ui/ThemeSelector.vue';
 
 const globalStore = useGlobalStore();
 const ssid = ref('');
 const password = ref('');
 const isLoading = ref(false);
+const { t } = useI18n();
 
 // Available network options
 const networkOptions = computed(() => {
     return globalStore.value.networksList.map(network => ({
         value: network.ssid,
         label: network.ssid,
-        meta: `${network.signal} dBm · Ch ${network.channel} · ${network.quality}% · ${network.secured ? 'Secured' : 'Open'}`
+        meta: `${network.signal} dBm · Ch ${network.channel} · ${network.quality}% · ${network.secured ? t('pages.wifi.secured') : t('pages.wifi.open')}`
     }));
 });
 
@@ -36,14 +39,14 @@ const connectDeviceToWiFi = async () => {
         const result = await connectToWiFi(ssid.value, password.value);
         showMessage({
             type: 'Info',
-            title: 'Device connected',
-            message: `The microcontroller connected to ${result.ssid || ssid.value} and is available at ${result.hostname} and ${result.ip}.`
+            title: t('pages.wifi.connectedTitle'),
+            message: t('pages.wifi.connectedMessage', { ssid: result.ssid || ssid.value, hostname: result.hostname, ip: result.ip })
         });
     } catch (error) {
         handleBackendErrors({
             error,
-            errorTranslated: error instanceof Error ? error.message : 'An error occurred while connecting to the Wi-Fi network',
-            errorMessage: error instanceof Error ? error.message : 'An error occurred while connecting to the Wi-Fi network',
+            errorTranslated: error instanceof Error ? error.message : t('pages.wifi.connectError'),
+            errorMessage: error instanceof Error ? error.message : t('pages.wifi.connectError'),
             showDialog: true
         });
     } finally {
@@ -55,14 +58,14 @@ const connectDeviceToWiFi = async () => {
 // Ask for confirmation before disabling AP mode and joining the selected WiFi network
 const handleConnectPress = () => {
     showConfirmDialog({
-        title: 'Connect and leave AP mode',
-        message: `Send the selected credentials for ${ssid.value} to the device, connect to that network, and disable the temporary hotspot?`,
+        title: t('pages.apSetup.connectConfirmTitle'),
+        message: t('pages.apSetup.connectConfirmMessage', { ssid: ssid.value }),
         confirmButton: {
-            text: 'Connect device',
+            text: t('pages.wifi.connectAction'),
             type: 'primary'
         },
         cancelButton: {
-            text: 'Cancel',
+            text: t('common.cancel'),
             type: 'secondary'
         },
         onConfirm: connectDeviceToWiFi
@@ -76,7 +79,7 @@ const refreshSSIDList = async () => {
     try {
         globalStore.value.networksList = await getNetworks();
     } catch (error) {
-        handleBackendErrors({ error, errorTranslated: 'An error occurred while refreshing the SSID list', errorMessage: 'An error occurred while refreshing the SSID list', showDialog: true });
+        handleBackendErrors({ error, errorTranslated: t('pages.wifi.refreshError'), errorMessage: t('pages.wifi.refreshError'), showDialog: true });
     } finally {
         isLoading.value = false;
     }
@@ -91,15 +94,21 @@ const refreshSSIDList = async () => {
         <!-- Main content -->
         <main class="relative z-10 mx-auto flex min-h-screen w-full max-w-2xl items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
             <div class="w-full space-y-6">
+                <!-- Toolbar -->
+                <div class="flex justify-end gap-3">
+                    <LanguageSelector />
+                    <ThemeSelector />
+                </div>
+
                 <!-- Brand -->
-                <BrandLogo brand-name="Bitcoin Ticker" />
+                <BrandLogo :brand-name="t('app.title')" />
 
                 <!-- Setup card -->
                 <Card>
                     <!-- Header with icon -->
-                    <CardHeaderWithIcon eyebrow="Access point mode" title="Connect to WiFi">
+                    <CardHeaderWithIcon :eyebrow="t('pages.apSetup.eyebrow')" :title="t('pages.apSetup.title')">
                         <template #icon>
-                            <HugeiconsIcon :icon="Wifi01Icon" :size="28" color="currentColor" :stroke-width="1.8" aria-label="WiFi" role="img" class="h-7 w-7" />
+                            <HugeiconsIcon :icon="Wifi01Icon" :size="28" color="currentColor" :stroke-width="1.8" :aria-label="t('nav.wifi.label')" role="img" class="h-7 w-7" />
                         </template>
                     </CardHeaderWithIcon>
 
@@ -110,32 +119,32 @@ const refreshSSIDList = async () => {
                             <!-- Network header -->
                             <div class="flex items-center justify-between gap-3">
                                 <!-- Label -->
-                                <Label for="ssid">Available networks</Label>
+                                <Label for="ssid">{{ t('pages.wifi.availableNetworks') }}</Label>
 
                                 <!-- Refresh button -->
                                 <Button type="secondary" :disabled="isLoading" @click="refreshSSIDList">
-                                    <span v-if="isLoading">Refreshing...</span>
-                                    <span v-else>Refresh</span>
+                                    <span v-if="isLoading">{{ t('common.refreshing') }}</span>
+                                    <span v-else>{{ t('common.refresh') }}</span>
                                 </Button>
                             </div>
 
                             <!-- Network select -->
-                            <Select id="ssid" v-model="ssid" placeholder="Select a network" :option-list="networkOptions" />
+                            <Select id="ssid" v-model="ssid" :placeholder="t('pages.wifi.networkPlaceholder')" :option-list="networkOptions" />
                         </div>
 
                         <!-- Password input -->
                         <div class="space-y-2">
-                            <Label for="password">Password</Label>
-                            <Input id="password" v-model="password" type="password" placeholder="Enter the WiFi password" />
+                            <Label for="password">{{ t('pages.wifi.password') }}</Label>
+                            <Input id="password" v-model="password" type="password" :placeholder="t('pages.wifi.passwordPlaceholder')" />
                         </div>
 
                         <!-- Connection note -->
                         <InfoBox>
-                            The device will try the credentials immediately and disable its temporary hotspot after a successful connection.
+                            {{ t('pages.wifi.note') }}
                         </InfoBox>
 
                         <!-- Submit button -->
-                        <Button type="primary" native-type="submit" class="w-full" :disabled="!ssid || !password">Connect device</Button>
+                        <Button type="primary" native-type="submit" class="w-full" :disabled="!ssid || !password">{{ t('pages.wifi.connectAction') }}</Button>
                     </form>
                 </Card>
             </div>

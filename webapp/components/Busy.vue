@@ -5,6 +5,8 @@ import BitcoinLogo from '~/components/ui/BitcoinLogo.vue';
 const props = defineProps({
     show: { type: Boolean, default: false }
 });
+
+const { t } = useI18n();
 </script>
 
 <template>
@@ -14,7 +16,7 @@ const props = defineProps({
                 <!-- Busy state content -->
                 <div class="flex flex-col items-center">
                     <BitcoinLogo decorative class="h-14 w-14 animate-spin" style="animation-duration: 2s;" />
-                    <span class="mt-4 text-sm font-medium text-[var(--text-primary-light)] dark:text-[var(--text-primary-dark)]">Syncing device...</span>
+                    <span class="mt-4 text-sm font-medium text-[var(--text-primary-light)] dark:text-[var(--text-primary-dark)]">{{ t('common.syncingDevice') }}</span>
                 </div>
             </div>
         </div>

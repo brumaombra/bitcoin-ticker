@@ -16,6 +16,7 @@ import Select from '~/components/ui/Select.vue';
 import Label from '~/components/ui/Label.vue';
 
 const globalStore = useGlobalStore();
+const { t } = useI18n();
 
 // Reactive settings payload
 const settings = computed(() => globalStore.value.settings);
@@ -31,10 +32,10 @@ const scrollSpeedPercentage = computed(() => {
 });
 
 // Available thousands separator formats
-const separatorOptions = [
-    { value: 'US', label: '21,000.00', meta: 'Comma thousands, dot decimals' },
-    { value: 'EU', label: '21.000,00', meta: 'Dot thousands, comma decimals' }
-];
+const separatorOptions = computed(() => ([
+    { value: 'US', label: '21,000.00', meta: t('pages.settings.formatType.usMeta') },
+    { value: 'EU', label: '21.000,00', meta: t('pages.settings.formatType.euMeta') }
+]));
 
 // Save the current settings payload
 const saveCurrentSettings = async () => {
@@ -47,11 +48,11 @@ const saveCurrentSettings = async () => {
         await saveSettings(settings.value);
         showMessage({
             type: 'Success',
-            title: 'Success',
-            message: 'The settings have been saved successfully!'
+            title: t('dialogs.successTitle'),
+            message: t('pages.settings.saveSuccess')
         });
     } catch (error) {
-        handleBackendErrors({ error, errorTranslated: 'An error occurred while saving the settings', errorMessage: 'An error occurred while saving the settings', showDialog: true });
+        handleBackendErrors({ error, errorTranslated: t('pages.settings.saveError'), errorMessage: t('pages.settings.saveError'), showDialog: true });
     } finally {
         setBusy(false);
     }
@@ -64,11 +65,11 @@ const resetSavedSettings = async () => {
         const result = await resetSettings();
         showMessage({
             type: 'Info',
-            title: 'Device restarting',
-            message: result.message || 'The device settings were cleared and the firmware is restarting.'
+            title: t('pages.settings.resetInfoTitle'),
+            message: result.message || t('pages.settings.resetInfoMessage')
         });
     } catch (error) {
-        handleBackendErrors({ error, errorTranslated: 'An error occurred while resetting the settings', errorMessage: 'An error occurred while resetting the settings', showDialog: true });
+        handleBackendErrors({ error, errorTranslated: t('pages.settings.resetError'), errorMessage: t('pages.settings.resetError'), showDialog: true });
     } finally {
         setBusy(false);
     }
@@ -77,14 +78,14 @@ const resetSavedSettings = async () => {
 // Ask for confirmation before saving the current settings
 const handleSavePress = () => {
     showConfirmDialog({
-        title: 'Save settings',
-        message: 'Save the current ticker settings to the device?',
+        title: t('pages.settings.saveConfirmTitle'),
+        message: t('pages.settings.saveConfirmMessage'),
         confirmButton: {
-            text: 'Save settings',
+            text: t('pages.settings.saveAction'),
             type: 'primary'
         },
         cancelButton: {
-            text: 'Keep editing',
+            text: t('common.keepEditing'),
             type: 'secondary'
         },
         onConfirm: saveCurrentSettings
@@ -94,14 +95,14 @@ const handleSavePress = () => {
 // Ask for confirmation before resetting the saved settings
 const handleResetPress = () => {
     showConfirmDialog({
-        title: 'Reset saved settings',
-        message: 'Clear the saved settings and restart the firmware?',
+        title: t('pages.settings.resetConfirmTitle'),
+        message: t('pages.settings.resetConfirmMessage'),
         confirmButton: {
-            text: 'Reset settings',
+            text: t('pages.settings.resetAction'),
             type: 'primary'
         },
         cancelButton: {
-            text: 'Cancel',
+            text: t('common.cancel'),
             type: 'secondary'
         },
         onConfirm: resetSavedSettings
@@ -118,9 +119,9 @@ definePageMeta({
     <div class="mx-auto flex w-full flex-col gap-6">
         <div class="grid gap-6 xl:grid-cols-[minmax(0,320px),minmax(0,1fr)]">
             <!-- Page intro -->
-            <PageIntroCard eyebrow="Display" title="Ticker Settings" description="Fine-tune what the LED matrix shows and how aggressively it scrolls through the market data.">
+            <PageIntroCard :eyebrow="t('pages.settings.eyebrow')" :title="t('pages.settings.title')" :description="t('pages.settings.description')">
                 <template #icon>
-                    <HugeiconsIcon :icon="Settings01Icon" :size="28" color="currentColor" :stroke-width="1.8" aria-label="Settings" role="img" class="h-7 w-7" />
+                    <HugeiconsIcon :icon="Settings01Icon" :size="28" color="currentColor" :stroke-width="1.8" :aria-label="t('nav.settings.label')" role="img" class="h-7 w-7" />
                 </template>
             </PageIntroCard>
 
@@ -129,96 +130,96 @@ definePageMeta({
                 <!-- Visibility card -->
                 <Card>
                     <!-- Visibility section -->
-                    <CardHeader title="Visibility"
-                        description="Choose which market metrics rotate on the matrix." />
+                    <CardHeader :title="t('pages.settings.visibilityTitle')"
+                        :description="t('pages.settings.visibilityDescription')" />
 
                     <!-- Visibility toggles -->
                     <div class="space-y-3">
                         <!-- Current price -->
                         <SettingToggleItem id="currentPrice"
                             v-model="settings.currentPrice"
-                            label="Current price"
-                            description="The live Bitcoin price currently fetched from the API." />
+                            :label="t('pages.settings.visibility.currentPrice.label')"
+                            :description="t('pages.settings.visibility.currentPrice.description')" />
 
                         <!-- Price change -->
                         <SettingToggleItem id="priceChange"
                             v-model="settings.priceChange"
-                            label="Price change"
-                            description="How much the price moved compared to the previous period." />
+                            :label="t('pages.settings.visibility.priceChange.label')"
+                            :description="t('pages.settings.visibility.priceChange.description')" />
 
                         <!-- Market cap -->
                         <SettingToggleItem id="marketCap"
                             v-model="settings.marketCap"
-                            label="Market cap"
-                            description="The total market value of Bitcoin." />
+                            :label="t('pages.settings.visibility.marketCap.label')"
+                            :description="t('pages.settings.visibility.marketCap.description')" />
 
                         <!-- 24h volume -->
                         <SettingToggleItem id="dailyHighLow"
                             v-model="settings.dailyHighLow"
-                            label="Daily high / low"
-                            description="The highest and lowest price reached today." />
+                            :label="t('pages.settings.visibility.dailyHighLow.label')"
+                            :description="t('pages.settings.visibility.dailyHighLow.description')" />
 
                         <!-- 24h high / low -->
                         <SettingToggleItem id="yearHighLow"
                             v-model="settings.yearHighLow"
-                            label="Year high / low"
-                            description="The highest and lowest price reached over the last 52 weeks." />
+                            :label="t('pages.settings.visibility.yearHighLow.label')"
+                            :description="t('pages.settings.visibility.yearHighLow.description')" />
 
                         <!-- Open price -->
                         <SettingToggleItem id="openPrice"
                             v-model="settings.openPrice"
-                            label="Open price"
-                            description="The price when the current period opened." />
+                            :label="t('pages.settings.visibility.openPrice.label')"
+                            :description="t('pages.settings.visibility.openPrice.description')" />
 
                         <!-- Volume -->
                         <SettingToggleItem id="volume"
                             v-model="settings.volume"
-                            label="Volume"
-                            description="The trading volume for the current period." />
+                            :label="t('pages.settings.visibility.volume.label')"
+                            :description="t('pages.settings.visibility.volume.description')" />
                     </div>
                 </Card>
 
                 <!-- Formatting & motion card -->
                 <Card>
                     <!-- Formatting section -->
-                    <CardHeader title="Formatting & Motion"
-                        description="Tweak the number formatting and playback intensity for the matrix." />
+                    <CardHeader :title="t('pages.settings.formattingTitle')"
+                        :description="t('pages.settings.formattingDescription')" />
 
                     <!-- Formatting controls -->
                     <div class="space-y-6">
                         <!-- Thousands separator format -->
                         <div class="space-y-2">
-                            <Label for="selectFormatType">Thousands separator</Label>
-                            <Select id="selectFormatType" v-model="settings.formatType" :option-list="separatorOptions" placeholder="Choose a number format" />
-                            <FormInfoText>The formatting updates on the next API refresh.</FormInfoText>
+                            <Label for="selectFormatType">{{ t('pages.settings.formatType.label') }}</Label>
+                            <Select id="selectFormatType" v-model="settings.formatType" :option-list="separatorOptions" :placeholder="t('pages.settings.formatType.placeholder')" />
+                            <FormInfoText>{{ t('pages.settings.formatType.note') }}</FormInfoText>
                         </div>
 
                         <!-- Matrix intensity -->
                         <div class="space-y-2">
                             <div class="flex items-center justify-between">
-                                <Label for="matrixIntensity">Matrix intensity</Label>
+                                <Label for="matrixIntensity">{{ t('pages.settings.matrixIntensity.label') }}</Label>
                                 <span class="text-sm font-semibold text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ matrixIntensityPercentage }}%</span>
                             </div>
                             <SliderInput id="matrixIntensity" v-model="settings.matrixIntensity" :min="0" :max="15" />
-                            <FormInfoText class="mt-2">Controls the brightness of the matrix modules.</FormInfoText>
+                            <FormInfoText class="mt-2">{{ t('pages.settings.matrixIntensity.note') }}</FormInfoText>
                         </div>
 
                         <!-- Scroll speed -->
                         <div class="space-y-2">
                             <div class="flex items-center justify-between">
-                                <Label for="scrollSpeed">Scroll speed</Label>
+                                <Label for="scrollSpeed">{{ t('pages.settings.scrollSpeed.label') }}</Label>
                                 <span class="text-sm font-semibold text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ scrollSpeedPercentage }}%</span>
                             </div>
                             <SliderInput id="scrollSpeed" v-model="settings.scrollSpeed" :min="0" :max="15" />
-                            <FormInfoText class="mt-2">Controls how fast each text block moves across the display.</FormInfoText>
+                            <FormInfoText class="mt-2">{{ t('pages.settings.scrollSpeed.note') }}</FormInfoText>
                         </div>
                     </div>
                 </Card>
 
                 <!-- Action buttons -->
                 <div class="flex flex-col gap-3 md:flex-row md:justify-end">
-                    <Button type="primary" native-type="submit" class="w-full md:w-auto">Save settings</Button>
-                    <Button type="secondary" class="w-full md:w-auto" @click="handleResetPress">Reset saved settings</Button>
+                    <Button type="primary" native-type="submit" class="w-full md:w-auto">{{ t('pages.settings.saveAction') }}</Button>
+                    <Button type="secondary" class="w-full md:w-auto" @click="handleResetPress">{{ t('pages.settings.resetAction') }}</Button>
                 </div>
             </form>
         </div>

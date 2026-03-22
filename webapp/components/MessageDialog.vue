@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from 'vue';
 import { HugeiconsIcon } from '@hugeicons/vue';
 import { AlertCircleIcon, InformationCircleIcon, Tick01Icon } from '@hugeicons/core-free-icons';
 import Button from '~/components/ui/Button.vue';
@@ -8,12 +9,29 @@ import Dialog from '~/components/ui/Dialog.vue';
 const props = defineProps({
     show: { type: Boolean, required: true },
     type: { type: String, required: false, default: 'Info' },
-    title: { type: String, required: false, default: 'Message' },
+    title: { type: String, required: false, default: '' },
     message: { type: String, required: true }
 });
 
 // Emits
 const emits = defineEmits(['close']);
+
+const { t } = useI18n();
+
+// Resolve a translated fallback title by dialog type
+const dialogTitle = computed(() => {
+    if (props.title) {
+        return props.title;
+    }
+
+    const titleMap = {
+        Error: t('dialogs.errorTitle'),
+        Success: t('dialogs.successTitle'),
+        Info: t('dialogs.infoTitle')
+    };
+
+    return titleMap[props.type] || t('dialogs.messageTitle');
+});
 
 // Handle dialog close action
 const closeDialog = () => {
@@ -42,7 +60,7 @@ const closeDialog = () => {
 
             <!-- Message content -->
             <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                <h3 id="message-dialog-title" class="text-base font-semibold text-[var(--text-primary-light)] dark:text-[var(--text-primary-dark)]">{{ props.title }}</h3>
+                <h3 id="message-dialog-title" class="text-base font-semibold text-[var(--text-primary-light)] dark:text-[var(--text-primary-dark)]">{{ dialogTitle }}</h3>
                 <div class="mt-2">
                     <p class="text-sm text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ props.message }}</p>
                 </div>
@@ -52,7 +70,7 @@ const closeDialog = () => {
         <!-- Dialog footer -->
         <template #footer>
             <div class="sm:flex sm:justify-end">
-                <Button type="secondary" class="w-full sm:w-auto" @click="closeDialog">Close</Button>
+                <Button type="secondary" class="w-full sm:w-auto" @click="closeDialog">{{ t('common.close') }}</Button>
             </div>
         </template>
     </Dialog>
