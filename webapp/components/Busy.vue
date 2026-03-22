@@ -1,5 +1,5 @@
 <script setup>
-import BitcoinLogo from '~/components/ui/BitcoinLogo.vue';
+import CryptoLogo from '~/components/ui/crypto/CryptoLogo.vue';
 
 // Props
 const props = defineProps({
@@ -15,7 +15,7 @@ const { t } = useI18n();
             <div class="rounded border border-[var(--border-light)] bg-[color:color-mix(in_srgb,var(--bg-card-light)_92%,transparent)] px-8 py-7 shadow-2xl dark:border-[var(--border-dark)] dark:bg-[color:color-mix(in_srgb,var(--bg-card-dark)_92%,transparent)]">
                 <!-- Busy state content -->
                 <div class="flex flex-col items-center">
-                    <BitcoinLogo decorative class="h-14 w-14 animate-spin" style="animation-duration: 2s;" />
+                    <CryptoLogo class="h-14 w-14 animate-spin" style="animation-duration: 2s;" />
                     <span class="mt-4 text-sm font-medium text-[var(--text-primary-light)] dark:text-[var(--text-primary-dark)]">{{ t('common.syncingDevice') }}</span>
                 </div>
             </div>

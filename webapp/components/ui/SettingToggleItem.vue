@@ -1,5 +1,4 @@
 <script setup>
-import Label from '~/components/ui/Label.vue';
 import ToggleSwitch from '~/components/ui/ToggleSwitch.vue';
 
 // Props
@@ -18,7 +17,9 @@ const emits = defineEmits(['update:modelValue']);
     <div class="rounded border border-[var(--border-light)] px-4 py-3 dark:border-[var(--border-dark)]">
         <div class="flex items-center justify-between gap-4">
             <!-- Label -->
-            <Label :for="props.id">{{ props.label }}</Label>
+            <span class="text-xs font-bold text-[var(--text-primary-light)] dark:text-[var(--text-primary-dark)] sm:text-sm">
+                {{ props.label }}
+            </span>
 
             <!-- Toggle switch -->
             <ToggleSwitch :id="props.id"

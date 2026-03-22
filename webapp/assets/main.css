@@ -72,14 +72,14 @@ html {
 
 /* Kaspa theme */
 :root[data-crypto-theme='kaspa'] {
-	--button-primary-light: #49eacb;
-	--button-primary-hover-light: #32d8b8;
-	--button-primary-dark: #5cefd4;
-	--button-primary-hover-dark: #7cf5de;
-	--button-primary-foreground-light: #082a2a;
+	--button-primary-light: #6fc7ba;
+	--button-primary-hover-light: #5bb7ab;
+	--button-primary-dark: #7dd3c7;
+	--button-primary-hover-dark: #95ded4;
+	--button-primary-foreground-light: #ffffff;
 	--button-primary-foreground-dark: #06211f;
-	--app-accent-gradient-light: radial-gradient(circle at top left, rgba(73, 234, 203, 0.2), transparent 34%), radial-gradient(circle at bottom right, rgba(73, 234, 203, 0.1), transparent 28%), linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(7, 24, 31, 0.035));
-	--app-accent-gradient-dark: radial-gradient(circle at top left, rgba(73, 234, 203, 0.22), transparent 32%), radial-gradient(circle at bottom right, rgba(73, 234, 203, 0.12), transparent 24%), linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(6, 24, 24, 0));
+	--app-accent-gradient-light: radial-gradient(circle at top left, rgba(111, 199, 186, 0.2), transparent 34%), radial-gradient(circle at bottom right, rgba(111, 199, 186, 0.1), transparent 28%), linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(7, 24, 31, 0.035));
+	--app-accent-gradient-dark: radial-gradient(circle at top left, rgba(111, 199, 186, 0.22), transparent 32%), radial-gradient(circle at bottom right, rgba(111, 199, 186, 0.12), transparent 24%), linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(6, 24, 24, 0));
 }
 
 body {

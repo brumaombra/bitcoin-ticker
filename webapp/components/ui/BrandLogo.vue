@@ -1,5 +1,5 @@
 <script setup>
-import BitcoinLogo from '~/components/ui/BitcoinLogo.vue';
+import CryptoLogo from '~/components/ui/crypto/CryptoLogo.vue';
 
 // Props
 const props = defineProps({
@@ -11,7 +11,7 @@ const props = defineProps({
 <template>
     <div class="flex items-center gap-2 sm:gap-3">
         <!-- Brand mark -->
-        <BitcoinLogo class="h-8 w-8 sm:h-9 sm:w-9" />
+        <CryptoLogo class="h-8 w-8 sm:h-9 sm:w-9" />
 
         <!-- Brand text -->
         <div v-if="!props.compact">
