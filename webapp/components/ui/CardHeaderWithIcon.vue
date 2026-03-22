@@ -1,8 +1,12 @@
 <script setup>
+import { HugeiconsIcon } from '@hugeicons/vue';
+
 // Props
 const props = defineProps({
     eyebrow: { type: String, required: true },
-    title: { type: String, required: true }
+    title: { type: String, required: true },
+    icon: { type: Object, required: true },
+    iconLabel: { type: String, default: '' }
 });
 </script>
 
@@ -10,7 +14,13 @@ const props = defineProps({
     <div class="mb-5 flex items-center gap-3 sm:mb-6 sm:gap-4">
         <!-- Leading icon -->
         <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded border border-[var(--border-light)] bg-[var(--bg-selected-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)] sm:h-14 sm:w-14">
-            <slot name="icon" />
+            <HugeiconsIcon :icon="props.icon"
+                :size="24"
+                color="currentColor"
+                :stroke-width="1.8"
+                :aria-label="props.iconLabel || undefined"
+                role="img"
+                class="h-6 w-6" />
         </div>
 
         <!-- Title copy -->

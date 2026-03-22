@@ -156,7 +156,7 @@ onBeforeUnmount(() => {
         </select>
 
         <!-- Trigger button -->
-        <button ref="selectButtonRef" type="button" :disabled="props.disabled" class="flex h-[52px] w-full cursor-pointer items-center justify-between rounded border border-[var(--border-light)] bg-[var(--button-secondary-light)] px-4 py-3 text-left text-sm font-medium text-[var(--text-primary-light)] transition-all duration-300 ease-in-out focus:border-[var(--border-hover-light)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 dark:border-[var(--border-dark)] dark:bg-[var(--button-secondary-dark)] dark:text-[var(--text-primary-dark)] dark:focus:border-[var(--border-hover-dark)]" :class="{ 'border-[var(--border-hover-light)] dark:border-[var(--border-hover-dark)]': isOpen }" @click="toggleDropdown">
+        <button ref="selectButtonRef" type="button" :disabled="props.disabled" class="flex h-[52px] w-full cursor-pointer items-center justify-between rounded border border-[var(--border-light)] bg-[var(--button-secondary-light)] px-4 py-3 text-left text-xs font-medium text-[var(--text-primary-light)] transition-all duration-300 ease-in-out focus:border-[var(--border-hover-light)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 dark:border-[var(--border-dark)] dark:bg-[var(--button-secondary-dark)] dark:text-[var(--text-primary-dark)] dark:focus:border-[var(--border-hover-dark)] sm:text-sm" :class="{ 'border-[var(--border-hover-light)] dark:border-[var(--border-hover-dark)]': isOpen }" @click="toggleDropdown">
             <span :class="getSelectedValueClasses()">
                 {{ selectedOption?.label || props.placeholder }}
             </span>
@@ -172,8 +172,8 @@ onBeforeUnmount(() => {
                     <button v-for="option in options" :key="option.value" type="button" class="flex w-full cursor-pointer items-start justify-between gap-3 px-4 py-3 text-left transition-colors duration-200" :class="getOptionClasses(option)" @click="selectOption(option)">
                         <!-- Option content -->
                         <div>
-                            <div class="text-sm font-medium">{{ option.label }}</div>
-                            <div v-if="option.meta" class="mt-1 text-xs text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ option.meta }}</div>
+                            <div class="text-xs font-medium sm:text-sm">{{ option.label }}</div>
+                            <div v-if="option.meta" class="mt-1 text-[11px] sm:text-xs text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ option.meta }}</div>
                         </div>
 
                         <!-- Selected indicator -->

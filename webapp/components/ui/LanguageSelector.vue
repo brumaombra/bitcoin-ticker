@@ -12,15 +12,20 @@ const languageOptions = computed(() => {
     return locales.value.map(language => ({
         key: language.code,
         label: language.name,
-        shortLabel: language.code.toUpperCase()
+        flagCode: language.code === 'en' ? 'gb' : language.code
     }));
 });
 
-// Currently selected language label
-const currentLanguageLabel = computed(() => {
+// Currently selected language metadata
+const currentLanguage = computed(() => {
     const currentLanguage = languageOptions.value.find(language => language.key === locale.value);
-    return currentLanguage?.shortLabel || locale.value.toUpperCase();
+    return currentLanguage || null;
 });
+
+// Resolve a flag-icons class name
+const getFlagClass = flagCode => {
+    return `fi fi-${flagCode}`;
+};
 
 // Toggle the language menu
 const toggleDropdown = () => {
@@ -36,12 +41,21 @@ const handleSelectLanguage = async language => {
 
 <template>
     <Dropdown v-model:open="isOpen" width="w-44">
+        <!-- Trigger -->
         <template #trigger>
             <IconButton :aria-label="t('language.toggleMenu')" @click="toggleDropdown">
-                <span class="text-xs font-semibold uppercase tracking-[0.18em]">{{ currentLanguageLabel }}</span>
+                <span :class="getFlagClass(currentLanguage?.flagCode || 'gb')" class="inline-block h-4 w-5 overflow-hidden rounded-[2px]"></span>
             </IconButton>
         </template>
 
-        <DropdownMenu :title="t('language.title')" :options="languageOptions" :current="locale" @select="handleSelectLanguage" />
+        <!-- Menu -->
+        <DropdownMenu :title="t('language.title')"
+            :options="languageOptions"
+            :current="locale"
+            @select="handleSelectLanguage">
+            <template #option-leading="{ option }">
+                <span :class="getFlagClass(option.flagCode)" class="inline-block h-4 w-5 overflow-hidden rounded-[2px]"></span>
+            </template>
+        </DropdownMenu>
     </Dropdown>
 </template>

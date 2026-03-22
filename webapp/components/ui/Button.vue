@@ -12,7 +12,7 @@ const emits = defineEmits(['click']);
 
 // Resolve the button style variant
 const getButtonClasses = () => {
-    const classes = ['inline-flex min-h-12 items-center justify-center gap-2 rounded px-4 py-3 text-sm font-medium transition-all duration-300 ease-in-out'];
+    const classes = ['inline-flex min-h-12 items-center justify-center gap-2 rounded px-4 py-3 text-xs sm:text-sm font-medium transition-all duration-300 ease-in-out'];
 
     // Style variants
     if (props.type === 'primary') {

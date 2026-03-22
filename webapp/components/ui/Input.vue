@@ -18,7 +18,7 @@ const slots = useSlots();
 
 // Resolve the input classes based on available slots
 const inputClasses = computed(() => {
-    const classes = ['h-[52px] w-full rounded border border-[var(--border-light)] bg-[var(--button-secondary-light)] px-4 py-3 text-sm font-medium text-[var(--text-primary-light)] outline-none transition-all duration-300 ease-in-out placeholder:text-[var(--text-secondary-light)] placeholder:opacity-60 focus:border-[var(--border-hover-light)] dark:border-[var(--border-dark)] dark:bg-[var(--button-secondary-dark)] dark:text-[var(--text-primary-dark)] dark:placeholder:text-[var(--text-secondary-dark)] dark:focus:border-[var(--border-hover-dark)] disabled:cursor-not-allowed disabled:opacity-60'];
+    const classes = ['h-[52px] w-full rounded border border-[var(--border-light)] bg-[var(--button-secondary-light)] px-4 py-3 text-xs font-medium text-[var(--text-primary-light)] outline-none transition-all duration-300 ease-in-out placeholder:text-[var(--text-secondary-light)] placeholder:opacity-60 focus:border-[var(--border-hover-light)] dark:border-[var(--border-dark)] dark:bg-[var(--button-secondary-dark)] dark:text-[var(--text-primary-dark)] dark:placeholder:text-[var(--text-secondary-dark)] dark:focus:border-[var(--border-hover-dark)] disabled:cursor-not-allowed disabled:opacity-60 sm:text-sm'];
 
     // Add padding if suffix slot is used
     if (slots.suffix) {
@@ -48,7 +48,7 @@ const updateValue = event => {
             @input="updateValue">
 
         <!-- Suffix slot -->
-        <div v-if="slots.suffix" class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-sm text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">
+        <div v-if="slots.suffix" class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-xs sm:text-sm text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">
             <slot name="suffix"></slot>
         </div>
     </div>

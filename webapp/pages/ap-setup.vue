@@ -1,6 +1,5 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { HugeiconsIcon } from '@hugeicons/vue';
 import { Wifi01Icon } from '@hugeicons/core-free-icons';
 import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
@@ -106,11 +105,10 @@ const refreshSSIDList = async () => {
                 <!-- Setup card -->
                 <Card>
                     <!-- Header with icon -->
-                    <CardHeaderWithIcon :eyebrow="t('pages.apSetup.eyebrow')" :title="t('pages.apSetup.title')">
-                        <template #icon>
-                            <HugeiconsIcon :icon="Wifi01Icon" :size="28" color="currentColor" :stroke-width="1.8" :aria-label="t('nav.wifi.label')" role="img" class="h-7 w-7" />
-                        </template>
-                    </CardHeaderWithIcon>
+                    <CardHeaderWithIcon :eyebrow="t('pages.apSetup.eyebrow')"
+                        :title="t('pages.apSetup.title')"
+                        :icon="Wifi01Icon"
+                        :icon-label="t('nav.wifi.label')" />
 
                     <!-- Main form -->
                     <form class="mt-8 space-y-5" @submit.prevent="handleConnectPress">

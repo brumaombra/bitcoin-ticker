@@ -1,6 +1,5 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { HugeiconsIcon } from '@hugeicons/vue';
 import { Wifi01Icon } from '@hugeicons/core-free-icons';
 import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
@@ -91,11 +90,11 @@ definePageMeta({
     <div class="mx-auto flex w-full flex-col gap-6 lg:flex-row">
         <!-- Page intro -->
         <div class="w-full lg:max-w-sm">
-            <PageIntroCard :eyebrow="t('pages.wifi.eyebrow')" :title="t('pages.wifi.title')" :description="t('pages.wifi.description')">
-                <template #icon>
-                    <HugeiconsIcon :icon="Wifi01Icon" :size="28" color="currentColor" :stroke-width="1.8" :aria-label="t('nav.wifi.label')" role="img" class="h-7 w-7" />
-                </template>
-            </PageIntroCard>
+            <PageIntroCard :eyebrow="t('pages.wifi.eyebrow')"
+                :title="t('pages.wifi.title')"
+                :description="t('pages.wifi.description')"
+                :icon="Wifi01Icon"
+                :icon-label="t('nav.wifi.label')" />
         </div>
 
         <!-- Connection form -->

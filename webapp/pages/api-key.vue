@@ -1,5 +1,4 @@
 <script setup>
-import { HugeiconsIcon } from '@hugeicons/vue';
 import { Key01Icon } from '@hugeicons/core-free-icons';
 import { computed, ref } from 'vue';
 import { saveApiKey } from '~/composables/useDeviceApi.js';
@@ -64,11 +63,11 @@ definePageMeta({
     <div class="mx-auto flex w-full flex-col gap-6 lg:flex-row">
         <!-- Page intro -->
         <div class="w-full lg:max-w-sm">
-            <PageIntroCard :eyebrow="t('pages.apiKey.eyebrow')" :title="t('pages.apiKey.title')" :description="t('pages.apiKey.description')">
-                <template #icon>
-                    <HugeiconsIcon :icon="Key01Icon" :size="28" color="currentColor" :stroke-width="1.8" :aria-label="t('pages.apiKey.label')" role="img" class="h-7 w-7" />
-                </template>
-            </PageIntroCard>
+            <PageIntroCard :eyebrow="t('pages.apiKey.eyebrow')"
+                :title="t('pages.apiKey.title')"
+                :description="t('pages.apiKey.description')"
+                :icon="Key01Icon"
+                :icon-label="t('pages.apiKey.label')" />
         </div>
 
         <!-- API key form -->

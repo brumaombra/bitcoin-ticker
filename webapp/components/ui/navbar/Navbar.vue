@@ -38,19 +38,22 @@ const handleCloseSidebar = () => {
     <!-- Top bar -->
     <header class="sticky inset-x-0 top-0 z-30 h-20 border-b border-[var(--border-light)] bg-[color:color-mix(in_srgb,var(--bg-card-light)_84%,transparent)] backdrop-blur xl:ps-72 dark:border-[var(--border-dark)] dark:bg-[color:color-mix(in_srgb,var(--bg-card-dark)_84%,transparent)]">
         <nav class="mx-auto flex h-full max-w-6xl items-center justify-between px-3 sm:px-6 lg:px-8">
-            <!-- Mobile sidebar toggle -->
-            <div class="xl:hidden">
-                <IconButton :aria-label="t('nav.openNavigation')" @click="handleToggleSidebar">
-                    <HugeiconsIcon :icon="Menu02Icon" :size="20" color="currentColor" :stroke-width="1.8" class="h-5 w-5" />
-                </IconButton>
+            <!-- Left side -->
+            <div class="flex items-center gap-3">
+                <!-- Mobile sidebar toggle -->
+                <div class="xl:hidden">
+                    <IconButton :aria-label="t('nav.openNavigation')" @click="handleToggleSidebar">
+                        <HugeiconsIcon :icon="Menu02Icon" :size="20" color="currentColor" :stroke-width="1.8" class="h-5 w-5" />
+                    </IconButton>
+                </div>
+
+                <!-- Compact logo -->
+                <div class="flex flex-1 justify-start xl:justify-center">
+                    <BrandLogo :brand-name="props.brandName" compact />
+                </div>
             </div>
 
-            <!-- Compact logo -->
-            <div class="flex flex-1 justify-center">
-                <BrandLogo :brand-name="props.brandName" compact />
-            </div>
-
-            <!-- Toolbar actions -->
+            <!-- Right side -->
             <div class="flex items-center gap-3">
                 <LanguageSelector />
                 <ThemeSelector />

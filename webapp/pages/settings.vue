@@ -1,5 +1,4 @@
 <script setup>
-import { HugeiconsIcon } from '@hugeicons/vue';
 import { Settings01Icon } from '@hugeicons/core-free-icons';
 import { computed } from 'vue';
 import { resetSettings, saveSettings } from '~/composables/useDeviceApi.js';
@@ -119,11 +118,11 @@ definePageMeta({
     <div class="mx-auto flex w-full flex-col gap-6">
         <div class="grid gap-6 xl:grid-cols-[minmax(0,320px),minmax(0,1fr)]">
             <!-- Page intro -->
-            <PageIntroCard :eyebrow="t('pages.settings.eyebrow')" :title="t('pages.settings.title')" :description="t('pages.settings.description')">
-                <template #icon>
-                    <HugeiconsIcon :icon="Settings01Icon" :size="28" color="currentColor" :stroke-width="1.8" :aria-label="t('nav.settings.label')" role="img" class="h-7 w-7" />
-                </template>
-            </PageIntroCard>
+            <PageIntroCard :eyebrow="t('pages.settings.eyebrow')"
+                :title="t('pages.settings.title')"
+                :description="t('pages.settings.description')"
+                :icon="Settings01Icon"
+                :icon-label="t('nav.settings.label')" />
 
             <!-- Settings form -->
             <form class="space-y-6" @submit.prevent="handleSavePress">
