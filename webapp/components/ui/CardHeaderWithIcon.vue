@@ -1,0 +1,22 @@
+<script setup>
+// Props
+const props = defineProps({
+    eyebrow: { type: String, required: true },
+    title: { type: String, required: true }
+});
+</script>
+
+<template>
+    <div class="mb-5 flex items-center gap-3 sm:mb-6 sm:gap-4">
+        <!-- Leading icon -->
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded border border-[var(--border-light)] bg-[var(--bg-selected-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)] sm:h-14 sm:w-14">
+            <slot name="icon" />
+        </div>
+
+        <!-- Title copy -->
+        <div>
+            <div class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ props.eyebrow }}</div>
+            <h1 class="mt-1 text-lg sm:text-2xl font-bold">{{ props.title }}</h1>
+        </div>
+    </div>
+</template>

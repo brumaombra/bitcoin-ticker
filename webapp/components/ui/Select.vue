@@ -156,7 +156,7 @@ onBeforeUnmount(() => {
         </select>
 
         <!-- Trigger button -->
-        <button ref="selectButtonRef" type="button" :disabled="props.disabled" class="flex h-[52px] w-full items-center justify-between rounded border border-[var(--border-light)] bg-[var(--button-secondary-light)] px-4 py-3 text-left text-sm font-medium text-[var(--text-primary-light)] transition-all duration-300 ease-in-out focus:border-[var(--border-hover-light)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 dark:border-[var(--border-dark)] dark:bg-[var(--button-secondary-dark)] dark:text-[var(--text-primary-dark)] dark:focus:border-[var(--border-hover-dark)]" :class="{ 'border-[var(--border-hover-light)] dark:border-[var(--border-hover-dark)]': isOpen }" @click="toggleDropdown">
+        <button ref="selectButtonRef" type="button" :disabled="props.disabled" class="flex h-[52px] w-full cursor-pointer items-center justify-between rounded border border-[var(--border-light)] bg-[var(--button-secondary-light)] px-4 py-3 text-left text-sm font-medium text-[var(--text-primary-light)] transition-all duration-300 ease-in-out focus:border-[var(--border-hover-light)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 dark:border-[var(--border-dark)] dark:bg-[var(--button-secondary-dark)] dark:text-[var(--text-primary-dark)] dark:focus:border-[var(--border-hover-dark)]" :class="{ 'border-[var(--border-hover-light)] dark:border-[var(--border-hover-dark)]': isOpen }" @click="toggleDropdown">
             <span :class="getSelectedValueClasses()">
                 {{ selectedOption?.label || props.placeholder }}
             </span>
@@ -169,7 +169,7 @@ onBeforeUnmount(() => {
             <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
                 <!-- Dropdown list -->
                 <div v-show="isOpen" class="fixed max-h-70 overflow-y-auto rounded border border-[var(--border-light)] bg-[var(--bg-card-light)] shadow-xl dark:border-[var(--border-dark)] dark:bg-[var(--bg-card-dark)]" :style="getDropdownStyles">
-                    <button v-for="option in options" :key="option.value" type="button" class="flex w-full items-start justify-between gap-3 px-4 py-3 text-left transition-colors duration-200" :class="getOptionClasses(option)" @click="selectOption(option)">
+                    <button v-for="option in options" :key="option.value" type="button" class="flex w-full cursor-pointer items-start justify-between gap-3 px-4 py-3 text-left transition-colors duration-200" :class="getOptionClasses(option)" @click="selectOption(option)">
                         <!-- Option content -->
                         <div>
                             <div class="text-sm font-medium">{{ option.label }}</div>

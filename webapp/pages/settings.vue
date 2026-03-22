@@ -7,8 +7,13 @@ import { handleBackendErrors, setBusy, showMessage } from '~/composables/useUtil
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
+import CardHeader from '~/components/ui/CardHeader.vue';
+import FormInfoText from '~/components/ui/FormInfoText.vue';
+import PageIntroCard from '~/components/ui/PageIntroCard.vue';
+import SettingToggleItem from '~/components/ui/SettingToggleItem.vue';
+import SliderInput from '~/components/ui/SliderInput.vue';
 import Select from '~/components/ui/Select.vue';
-import ToggleSwitch from '~/components/ui/ToggleSwitch.vue';
+import Label from '~/components/ui/Label.vue';
 
 const globalStore = useGlobalStore();
 
@@ -76,115 +81,112 @@ definePageMeta({
 </script>
 
 <template>
-    <div v-if="settings" class="mx-auto flex w-full flex-col gap-6">
+    <div class="mx-auto flex w-full flex-col gap-6">
         <div class="grid gap-6 xl:grid-cols-[minmax(0,320px),minmax(0,1fr)]">
             <!-- Page intro -->
-            <Card>
-                <div class="mb-6 flex items-center gap-4">
-                    <div class="flex h-14 w-14 items-center justify-center rounded border border-[var(--border-light)] bg-[var(--bg-selected-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)]">
-                        <HugeiconsIcon :icon="Settings01Icon" :size="28" color="currentColor" :stroke-width="1.8" aria-label="Settings" role="img" class="h-7 w-7" />
-                    </div>
-                    <div>
-                        <div class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">Display</div>
-                        <h1 class="mt-1 text-2xl font-bold">Ticker Settings</h1>
-                    </div>
-                </div>
-
-                <p class="text-sm leading-6 text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">
-                    Fine-tune what the LED matrix shows and how aggressively it scrolls through the market data.
-                </p>
-            </Card>
+            <PageIntroCard eyebrow="Display" title="Ticker Settings" description="Fine-tune what the LED matrix shows and how aggressively it scrolls through the market data.">
+                <template #icon>
+                    <HugeiconsIcon :icon="Settings01Icon" :size="28" color="currentColor" :stroke-width="1.8" aria-label="Settings" role="img" class="h-7 w-7" />
+                </template>
+            </PageIntroCard>
 
             <!-- Settings form -->
             <form class="space-y-6" @submit.prevent="handleSavePress">
+                <!-- Visibility card -->
                 <Card>
                     <!-- Visibility section -->
-                    <div class="mb-5 flex items-center justify-between">
-                        <div>
-                            <h2 class="text-lg font-bold">Visibility</h2>
-                            <p class="mt-1 text-sm text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">Choose which market metrics rotate on the matrix.</p>
-                        </div>
-                    </div>
+                    <CardHeader title="Visibility"
+                        description="Choose which market metrics rotate on the matrix." />
 
                     <!-- Visibility toggles -->
                     <div class="space-y-3">
-                        <div class="flex items-center justify-between rounded border border-[var(--border-light)] px-4 py-3 dark:border-[var(--border-dark)]">
-                            <label for="currentPrice" class="text-sm font-medium">Current price</label>
-                            <ToggleSwitch v-model="settings.currentPrice" />
-                        </div>
-                        <div class="flex items-center justify-between rounded border border-[var(--border-light)] px-4 py-3 dark:border-[var(--border-dark)]">
-                            <label for="priceChange" class="text-sm font-medium">Price change</label>
-                            <ToggleSwitch v-model="settings.priceChange" />
-                        </div>
-                        <div class="flex items-center justify-between rounded border border-[var(--border-light)] px-4 py-3 dark:border-[var(--border-dark)]">
-                            <label for="marketCap" class="text-sm font-medium">Market cap</label>
-                            <ToggleSwitch v-model="settings.marketCap" />
-                        </div>
-                        <div class="flex items-center justify-between rounded border border-[var(--border-light)] px-4 py-3 dark:border-[var(--border-dark)]">
-                            <label for="dailyHighLow" class="text-sm font-medium">Daily high / low</label>
-                            <ToggleSwitch v-model="settings.dailyHighLow" />
-                        </div>
-                        <div class="flex items-center justify-between rounded border border-[var(--border-light)] px-4 py-3 dark:border-[var(--border-dark)]">
-                            <label for="yearHighLow" class="text-sm font-medium">Year high / low</label>
-                            <ToggleSwitch v-model="settings.yearHighLow" />
-                        </div>
-                        <div class="flex items-center justify-between rounded border border-[var(--border-light)] px-4 py-3 dark:border-[var(--border-dark)]">
-                            <label for="openPrice" class="text-sm font-medium">Open price</label>
-                            <ToggleSwitch v-model="settings.openPrice" />
-                        </div>
-                        <div class="flex items-center justify-between rounded border border-[var(--border-light)] px-4 py-3 dark:border-[var(--border-dark)]">
-                            <label for="volume" class="text-sm font-medium">Volume</label>
-                            <ToggleSwitch v-model="settings.volume" />
-                        </div>
+                        <!-- Current price -->
+                        <SettingToggleItem id="currentPrice"
+                            v-model="settings.currentPrice"
+                            label="Current price"
+                            description="The live Bitcoin price currently fetched from the API." />
+
+                        <!-- Price change -->
+                        <SettingToggleItem id="priceChange"
+                            v-model="settings.priceChange"
+                            label="Price change"
+                            description="How much the price moved compared to the previous period." />
+
+                        <!-- Market cap -->
+                        <SettingToggleItem id="marketCap"
+                            v-model="settings.marketCap"
+                            label="Market cap"
+                            description="The total market value of Bitcoin." />
+
+                        <!-- 24h volume -->
+                        <SettingToggleItem id="dailyHighLow"
+                            v-model="settings.dailyHighLow"
+                            label="Daily high / low"
+                            description="The highest and lowest price reached today." />
+
+                        <!-- 24h high / low -->
+                        <SettingToggleItem id="yearHighLow"
+                            v-model="settings.yearHighLow"
+                            label="Year high / low"
+                            description="The highest and lowest price reached over the last 52 weeks." />
+
+                        <!-- Open price -->
+                        <SettingToggleItem id="openPrice"
+                            v-model="settings.openPrice"
+                            label="Open price"
+                            description="The price when the current period opened." />
+
+                        <!-- Volume -->
+                        <SettingToggleItem id="volume"
+                            v-model="settings.volume"
+                            label="Volume"
+                            description="The trading volume for the current period." />
                     </div>
                 </Card>
 
+                <!-- Formatting & motion card -->
                 <Card>
                     <!-- Formatting section -->
-                    <div class="mb-5">
-                        <h2 class="text-lg font-bold">Formatting & Motion</h2>
-                        <p class="mt-1 text-sm text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">Tweak the number formatting and playback intensity for the matrix.</p>
-                    </div>
+                    <CardHeader title="Formatting & Motion"
+                        description="Tweak the number formatting and playback intensity for the matrix." />
 
                     <!-- Formatting controls -->
                     <div class="space-y-6">
-                        <div>
-                            <label for="selectFormatType" class="mb-2 block text-sm font-medium">Thousands separator</label>
+                        <!-- Thousands separator format -->
+                        <div class="space-y-2">
+                            <Label for="selectFormatType">Thousands separator</Label>
                             <Select id="selectFormatType" v-model="settings.formatType" :option-list="separatorOptions" placeholder="Choose a number format" />
-                            <p class="mt-2 text-sm text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">The formatting updates on the next API refresh.</p>
+                            <FormInfoText>The formatting updates on the next API refresh.</FormInfoText>
                         </div>
 
-                        <div>
-                            <div class="mb-2 flex items-center justify-between">
-                                <label for="matrixIntensity" class="text-sm font-medium">Matrix intensity</label>
+                        <!-- Matrix intensity -->
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <Label for="matrixIntensity">Matrix intensity</Label>
                                 <span class="text-sm font-semibold text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ matrixIntensityPercentage }}%</span>
                             </div>
-                            <input id="matrixIntensity" v-model="settings.matrixIntensity" type="range" min="0" max="15" class="h-2 w-full cursor-pointer appearance-none rounded-full bg-[var(--bg-selected-light)] accent-[var(--button-primary-light)] dark:bg-[var(--bg-selected-dark)] dark:accent-[var(--button-primary-dark)]">
-                            <p class="mt-2 text-sm text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">Controls the brightness of the matrix modules.</p>
+                            <SliderInput id="matrixIntensity" v-model="settings.matrixIntensity" :min="0" :max="15" />
+                            <FormInfoText class="mt-2">Controls the brightness of the matrix modules.</FormInfoText>
                         </div>
 
-                        <div>
-                            <div class="mb-2 flex items-center justify-between">
-                                <label for="scrollSpeed" class="text-sm font-medium">Scroll speed</label>
+                        <!-- Scroll speed -->
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <Label for="scrollSpeed">Scroll speed</Label>
                                 <span class="text-sm font-semibold text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ scrollSpeedPercentage }}%</span>
                             </div>
-                            <input id="scrollSpeed" v-model="settings.scrollSpeed" type="range" min="0" max="15" class="h-2 w-full cursor-pointer appearance-none rounded-full bg-[var(--bg-selected-light)] accent-[var(--button-primary-light)] dark:bg-[var(--bg-selected-dark)] dark:accent-[var(--button-primary-dark)]">
-                            <p class="mt-2 text-sm text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">Controls how fast each text block moves across the display.</p>
+                            <SliderInput id="scrollSpeed" v-model="settings.scrollSpeed" :min="0" :max="15" />
+                            <FormInfoText class="mt-2">Controls how fast each text block moves across the display.</FormInfoText>
                         </div>
                     </div>
                 </Card>
 
-                <!-- Form actions -->
-                <div class="flex flex-col gap-3 md:flex-row">
-                    <Button type="primary" native-type="submit" class="w-full md:w-auto">Save Settings</Button>
-                    <Button type="secondary" class="w-full md:w-auto" @click="handleResetPress">Reset Saved Settings</Button>
+                <!-- Action buttons -->
+                <div class="flex flex-col gap-3 md:flex-row md:justify-end">
+                    <Button type="primary" native-type="submit" class="w-full md:w-auto">Save settings</Button>
+                    <Button type="secondary" class="w-full md:w-auto" @click="handleResetPress">Reset saved settings</Button>
                 </div>
             </form>
         </div>
-    </div>
-
-    <!-- Loading state -->
-    <div v-else class="mx-auto w-full max-w-xl">
-        <Card>Loading settings...</Card>
     </div>
 </template>

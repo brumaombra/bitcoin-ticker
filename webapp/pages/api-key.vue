@@ -6,7 +6,10 @@ import { saveApiKey } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showMessage } from '~/composables/useUtils.js';
 import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
+import InfoBox from '~/components/ui/InfoBox.vue';
+import Label from '~/components/ui/Label.vue';
 import Input from '~/components/ui/Input.vue';
+import PageIntroCard from '~/components/ui/PageIntroCard.vue';
 
 const apiKey = ref('');
 
@@ -43,21 +46,11 @@ definePageMeta({
     <div class="mx-auto flex w-full flex-col gap-6 lg:flex-row">
         <!-- Page intro -->
         <div class="w-full lg:max-w-sm">
-            <Card>
-                <div class="mb-6 flex items-center gap-4">
-                    <div class="flex h-14 w-14 items-center justify-center rounded border border-[var(--border-light)] bg-[var(--bg-selected-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)]">
-                        <HugeiconsIcon :icon="Key01Icon" :size="28" color="currentColor" :stroke-width="1.8" aria-label="API key" role="img" class="h-7 w-7" />
-                    </div>
-                    <div>
-                        <div class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">Credentials</div>
-                        <h1 class="mt-1 text-2xl font-bold">API Key</h1>
-                    </div>
-                </div>
-
-                <p class="text-sm leading-6 text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">
-                    Store the market data API key used by the ticker firmware. The value is sent directly to the device configuration endpoint.
-                </p>
-            </Card>
+            <PageIntroCard eyebrow="Credentials" title="API Key" description="Store the market data API key used by the ticker firmware. The value is sent directly to the device configuration endpoint.">
+                <template #icon>
+                    <HugeiconsIcon :icon="Key01Icon" :size="28" color="currentColor" :stroke-width="1.8" aria-label="API key" role="img" class="h-7 w-7" />
+                </template>
+            </PageIntroCard>
         </div>
 
         <!-- API key form -->
@@ -65,18 +58,18 @@ definePageMeta({
             <Card>
                 <form class="space-y-5" @submit.prevent="handleSavePress">
                     <!-- API key input -->
-                    <div>
-                        <label for="apiKey" class="mb-2 block text-sm font-medium">API key</label>
+                    <div class="space-y-2">
+                        <Label for="apiKey">API key</Label>
                         <Input id="apiKey" v-model="apiKey" type="text" placeholder="Paste your API key" />
                     </div>
 
                     <!-- API key guidance -->
-                    <div class="rounded border border-[var(--border-light)] bg-[var(--bg-selected-light)] px-4 py-3 text-sm text-[var(--text-secondary-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)] dark:text-[var(--text-secondary-dark)]">
+                    <InfoBox>
                         Use a key with enough quota for frequent polling. The current firmware expects the API key as a plain string.
-                    </div>
+                    </InfoBox>
 
                     <!-- Submit button -->
-                    <Button type="primary" native-type="submit" class="w-full" :disabled="!isFormValid">Save API Key</Button>
+                    <Button type="primary" native-type="submit" class="w-full" :disabled="!isFormValid">Save API key</Button>
                 </form>
             </Card>
         </div>

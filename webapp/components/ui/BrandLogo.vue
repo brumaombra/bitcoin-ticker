@@ -9,19 +9,19 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2 sm:gap-3">
         <!-- Brand mark -->
-        <BitcoinLogo class="h-9 w-9" />
+        <BitcoinLogo class="h-8 w-8 sm:h-9 sm:w-9" />
 
         <!-- Brand text -->
         <div v-if="!props.compact">
             <!-- Brand name -->
-            <div class="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">
+            <div class="text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)] sm:text-sm sm:tracking-[0.24em]">
                 Device UI
             </div>
 
             <!-- Brand name -->
-            <div class="text-lg font-bold text-[var(--text-primary-light)] dark:text-[var(--text-primary-dark)]">
+            <div class="text-base font-bold text-[var(--text-primary-light)] dark:text-[var(--text-primary-dark)] sm:text-lg">
                 {{ props.brandName }}
             </div>
         </div>
