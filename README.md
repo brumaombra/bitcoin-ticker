@@ -15,7 +15,7 @@ Bitcoin Ticker is a two-part project for building a WiFi-connected Bitcoin displ
 </p>
 
 <p>
-  📡 WiFi-connected ticker • 📺 MAX7219 LED matrix output • 🎛️ Web-based setup and settings • 🔧 ESP8266 firmware • ⚡ Lightweight Nuxt UI
+  📡 WiFi-connected ticker • 📺 MAX7219 LED matrix output • 🎛️ Web-based setup and settings • 🌍 EN/IT UI • ⚡ Lightweight Nuxt UI
 </p>
 
 <p>
@@ -35,12 +35,12 @@ Bitcoin Ticker is designed for a simple hardware-to-web workflow: the ESP8266 fe
 ## ✨ Features
 
 - Live Bitcoin data on a MAX7219 LED matrix
-- ESP8266 firmware with WiFi, local storage, and embedded HTTP configuration
+- ESP8266 firmware with WiFi, flash-backed local storage, and embedded HTTP configuration
 - Web-based configuration for WiFi credentials, API key, and display settings
 - Adjustable scroll speed, selected metrics, and matrix behavior
-- EEPROM-backed persistence for device settings
 - Nuxt 3 interface that mirrors the firmware configuration flow
-- Lightweight frontend with reusable UI primitives
+- Reusable frontend UI primitives, shared dialogs, and confirmation flows
+- English and Italian localization with browser language detection
 
 <a id="architecture"></a>
 ## 🏗️ Architecture
@@ -49,7 +49,7 @@ Bitcoin Ticker is built around three cooperating parts:
 
 - 🔌 **ESP8266 firmware** handles WiFi, data fetching, settings storage, and the embedded HTTP server
 - 📺 **MAX7219 LED matrix** displays the live Bitcoin ticker output
-- 🌐 **Nuxt web app** provides the browser-based setup and configuration interface
+- 🌐 **Nuxt web app** provides the browser-based setup and configuration interface with theme and language support
 
 ### 🔄 Data Flow
 
@@ -93,7 +93,7 @@ Bitcoin Ticker is built around three cooperating parts:
 The firmware is responsible for the runtime behavior of the physical ticker.
 
 - Connects the ESP8266 to WiFi
-- Persists settings in flash storage
+- Persists settings in flash-backed local storage
 - Hosts the embedded HTTP server
 - Fetches and parses Bitcoin market data
 - Renders scrolling text to the MAX7219 matrix
@@ -116,15 +116,18 @@ The Nuxt app provides the browser-based device configuration interface.
 - Mirrors the firmware settings model
 - Lets users configure WiFi and API credentials
 - Controls display behavior and matrix preferences
+- Supports English and Italian localization
+- Includes confirm and message dialogs for critical actions
 - Uses reusable UI primitives under `webapp/components/ui/`
-- Shares device API helpers in `webapp/composables/`
+- Shares device API helpers and theme utilities in `webapp/composables/`
 
 Important web app areas:
 
 - `webapp/pages/` for the main setup screens
 - `webapp/components/ui/` for shared interface elements
 - `webapp/composables/useDeviceApi.js` for device communication
-- `webapp/composables/useUtils.js` for theme and app helpers
+- `webapp/composables/useUtils.js` for theme, dialog, and app helpers
+- `webapp/i18n/locales/` for translations
 
 <a id="build-and-deploy"></a>
 ## 🛠️ Build and Deploy
@@ -138,8 +141,10 @@ Important web app areas:
 ### 🌐 Web App
 
 - Open `webapp/` in Nuxt.
-- Run the development server for local work.
-- Run the production build for deployment or embedded asset generation.
+- Install dependencies with `npm install`.
+- Run `npm run dev` for local work.
+- Run `npm run build` for a production static build.
+- Run `npm run build:embedded` to export the embedded web UI bundle used by the firmware.
 
 ### 📦 Embedded Web UI
 
