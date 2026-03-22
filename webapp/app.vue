@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted } from 'vue';
 import { getNetworks, getSettings } from '~/composables/useDeviceApi.js';
-import { closeConfirmDialog, closeMessage, initializeTheme, setBusy, showMessage } from '~/composables/useUtils.js';
+import { closeConfirmDialog, closeMessage, initializeCryptoTheme, initializeTheme, setBusy, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Busy from '~/components/Busy.vue';
 import ConfirmDialog from '~/components/ConfirmDialog.vue';
@@ -59,6 +59,7 @@ const handleConfirmDialogCancel = () => {
 // Initialize the theme and preload device data once the app mounts
 onMounted(async () => {
     initializeTheme();
+    initializeCryptoTheme();
     await ensureDeviceData();
 });
 </script>

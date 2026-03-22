@@ -14,9 +14,6 @@ const props = defineProps({
         <!-- Background grid -->
         <BackgroundGrid />
 
-        <!-- Ambient overlay -->
-        <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(247,147,26,0.14),transparent_30%),linear-gradient(180deg,transparent,rgba(0,0,0,0.02))] dark:bg-[radial-gradient(circle_at_top_left,rgba(247,147,26,0.16),transparent_28%),linear-gradient(180deg,transparent,rgba(255,255,255,0.02))]"></div>
-
         <!-- Top navigation -->
         <Navbar :brand-name="props.brandName"
             :sidebar-items="props.sidebarItems" />

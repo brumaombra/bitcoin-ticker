@@ -8,8 +8,11 @@ const availableThemes = [
     { id: 'system' }
 ];
 
-// Shared state for the active theme mode
-const getThemeStore = () => useState('theme-mode', () => 'system');
+// Available crypto accent themes for the webapp
+const availableCryptoThemes = [
+    { id: 'bitcoin', shortLabel: 'BTC', accentLight: '#f7931a', accentDark: '#f7a23c' },
+    { id: 'kaspa', shortLabel: 'KAS', accentLight: '#49eacb', accentDark: '#5cefd4' }
+];
 
 // Translate a key through the active i18n instance when available
 const translate = (key, params = {}) => {
@@ -31,9 +34,10 @@ const applyThemeToDocument = theme => {
     document.documentElement.classList.add(resolvedTheme);
 };
 
-// Return the current theme state
-export const getCurrentTheme = () => {
-    return getThemeStore();
+// Apply the active crypto accent theme to the document root
+const applyCryptoThemeToDocument = cryptoTheme => {
+    if (!import.meta.client) return;
+    document.documentElement.dataset.cryptoTheme = cryptoTheme;
 };
 
 // Return the list of supported theme options
@@ -41,10 +45,15 @@ export const getThemes = () => {
     return computed(() => availableThemes);
 };
 
+// Return the list of supported crypto accent themes
+export const getCryptoThemes = () => {
+    return computed(() => availableCryptoThemes);
+};
+
 // Persist and apply a selected theme
 export const setTheme = theme => {
-    const currentTheme = getThemeStore();
-    currentTheme.value = theme;
+    const globalStore = useGlobalStore();
+    globalStore.value.themeMode = theme;
 
     // Save the preference in localStorage for persistence across sessions
     if (import.meta.client) {
@@ -55,22 +64,45 @@ export const setTheme = theme => {
     applyThemeToDocument(theme);
 };
 
+// Persist and apply a selected crypto accent theme
+export const setCryptoTheme = cryptoTheme => {
+    const globalStore = useGlobalStore();
+    globalStore.value.cryptoTheme = cryptoTheme;
+
+    if (import.meta.client) {
+        localStorage.setItem('crypto-theme', cryptoTheme);
+    }
+
+    applyCryptoThemeToDocument(cryptoTheme);
+};
+
 // Initialize the theme from storage and system preference
 export const initializeTheme = () => {
-    const currentTheme = getThemeStore();
+    const globalStore = useGlobalStore();
     if (!import.meta.client) return;
 
     // Check localStorage for a saved theme preference
     const storedTheme = localStorage.getItem('theme') || 'system';
-    currentTheme.value = storedTheme;
+    globalStore.value.themeMode = storedTheme;
     applyThemeToDocument(storedTheme);
 
     // Listen for changes in the system theme preference
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-        if (currentTheme.value === 'system') {
+        if (globalStore.value.themeMode === 'system') {
             applyThemeToDocument('system');
         }
     });
+};
+
+// Initialize the crypto accent theme from storage
+export const initializeCryptoTheme = () => {
+    const globalStore = useGlobalStore();
+    if (!import.meta.client) return;
+
+    const storedCryptoTheme = localStorage.getItem('crypto-theme') || 'bitcoin';
+    const isSupportedCryptoTheme = availableCryptoThemes.some(theme => theme.id === storedCryptoTheme);
+    globalStore.value.cryptoTheme = isSupportedCryptoTheme ? storedCryptoTheme : 'bitcoin';
+    applyCryptoThemeToDocument(globalStore.value.cryptoTheme);
 };
 
 // Toggle the global busy overlay

@@ -26,30 +26,60 @@ html {
 	font-family: 'Courier Prime', monospace;
 }
 
+/* Basic theme */
 :root {
-	--bg-main-light: #f6f3ee;
-	--bg-main-dark: #111316;
-	--bg-card-light: #fffdfa;
-	--bg-card-dark: #171a1f;
-	--bg-selected-light: #efe7dc;
-	--bg-selected-dark: #1f252d;
+	--bg-main-light: #f4f6f8;
+	--bg-main-dark: #0f1318;
+	--bg-card-light: #ffffff;
+	--bg-card-dark: #171c23;
+	--bg-selected-light: #edf1f5;
+	--bg-selected-dark: #202733;
 
-	--text-primary-light: #231f1a;
-	--text-primary-dark: #f4eee6;
-	--text-secondary-light: #6f6558;
-	--text-secondary-dark: #a49887;
+	--text-primary-light: #1b222d;
+	--text-primary-dark: #eef3f8;
+	--text-secondary-light: #66707d;
+	--text-secondary-dark: #97a2b2;
 
 	--button-primary-light: #f7931a;
 	--button-primary-hover-light: #df8112;
 	--button-primary-dark: #f7a23c;
 	--button-primary-hover-dark: #ffb55b;
-	--button-secondary-light: #fffdfa;
-	--button-secondary-dark: #171a1f;
+	--button-primary-foreground-light: #ffffff;
+	--button-primary-foreground-dark: #1b1307;
+	--button-secondary-light: #ffffff;
+	--button-secondary-dark: #171c23;
 
-	--border-light: #ded4c6;
-	--border-dark: #333943;
-	--border-hover-light: #b79d80;
-	--border-hover-dark: #5e6876;
+	--border-light: #d8dee7;
+	--border-dark: #313948;
+	--border-hover-light: #a7b0bd;
+	--border-hover-dark: #5d6878;
+
+	--app-accent-gradient-light: radial-gradient(circle at top left, rgba(247, 147, 26, 0.18), transparent 34%), radial-gradient(circle at bottom right, rgba(247, 147, 26, 0.08), transparent 28%), linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(15, 23, 42, 0.03));
+	--app-accent-gradient-dark: radial-gradient(circle at top left, rgba(247, 147, 26, 0.2), transparent 32%), radial-gradient(circle at bottom right, rgba(247, 147, 26, 0.1), transparent 24%), linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(15, 23, 42, 0));
+}
+
+/* Bitcoin theme */
+:root[data-crypto-theme='bitcoin'] {
+	--button-primary-light: #f7931a;
+	--button-primary-hover-light: #df8112;
+	--button-primary-dark: #f7a23c;
+	--button-primary-hover-dark: #ffb55b;
+	--button-primary-foreground-light: #ffffff;
+	--button-primary-foreground-dark: #1b1307;
+	--app-accent-gradient-light: radial-gradient(circle at top left, rgba(247, 147, 26, 0.18), transparent 34%), radial-gradient(circle at bottom right, rgba(247, 147, 26, 0.08), transparent 28%), linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(15, 23, 42, 0.03));
+	--app-accent-gradient-dark: radial-gradient(circle at top left, rgba(247, 147, 26, 0.2), transparent 32%), radial-gradient(circle at bottom right, rgba(247, 147, 26, 0.1), transparent 24%), linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(15, 23, 42, 0));
+}
+
+/* Kaspa theme */
+:root[data-crypto-theme='kaspa'] {
+	--button-primary-light: #49eacb;
+	--button-primary-hover-light: #32d8b8;
+	--button-primary-dark: #5cefd4;
+	--button-primary-hover-dark: #7cf5de;
+	--button-primary-foreground-light: #082a2a;
+	--button-primary-foreground-dark: #06211f;
+	--app-accent-gradient-light: radial-gradient(circle at top left, rgba(73, 234, 203, 0.2), transparent 34%), radial-gradient(circle at bottom right, rgba(73, 234, 203, 0.1), transparent 28%), linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(7, 24, 31, 0.035));
+	--app-accent-gradient-dark: radial-gradient(circle at top left, rgba(73, 234, 203, 0.22), transparent 32%), radial-gradient(circle at bottom right, rgba(73, 234, 203, 0.12), transparent 24%), linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(6, 24, 24, 0));
 }
 
 body {

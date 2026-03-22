@@ -120,6 +120,15 @@
             "visibilityDescription": "Choose which market metrics rotate on the matrix.",
             "formattingTitle": "Formatting & Motion",
             "formattingDescription": "Tweak the number formatting and playback intensity for the matrix.",
+            "cryptoTheme": {
+                "label": "Crypto theme",
+                "placeholder": "Choose a crypto theme",
+                "note": "Changes the accent colors and background glow used by the web interface.",
+                "bitcoinLabel": "Bitcoin",
+                "bitcoinMeta": "Orange Bitcoin accents",
+                "kaspaLabel": "Kaspa",
+                "kaspaMeta": "Turquoise Kaspa accents"
+            },
             "saveAction": "Save settings",
             "resetAction": "Reset saved settings",
             "saveSuccess": "The settings have been saved successfully!",

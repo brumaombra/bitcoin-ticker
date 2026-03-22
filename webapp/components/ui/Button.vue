@@ -16,7 +16,7 @@ const getButtonClasses = () => {
 
     // Style variants
     if (props.type === 'primary') {
-        classes.push('bg-[var(--button-primary-light)] text-white hover:bg-[var(--button-primary-hover-light)] dark:bg-[var(--button-primary-dark)] dark:text-[var(--text-primary-dark)] dark:hover:bg-[var(--button-primary-hover-dark)]');
+        classes.push('bg-[var(--button-primary-light)] text-[var(--button-primary-foreground-light)] hover:bg-[var(--button-primary-hover-light)] dark:bg-[var(--button-primary-dark)] dark:text-[var(--button-primary-foreground-dark)] dark:hover:bg-[var(--button-primary-hover-dark)]');
     } else if (props.type === 'ghost') {
         classes.push('text-[var(--text-secondary-light)] hover:bg-[var(--bg-selected-light)] hover:text-[var(--text-primary-light)] dark:text-[var(--text-secondary-dark)] dark:hover:bg-[var(--bg-selected-dark)] dark:hover:text-[var(--text-primary-dark)]');
     } else {

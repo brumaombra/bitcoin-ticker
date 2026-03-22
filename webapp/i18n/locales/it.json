@@ -120,6 +120,15 @@
             "visibilityDescription": "Scegli quali metriche di mercato devono ruotare sulla matrice.",
             "formattingTitle": "Formato e movimento",
             "formattingDescription": "Regola il formato dei numeri e l'intensita di riproduzione della matrice.",
+            "cryptoTheme": {
+                "label": "Tema cripto",
+                "placeholder": "Scegli un tema cripto",
+                "note": "Cambia i colori di accento e il bagliore di sfondo usati dall'interfaccia web.",
+                "bitcoinLabel": "Bitcoin",
+                "bitcoinMeta": "Accenti arancioni Bitcoin",
+                "kaspaLabel": "Kaspa",
+                "kaspaMeta": "Accenti turchesi Kaspa"
+            },
             "saveAction": "Salva impostazioni",
             "resetAction": "Reimposta impostazioni salvate",
             "saveSuccess": "Le impostazioni sono state salvate correttamente!",

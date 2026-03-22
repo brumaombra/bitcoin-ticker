@@ -2,13 +2,14 @@
 import { computed, ref } from 'vue';
 import { HugeiconsIcon } from '@hugeicons/vue';
 import { ComputerIcon, Moon02Icon, Sun01Icon } from '@hugeicons/core-free-icons';
-import { getCurrentTheme, getThemes, setTheme } from '~/composables/useUtils.js';
+import { getThemes, setTheme } from '~/composables/useUtils.js';
+import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Dropdown from '~/components/ui/Dropdown.vue';
 import DropdownMenu from '~/components/ui/DropdownMenu.vue';
 import IconButton from '~/components/ui/IconButton.vue';
 
 const isOpen = ref(false);
-const currentTheme = getCurrentTheme();
+const globalStore = useGlobalStore();
 const themes = getThemes();
 const { t } = useI18n();
 
@@ -34,7 +35,7 @@ const getThemeIcon = theme => {
 
 // Resolve the icon for the current theme
 const currentThemeIcon = computed(() => {
-    return getThemeIcon(currentTheme.value);
+    return getThemeIcon(globalStore.value.themeMode);
 });
 
 // Toggle the theme menu
@@ -59,7 +60,7 @@ const handleSelectTheme = theme => {
         </template>
 
         <!-- Theme options -->
-        <DropdownMenu :title="t('theme.title')" :options="themeOptions" :current="currentTheme" @select="handleSelectTheme">
+        <DropdownMenu :title="t('theme.title')" :options="themeOptions" :current="globalStore.themeMode" @select="handleSelectTheme">
             <template #option-leading="{ option }">
                 <HugeiconsIcon :icon="option.icon" :size="16" color="currentColor" :stroke-width="1.8" class="h-4 w-4" />
             </template>
