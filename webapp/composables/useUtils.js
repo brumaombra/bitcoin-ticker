@@ -1,4 +1,3 @@
-import { computed } from 'vue';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 
 // Available theme modes for the webapp
@@ -8,46 +7,46 @@ const availableThemes = [
     { id: 'system' }
 ];
 
-// Available crypto accent themes for the webapp
-const availableCryptoThemes = [
+// Available crypto coins for the ticker and matching webapp accent styles
+const availableCryptoCoins = [
     { id: 'bitcoin', shortLabel: 'BTC', accentLight: '#f7931a', accentDark: '#f7a23c' },
-    { id: 'kaspa', shortLabel: 'KAS', accentLight: '#49eacb', accentDark: '#5cefd4' }
+    { id: 'kaspa', shortLabel: 'KAS', accentLight: '#6fc7ba', accentDark: '#7dd3c7' }
 ];
 
 // Translate a key through the active i18n instance when available
 const translate = (key, params = {}) => {
     const nuxtApp = useNuxtApp();
 
+    // If the function is available, return the translated string
     if (typeof nuxtApp?.$i18n?.t === 'function') {
         return nuxtApp.$i18n.t(key, params);
     }
 
+    // Otherwise, return the key as a fallback
     return key;
 };
 
 // Apply the resolved theme class to the document root
 const applyThemeToDocument = theme => {
-    if (!import.meta.client) return;
     const isDarkSystem = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const resolvedTheme = theme === 'system' ? (isDarkSystem ? 'dark' : 'light') : theme;
     document.documentElement.classList.remove('light', 'dark');
     document.documentElement.classList.add(resolvedTheme);
 };
 
-// Apply the active crypto accent theme to the document root
-const applyCryptoThemeToDocument = cryptoTheme => {
-    if (!import.meta.client) return;
-    document.documentElement.dataset.cryptoTheme = cryptoTheme;
+// Apply the active crypto coin accent style to the document root
+const applyCryptoCoinToDocument = cryptoCoin => {
+    document.documentElement.dataset.cryptoCoin = cryptoCoin;
 };
 
 // Return the list of supported theme options
 export const getThemes = () => {
-    return computed(() => availableThemes);
+    return availableThemes;
 };
 
-// Return the list of supported crypto accent themes
-export const getCryptoThemes = () => {
-    return computed(() => availableCryptoThemes);
+// Return the list of supported crypto coins
+export const getCryptoCoins = () => {
+    return availableCryptoCoins;
 };
 
 // Persist and apply a selected theme
@@ -56,30 +55,23 @@ export const setTheme = theme => {
     globalStore.value.themeMode = theme;
 
     // Save the preference in localStorage for persistence across sessions
-    if (import.meta.client) {
-        localStorage.setItem('theme', theme);
-    }
+    localStorage.setItem('theme', theme);
 
     // Apply the theme to the document root to update the UI
     applyThemeToDocument(theme);
 };
 
-// Persist and apply a selected crypto accent theme
-export const setCryptoTheme = cryptoTheme => {
+// Apply a selected crypto coin to the shared store and document
+export const setCryptoCoin = cryptoCoin => {
     const globalStore = useGlobalStore();
-    globalStore.value.cryptoTheme = cryptoTheme;
-
-    if (import.meta.client) {
-        localStorage.setItem('crypto-theme', cryptoTheme);
-    }
-
-    applyCryptoThemeToDocument(cryptoTheme);
+    const isSupportedCryptoCoin = availableCryptoCoins.some(coin => coin.id === cryptoCoin);
+    globalStore.value.settings.cryptoCoin = isSupportedCryptoCoin ? cryptoCoin : 'bitcoin';
+    applyCryptoCoinToDocument(globalStore.value.settings.cryptoCoin);
 };
 
 // Initialize the theme from storage and system preference
 export const initializeTheme = () => {
     const globalStore = useGlobalStore();
-    if (!import.meta.client) return;
 
     // Check localStorage for a saved theme preference
     const storedTheme = localStorage.getItem('theme') || 'system';
@@ -94,15 +86,10 @@ export const initializeTheme = () => {
     });
 };
 
-// Initialize the crypto accent theme from storage
-export const initializeCryptoTheme = () => {
+// Initialize the crypto coin accent state from the current store value
+export const initializeCryptoCoin = () => {
     const globalStore = useGlobalStore();
-    if (!import.meta.client) return;
-
-    const storedCryptoTheme = localStorage.getItem('crypto-theme') || 'bitcoin';
-    const isSupportedCryptoTheme = availableCryptoThemes.some(theme => theme.id === storedCryptoTheme);
-    globalStore.value.cryptoTheme = isSupportedCryptoTheme ? storedCryptoTheme : 'bitcoin';
-    applyCryptoThemeToDocument(globalStore.value.cryptoTheme);
+    applyCryptoCoinToDocument(globalStore.value.settings.cryptoCoin || 'bitcoin');
 };
 
 // Toggle the global busy overlay
@@ -126,6 +113,7 @@ export const showMessage = ({ type = 'Error', title = '', message = '' }) => {
         Info: translate('dialogs.infoTitle')
     };
 
+    // Set the dialog properties
     globalStore.value.messageDialog = {
         visible: true,
         type,

@@ -21,6 +21,7 @@ const char mdnsHostname[] = "ticker";
 char wiFiSSID[35] = "";
 char wiFiPassword[70] = "";
 char apiKey[35] = "";
+char cryptoCoin[16] = "bitcoin";
 bool accessPointEnabled = false;
 bool disableAccessPoint = false;
 connectionStatus wiFiConnectionStatus = WIFI_KO;

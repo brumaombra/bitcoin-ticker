@@ -64,6 +64,9 @@ bool writeEEPROM() {
         doc["apiKey"] = apiKey;
     }
 
+    // Add the selected crypto coin to the JSON object
+    doc["cryptoCoin"] = cryptoCoin;
+
     // Add the visibility settings to the JSON object
     doc["currentPrice"] = currentPriceVisible;
     doc["priceChange"] = priceChangeVisible;
@@ -130,6 +133,11 @@ void loadSettingFromEEPROM() {
     // Load the API key
     if (!doc["apiKey"].isNull()) {
         stringCopy(apiKey, doc["apiKey"], sizeof(apiKey));
+    }
+
+    // Load the selected crypto coin
+    if (!doc["cryptoCoin"].isNull()) {
+        stringCopy(cryptoCoin, doc["cryptoCoin"].as<const char*>(), sizeof(cryptoCoin));
     }
     
     // Load the WiFi credentials

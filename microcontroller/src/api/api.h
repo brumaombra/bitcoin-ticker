@@ -4,7 +4,7 @@
 #include <ArduinoJson.h>
 
 void setupWebClient();
-void createStockDataMessage(JsonDocument doc);
+void createStockDataMessage(JsonDocument marketDoc);
 bool getStockDataAPI();
 bool callAPI();
 

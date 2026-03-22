@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted } from 'vue';
 import { getNetworks, getSettings } from '~/composables/useDeviceApi.js';
-import { closeConfirmDialog, closeMessage, initializeCryptoTheme, initializeTheme, setBusy, showMessage } from '~/composables/useUtils.js';
+import { closeConfirmDialog, closeMessage, initializeCryptoCoin, initializeTheme, setBusy, setCryptoCoin, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Busy from '~/components/Busy.vue';
 import ConfirmDialog from '~/components/ConfirmDialog.vue';
@@ -11,34 +11,41 @@ const globalStore = useGlobalStore();
 const { t } = useI18n();
 
 // Load the initial device data once for the app shell
-const ensureDeviceData = async () => {
+const loadInitialData = async () => {
+    // Exit if already loaded
     if (globalStore.value.settingsLoaded && globalStore.value.networksList.length > 0) {
+        setCryptoCoin(globalStore.value.settings.cryptoCoin || 'bitcoin');
         return;
     }
 
     try {
-        setBusy(true);
+        setBusy(true); // Busy on
 
+        // Load the networks if needed
         if (!globalStore.value.networksList.length) {
             globalStore.value.networksList = await getNetworks();
         }
 
+        // Load the settings if needed
         if (!globalStore.value.settingsLoaded) {
+            // Get the settings
+            const settings = await getSettings();
+
+            // Merge with the existing settings
             globalStore.value.settings = {
                 ...globalStore.value.settings,
-                ...await getSettings()
+                ...settings
             };
+
+            // Set the crypto coin in the global store
+            setCryptoCoin(globalStore.value.settings.cryptoCoin || 'bitcoin');
             globalStore.value.settingsLoaded = true;
         }
     } catch (error) {
         console.error(error);
-        showMessage({
-            type: 'Error',
-            title: t('dialogs.errorTitle'),
-            message: t('app.loadError')
-        });
+        showMessage({ type: 'Error', title: t('dialogs.errorTitle'), message: t('app.loadError') });
     } finally {
-        setBusy(false);
+        setBusy(false); // Busy off
     }
 };
 
@@ -59,8 +66,8 @@ const handleConfirmDialogCancel = () => {
 // Initialize the theme and preload device data once the app mounts
 onMounted(async () => {
     initializeTheme();
-    initializeCryptoTheme();
-    await ensureDeviceData();
+    initializeCryptoCoin();
+    await loadInitialData();
 });
 </script>
 

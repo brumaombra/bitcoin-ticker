@@ -120,14 +120,14 @@
             "visibilityDescription": "Scegli quali metriche di mercato devono ruotare sulla matrice.",
             "formattingTitle": "Formato e movimento",
             "formattingDescription": "Regola il formato dei numeri e l'intensita di riproduzione della matrice.",
-            "cryptoTheme": {
-                "label": "Tema cripto",
-                "placeholder": "Scegli un tema cripto",
-                "note": "Cambia i colori di accento e il bagliore di sfondo usati dall'interfaccia web.",
+            "cryptoCoin": {
+                "label": "Moneta del ticker",
+                "placeholder": "Scegli una cripto",
+                "note": "Seleziona quale moneta il dispositivo deve recuperare e applica il relativo stile di accento nell'interfaccia web.",
                 "bitcoinLabel": "Bitcoin",
-                "bitcoinMeta": "Accenti arancioni Bitcoin",
+                "bitcoinMeta": "Dati di mercato Bitcoin con accenti arancioni",
                 "kaspaLabel": "Kaspa",
-                "kaspaMeta": "Accenti turchesi Kaspa"
+                "kaspaMeta": "Dati di mercato Kaspa con accenti turchesi"
             },
             "saveAction": "Salva impostazioni",
             "resetAction": "Reimposta impostazioni salvate",
@@ -143,7 +143,7 @@
             "visibility": {
                 "currentPrice": {
                     "label": "Prezzo attuale",
-                    "description": "Il prezzo live di Bitcoin attualmente recuperato dall'API."
+                    "description": "Il prezzo live attualmente recuperato per la moneta selezionata."
                 },
                 "priceChange": {
                     "label": "Variazione prezzo",
@@ -151,7 +151,7 @@
                 },
                 "marketCap": {
                     "label": "Capitalizzazione",
-                    "description": "Il valore totale di mercato di Bitcoin."
+                    "description": "Il valore totale di mercato della moneta selezionata."
                 },
                 "dailyHighLow": {
                     "label": "Massimo / minimo giornaliero",

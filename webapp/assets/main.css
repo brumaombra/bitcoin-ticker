@@ -59,7 +59,7 @@ html {
 }
 
 /* Bitcoin theme */
-:root[data-crypto-theme='bitcoin'] {
+:root[data-crypto-coin='bitcoin'] {
 	--button-primary-light: #f7931a;
 	--button-primary-hover-light: #df8112;
 	--button-primary-dark: #f7a23c;
@@ -71,7 +71,7 @@ html {
 }
 
 /* Kaspa theme */
-:root[data-crypto-theme='kaspa'] {
+:root[data-crypto-coin='kaspa'] {
 	--button-primary-light: #6fc7ba;
 	--button-primary-hover-light: #5bb7ab;
 	--button-primary-dark: #7dd3c7;

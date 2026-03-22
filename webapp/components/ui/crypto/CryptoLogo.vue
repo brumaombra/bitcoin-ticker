@@ -7,6 +7,6 @@ const globalStore = useGlobalStore();
 </script>
 
 <template>
-    <KaspaLogo v-if="globalStore.cryptoTheme === 'kaspa'" v-bind="$attrs" />
+    <KaspaLogo v-if="globalStore.settings.cryptoCoin === 'kaspa'" v-bind="$attrs" />
     <BitcoinLogo v-else v-bind="$attrs" />
 </template>

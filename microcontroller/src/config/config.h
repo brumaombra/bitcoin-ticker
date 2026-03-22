@@ -35,6 +35,7 @@ extern const char mdnsHostname[];
 extern char wiFiSSID[35];
 extern char wiFiPassword[70];
 extern char apiKey[35];
+extern char cryptoCoin[16];
 extern bool accessPointEnabled;
 extern bool disableAccessPoint;
 enum connectionStatus { WIFI_TRY = 2, WIFI_OK = 1, WIFI_KO = 0 };

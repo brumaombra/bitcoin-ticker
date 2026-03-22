@@ -6,9 +6,6 @@ export const useGlobalStore = () => useState('global', () => ({
     // Shared UI theme mode
     themeMode: 'system',
 
-    // Shared crypto accent theme
-    cryptoTheme: 'bitcoin',
-
     // Cached WiFi scan results
     networksList: [],
 
@@ -21,6 +18,7 @@ export const useGlobalStore = () => useState('global', () => ({
         yearHighLow: false,
         openPrice: false,
         volume: false,
+        cryptoCoin: 'bitcoin',
         formatType: 'US',
         matrixIntensity: 0,
         scrollSpeed: 0

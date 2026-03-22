@@ -120,14 +120,14 @@
             "visibilityDescription": "Choose which market metrics rotate on the matrix.",
             "formattingTitle": "Formatting & Motion",
             "formattingDescription": "Tweak the number formatting and playback intensity for the matrix.",
-            "cryptoTheme": {
-                "label": "Crypto theme",
-                "placeholder": "Choose a crypto theme",
-                "note": "Changes the accent colors and background glow used by the web interface.",
+            "cryptoCoin": {
+                "label": "Ticker coin",
+                "placeholder": "Choose a crypto coin",
+                "note": "Selects which coin the device fetches and applies the matching accent style in the web interface.",
                 "bitcoinLabel": "Bitcoin",
-                "bitcoinMeta": "Orange Bitcoin accents",
+                "bitcoinMeta": "Bitcoin market data with orange accents",
                 "kaspaLabel": "Kaspa",
-                "kaspaMeta": "Turquoise Kaspa accents"
+                "kaspaMeta": "Kaspa market data with turquoise accents"
             },
             "saveAction": "Save settings",
             "resetAction": "Reset saved settings",
@@ -143,7 +143,7 @@
             "visibility": {
                 "currentPrice": {
                     "label": "Current price",
-                    "description": "The live Bitcoin price currently fetched from the API."
+                    "description": "The live price currently fetched for the selected coin."
                 },
                 "priceChange": {
                     "label": "Price change",
@@ -151,7 +151,7 @@
                 },
                 "marketCap": {
                     "label": "Market cap",
-                    "description": "The total market value of Bitcoin."
+                    "description": "The total market value of the selected coin."
                 },
                 "dailyHighLow": {
                     "label": "Daily high / low",

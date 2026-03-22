@@ -2,7 +2,7 @@
 import { Settings01Icon } from '@hugeicons/core-free-icons';
 import { computed } from 'vue';
 import { resetSettings, saveSettings } from '~/composables/useDeviceApi.js';
-import { getCryptoThemes, handleBackendErrors, setBusy, setCryptoTheme, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
+import { getCryptoCoins, handleBackendErrors, setBusy, setCryptoCoin, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
@@ -15,17 +15,11 @@ import Select from '~/components/ui/Select.vue';
 import Label from '~/components/ui/Label.vue';
 
 const globalStore = useGlobalStore();
-const cryptoThemes = getCryptoThemes();
+const cryptoCoins = getCryptoCoins();
 const { t } = useI18n();
 
 // Reactive settings payload
 const settings = computed(() => globalStore.value.settings);
-
-// Reactive crypto theme setting for the accent palette
-const selectedCryptoTheme = computed({
-    get: () => globalStore.value.cryptoTheme,
-    set: value => setCryptoTheme(value)
-});
 
 // Slider percentage for matrix intensity
 const matrixIntensityPercentage = computed(() => {
@@ -43,12 +37,12 @@ const separatorOptions = computed(() => ([
     { value: 'EU', label: '21.000,00', meta: t('pages.settings.formatType.euMeta') }
 ]));
 
-// Available crypto accent themes
-const cryptoThemeOptions = computed(() => {
-    return cryptoThemes.value.map(theme => ({
-        value: theme.id,
-        label: t(`pages.settings.cryptoTheme.${theme.id}Label`),
-        meta: t(`pages.settings.cryptoTheme.${theme.id}Meta`)
+// Available crypto coin choices
+const cryptoCoinOptions = computed(() => {
+    return cryptoCoins.value.map(coin => ({
+        value: coin.id,
+        label: t(`pages.settings.cryptoCoin.${coin.id}Label`),
+        meta: t(`pages.settings.cryptoCoin.${coin.id}Meta`)
     }));
 });
 
@@ -202,11 +196,11 @@ definePageMeta({
 
                     <!-- Formatting controls -->
                     <div class="space-y-6">
-                        <!-- Crypto theme -->
+                        <!-- Crypto coin -->
                         <div class="space-y-2">
-                            <Label for="cryptoTheme">{{ t('pages.settings.cryptoTheme.label') }}</Label>
-                            <Select id="cryptoTheme" v-model="selectedCryptoTheme" :option-list="cryptoThemeOptions" :placeholder="t('pages.settings.cryptoTheme.placeholder')" />
-                            <FormInfoText>{{ t('pages.settings.cryptoTheme.note') }}</FormInfoText>
+                            <Label for="cryptoCoin">{{ t('pages.settings.cryptoCoin.label') }}</Label>
+                            <Select id="cryptoCoin" v-model="settings.cryptoCoin" :option-list="cryptoCoinOptions" :placeholder="t('pages.settings.cryptoCoin.placeholder')" @change="setCryptoCoin" />
+                            <FormInfoText>{{ t('pages.settings.cryptoCoin.note') }}</FormInfoText>
                         </div>
 
                         <!-- Thousands separator format -->

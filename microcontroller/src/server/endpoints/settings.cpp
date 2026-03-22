@@ -21,6 +21,7 @@ void setupSettingsRoute() {
 		doc["yearHighLow"] = yearHighLowVisible;
 		doc["openPrice"] = openPriceVisible;
 		doc["volume"] = volumeVisible;
+		doc["cryptoCoin"] = cryptoCoin;
 		doc["formatType"] = formatType == FORMAT_US ? "US" : "EU";
 		doc["matrixIntensity"] = matrixIntensity;
 		doc["scrollSpeed"] = scrollSpeed;
@@ -86,6 +87,8 @@ void setupSettingsRoute() {
 				openPriceVisible = doc["openPrice"].as<bool>();
 			if (!doc["volume"].isNull())
 				volumeVisible = doc["volume"].as<bool>();
+			if (!doc["cryptoCoin"].isNull())
+				stringCopy(cryptoCoin, doc["cryptoCoin"].as<const char*>(), sizeof(cryptoCoin));
 			if (!doc["formatType"].isNull())
 				formatType = doc["formatType"].as<String>() == "US" ? FORMAT_US : FORMAT_EU;
 			if (!doc["matrixIntensity"].isNull())
@@ -94,6 +97,7 @@ void setupSettingsRoute() {
 				scrollSpeed = doc["scrollSpeed"].as<uint8_t>();
 
 			// Apply changes
+			timestampStockData = 0;
 			writeEEPROM();
 			setMatrixIntensity(matrixIntensity);
 			setMatrixSpeed(scrollSpeed);
