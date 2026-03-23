@@ -1,5 +1,4 @@
 #include "server.h"
-#include "endpoints/endpoints.h"
 #include "../config/config.h"
 
 // Setup routes

@@ -1,4 +1,4 @@
-#include "endpoints.h"
+#include "../server.h"
 #include <Arduino.h>
 #include "../../config/config.h"
 #include "../../storage/storage.h"

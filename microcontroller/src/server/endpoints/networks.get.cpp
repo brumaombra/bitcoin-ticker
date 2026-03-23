@@ -1,4 +1,4 @@
-#include "endpoints.h"
+#include "../server.h"
 #include <ArduinoJson.h>
 #include <ESP8266WiFi.h>
 #include <algorithm>

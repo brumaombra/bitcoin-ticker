@@ -1,4 +1,4 @@
-#include "endpoints.h"
+#include "../server.h"
 #include "../../config/config.h"
 #include "../../utils/utils.h"
 #include "../../serial/serial.h"

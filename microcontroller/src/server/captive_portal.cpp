@@ -1,6 +1,6 @@
-#include "endpoints.h"
-#include "../../config/config.h"
-#include "../../webui/generated_assets.h"
+#include "server.h"
+#include "../config/config.h"
+#include "../webui/generated_assets.h"
 
 namespace {
 	String normalizeAssetPath(const String& requestPath) {
