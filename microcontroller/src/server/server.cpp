@@ -13,7 +13,6 @@ void setupRoutes() {
 	setupConnectGetRoute();
 	setupCheckConnectionGetRoute();
 	setupNetworksGetRoute();
-	setupApiKeyGetRoute();
 	setupApiKeyPostRoute();
 	setupSettingsGetRoute();
 	setupSettingsPostRoute();
