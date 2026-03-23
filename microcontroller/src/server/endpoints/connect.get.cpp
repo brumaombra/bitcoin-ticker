@@ -3,8 +3,8 @@
 #include "../../utils/utils.h"
 #include "../../serial/serial.h"
 
+// Connect to WiFi with the provided credentials
 void setupConnectGetRoute() {
-	// Connect to WiFi
 	server.on("/api/connect", HTTP_GET, [](AsyncWebServerRequest *request) {
 		// Check required fields
 		if (!request->hasParam("ssid") || !request->hasParam("password")) {

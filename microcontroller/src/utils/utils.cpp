@@ -1,5 +1,6 @@
 #include "utils.h"
 #include <Arduino.h>
+#include <ESPAsyncWebServer.h>
 #include "../config/config.h"
 
 // Custom string copy function
@@ -40,8 +41,46 @@ char* addThousandsSeparators(double value, int decimals, char decimalSeparator, 
 
 // Format currency
 void formatCurrency(double value, char* output, const byte length) {
-	if (formatType == FORMAT_US)
+	if (formatType == FORMAT_US) {
 		stringCopy(output, addThousandsSeparators(value * 100, 2, '.', ','), length);
-	else
+	} else {
 		stringCopy(output, addThousandsSeparators(value * 100, 2, ',', '.'), length);
+	}
+}
+
+// Accumulate the request body for POST requests
+RequestBodyResult accumulateRequestBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+	// If it's the first chunk, allocate memory for the entire body
+	if (index == 0) {
+		releaseRequestBody(request);
+		request->_tempObject = malloc(total + 1);
+		if (request->_tempObject == NULL) {
+			return { RequestBodyState::Error, NULL, 0 };
+		}
+	}
+
+	// If memory allocation failed, return an error
+	if (request->_tempObject == NULL) {
+		return { RequestBodyState::Error, NULL, 0 };
+	}
+
+	// Copy the current chunk into the allocated memory
+	memcpy(static_cast<uint8_t*>(request->_tempObject) + index, data, len);
+
+	// If still receiving data, wait for the next call
+	if (index + len != total) {
+		return { RequestBodyState::InProgress, NULL, 0 };
+	}
+
+	// All data received, return the complete body
+	char* body = static_cast<char*>(request->_tempObject);
+	body[total] = '\0';
+	return { RequestBodyState::Ready, body, total };
+}
+
+// Release the memory allocated for the request body
+void releaseRequestBody(AsyncWebServerRequest *request) {
+	if (request->_tempObject == NULL) return;
+	free(request->_tempObject);
+	request->_tempObject = NULL;
 }

@@ -2,12 +2,12 @@
 #include <ArduinoJson.h>
 #include "../../config/config.h"
 
+// Get the current settings
 void setupSettingsGetRoute() {
-	// Get the values visibility settings
 	server.on("/api/settings", HTTP_GET, [](AsyncWebServerRequest *request) {
 		JsonDocument doc;
 
-		// Add the visibility settings to the JSON object
+		// Add the settings to the JSON object
 		doc["currentPrice"] = currentPriceVisible;
 		doc["priceChange"] = priceChangeVisible;
 		doc["marketCap"] = marketCapVisible;
@@ -20,9 +20,11 @@ void setupSettingsGetRoute() {
 		doc["matrixIntensity"] = matrixIntensity;
 		doc["scrollSpeed"] = scrollSpeed;
 
+		// Serialize the JSON object to a string
 		size_t jsonLength = measureJson(doc) + 1;
 		char json[jsonLength];
 		serializeJson(doc, json, jsonLength);
+		
 		// Send the JSON object
 		request->send(200, "application/json", json);
 	});

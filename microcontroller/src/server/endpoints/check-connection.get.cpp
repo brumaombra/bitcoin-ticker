@@ -25,8 +25,8 @@ namespace {
 	}
 }
 
+// Check Wi-Fi connection status
 void setupCheckConnectionGetRoute() {
-	// Route to check the Wi-Fi connection status
 	server.on("/api/check-connection", HTTP_GET, [](AsyncWebServerRequest *request) {
 		// Create the JSON response
 		const String jsonResponse = getCheckConnectionResponse();

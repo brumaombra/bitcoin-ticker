@@ -3,8 +3,8 @@
 #include "../../config/config.h"
 #include "../../storage/storage.h"
 
+// Clear all saved settings from EEPROM and restart
 void setupResetSettingsGetRoute() {
-	// Clear all saved settings from EEPROM and restart
 	server.on("/api/reset-settings", HTTP_GET, [](AsyncWebServerRequest *request) {
 		// Clear EEPROM
 		if (!clearEEPROM()) {
