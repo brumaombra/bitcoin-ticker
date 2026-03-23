@@ -56,13 +56,10 @@ export const saveSettings = async settings => {
         const url = buildDeviceUrl('/api/settings');
         const data = await $fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
             body: settings
         });
 
-        // Return if successful
+        // Return result status
         return data.status === 'OK';
     } catch (error) {
         throw new Error(translate('api.saveSettings'));
@@ -83,8 +80,16 @@ export const resetSettings = async () => {
 // Save the market data API key on the device
 export const saveApiKey = async apiKey => {
     try {
-        const url = buildDeviceUrl('/api/api-key', { apiKey });
-        const data = await $fetch(url);
+        // Call the device API to save the API key
+        const url = buildDeviceUrl('/api/api-key');
+        const data = await $fetch(url, {
+            method: 'POST',
+            body: {
+                apiKey
+            }
+        });
+
+        // Return result status
         return data.status === 'OK';
     } catch (error) {
         throw new Error(translate('api.saveApiKey'));

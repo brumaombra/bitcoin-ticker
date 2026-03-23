@@ -57,7 +57,7 @@ namespace {
 	}
 }
 
-void setupNetworksRoute() {
+void setupNetworksGetRoute() {
 	// Send the list of networks
 	server.on("/api/networks", HTTP_GET, [](AsyncWebServerRequest *request) {
 		WiFi.scanNetworksAsync([request](int numNetworks) {

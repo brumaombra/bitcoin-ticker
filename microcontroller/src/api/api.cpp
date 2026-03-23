@@ -176,5 +176,5 @@ bool callAPI() {
 	}
 
 	// If no error, return true
-	return true
+	return true;
 }

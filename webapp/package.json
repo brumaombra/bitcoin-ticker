@@ -15,7 +15,6 @@
         "@hugeicons/vue": "1.0.5",
         "@nuxtjs/i18n": "10.2.3",
         "@tailwindcss/vite": "4.1.3",
-        "flag-icons": "7.3.2",
         "nuxt": "3.20.2"
     },
     "devDependencies": {

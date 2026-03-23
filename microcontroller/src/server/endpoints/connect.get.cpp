@@ -3,7 +3,7 @@
 #include "../../utils/utils.h"
 #include "../../serial/serial.h"
 
-void setupConnectRoute() {
+void setupConnectGetRoute() {
 	// Connect to WiFi
 	server.on("/api/connect", HTTP_GET, [](AsyncWebServerRequest *request) {
 		// Check required fields

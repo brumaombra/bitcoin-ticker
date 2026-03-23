@@ -1,7 +1,7 @@
 #include "endpoints.h"
 #include <ArduinoJson.h>
-#include "../../config/config.h"
 #include <ESP8266WiFi.h>
+#include "../../config/config.h"
 
 namespace {
 	// Create the JSON response for the check connection endpoint
@@ -25,8 +25,8 @@ namespace {
 	}
 }
 
-// Route to check the Wi-Fi connection status
-void setupCheckConnectionRoute() {
+void setupCheckConnectionGetRoute() {
+	// Route to check the Wi-Fi connection status
 	server.on("/api/check-connection", HTTP_GET, [](AsyncWebServerRequest *request) {
 		// Create the JSON response
 		const String jsonResponse = getCheckConnectionResponse();

@@ -4,8 +4,9 @@
 #include "../../storage/storage.h"
 #include "../../serial/serial.h"
 
-void setupApiKeyRoute() {
-	// Save the API key
+// Save the API key.
+// Kept as GET temporarily for backward compatibility with the embedded web app.
+void setupApiKeyGetRoute() {
 	server.on("/api/api-key", HTTP_GET, [](AsyncWebServerRequest *request) {
 		// Check if the API key is missing
 		if (!request->hasParam("apiKey")) {

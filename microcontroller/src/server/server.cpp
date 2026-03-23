@@ -10,11 +10,14 @@ void setupRoutes() {
 	DefaultHeaders::Instance().addHeader("Access-Control-Allow-Headers", "Content-Type");
 
 	// Setup the routes
-	setupConnectRoute();
-	setupCheckConnectionRoute();
-	setupNetworksRoute();
-	setupApiKeyRoute();
-	setupSettingsRoute();
+	setupConnectGetRoute();
+	setupCheckConnectionGetRoute();
+	setupNetworksGetRoute();
+	setupApiKeyGetRoute();
+	setupApiKeyPostRoute();
+	setupSettingsGetRoute();
+	setupSettingsPostRoute();
+	setupResetSettingsGetRoute();
 	setupCaptivePortalRoute();
 }
 

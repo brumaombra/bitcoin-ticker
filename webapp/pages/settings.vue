@@ -39,7 +39,7 @@ const separatorOptions = computed(() => ([
 
 // Available crypto coin choices
 const cryptoCoinOptions = computed(() => {
-    return cryptoCoins.value.map(coin => ({
+    return cryptoCoins.map(coin => ({
         value: coin.id,
         label: t(`pages.settings.cryptoCoin.${coin.id}Label`),
         meta: t(`pages.settings.cryptoCoin.${coin.id}Meta`)
