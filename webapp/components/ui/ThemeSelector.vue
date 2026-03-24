@@ -15,7 +15,7 @@ const { t } = useI18n();
 
 // Theme options for the dropdown menu
 const themeOptions = computed(() => {
-    return themes.value.map(theme => ({
+    return themes.map(theme => ({
         key: theme.id,
         label: t(`theme.${theme.id}`),
         icon: getThemeIcon(theme.id)

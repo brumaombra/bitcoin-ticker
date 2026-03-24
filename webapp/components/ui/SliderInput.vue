@@ -13,7 +13,7 @@ const emits = defineEmits(['update:modelValue']);
 
 // Update the model value when the slider input changes
 const updateValue = event => {
-    emits('update:modelValue', event.target.value);
+    emits('update:modelValue', Number(event.target.value));
 };
 </script>
 

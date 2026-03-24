@@ -1,9 +1,41 @@
 #include "../server.h"
 #include <ArduinoJson.h>
+#include <cstring>
 #include "../../config/config.h"
 #include "../../utils/utils.h"
 #include "../../storage/storage.h"
 #include "../../serial/serial.h"
+
+namespace {
+	constexpr size_t MAX_API_KEY_LENGTH = sizeof(apiKey) - 1;
+
+	// Validate the apiKey field
+	bool validateApiKeyField(AsyncWebServerRequest* request, JsonVariantConst value) {
+		// Null is not allowed
+		if (value.isNull()) {
+			sendErrorResponse(request, 400, "missing_api_key", "Missing apiKey field");
+			return false;
+		}
+
+		// Must be a string
+		if (!value.is<const char*>()) {
+			printLogfln("Invalid apiKey type");
+			sendErrorResponse(request, 400, "invalid_api_key", "Invalid apiKey field");
+			return false;
+		}
+
+		// If string, must not exceed max length
+		const char* apiKeyValue = value.as<const char*>();
+		if (strlen(apiKeyValue) > MAX_API_KEY_LENGTH) {
+			printLogfln("apiKey is too long: %d", strlen(apiKeyValue));
+			sendErrorResponse(request, 400, "invalid_api_key", "apiKey is too long");
+			return false;
+		}
+
+		// Valid apiKey value
+		return true;
+	}
+}
 
 // Save the API key
 void setupApiKeyPostRoute() {
@@ -35,9 +67,14 @@ void setupApiKeyPostRoute() {
 			return;
 		}
 
-		// Check required fields
-		if (doc["apiKey"].isNull()) {
-			sendErrorResponse(request, 400, "missing_api_key", "Missing apiKey field");
+		// Validate that the root is a JSON object
+		if (!doc.is<JsonObject>()) {
+			sendErrorResponse(request, 400, "invalid_json", "Invalid JSON object");
+			return;
+		}
+
+		// Validate the apiKey field
+		if (!validateApiKeyField(request, doc["apiKey"])) {
 			return;
 		}
 
