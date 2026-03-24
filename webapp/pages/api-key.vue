@@ -29,7 +29,7 @@ const saveCurrentApiKey = async () => {
             message: t('pages.apiKey.saveSuccess')
         });
     } catch (error) {
-        handleBackendErrors({ error, errorTranslated: t('pages.apiKey.saveError'), errorMessage: t('pages.apiKey.saveError'), showDialog: true });
+        handleBackendErrors({ error, defaultMessage: t('pages.apiKey.saveError'), showDialog: true });
     } finally {
         setBusy(false);
         apiKey.value = '';

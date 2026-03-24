@@ -169,15 +169,22 @@ export const closeConfirmDialog = () => {
 };
 
 // Handle backend errors with a shared message strategy
-export const handleBackendErrors = ({ error, errorTranslated = '', errorMessage = '', showDialog = false }) => {
-    console.error(errorMessage || translate('common.genericError'), error);
+export const handleBackendErrors = ({ error, defaultMessage = '', showDialog = false }) => {
+    const backendErrorPayload = error?.response?._data || error?.data || error?.response?.data || null;
+    const backendErrorId = backendErrorPayload?.errorId || '';
+    const backendErrorMessage = backendErrorPayload?.errorMessage || '';
+    const translationKey = backendErrorId ? `api.backendErrors.${backendErrorId}` : '';
+    const backendErrorTranslated = translationKey ? translate(translationKey) : '';
+    const runtimeErrorMessage = error instanceof Error ? error.message : '';
+    const resolvedMessage = backendErrorTranslated || backendErrorMessage || runtimeErrorMessage || defaultMessage || translate('common.genericError');
+    const resolvedLogMessage = backendErrorMessage || runtimeErrorMessage || defaultMessage || translate('common.genericError');
 
     // Show a user-friendly error dialog if requested
     if (showDialog) {
         showMessage({
             type: 'Error',
             title: translate('dialogs.errorTitle'),
-            message: errorTranslated || errorMessage || translate('common.genericError')
+            message: resolvedMessage
         });
     }
 
@@ -186,6 +193,7 @@ export const handleBackendErrors = ({ error, errorTranslated = '', errorMessage 
         throw error;
     }
 
-    // For other types of errors, throw a generic error with the translated message if available
-    throw new Error(errorTranslated || translate('common.genericError'));
+    // For other types of errors, throw a generic error with the message
+    console.error(resolvedLogMessage, error);
+    throw new Error(resolvedMessage);
 };

@@ -42,12 +42,7 @@ const connectDeviceToWiFi = async () => {
             message: t('pages.wifi.connectedMessage', { ssid: result.ssid || ssid.value, hostname: result.hostname, ip: result.ip })
         });
     } catch (error) {
-        handleBackendErrors({
-            error,
-            errorTranslated: error instanceof Error ? error.message : t('pages.wifi.connectError'),
-            errorMessage: error instanceof Error ? error.message : t('pages.wifi.connectError'),
-            showDialog: true
-        });
+        handleBackendErrors({ error, defaultMessage: t('pages.wifi.connectError'), showDialog: true });
     } finally {
         setBusy(false);
         password.value = '';
@@ -78,7 +73,7 @@ const refreshSSIDList = async () => {
     try {
         globalStore.value.networksList = await getNetworks();
     } catch (error) {
-        handleBackendErrors({ error, errorTranslated: t('pages.wifi.refreshError'), errorMessage: t('pages.wifi.refreshError'), showDialog: true });
+        handleBackendErrors({ error, defaultMessage: t('pages.wifi.refreshError'), showDialog: true });
     } finally {
         isLoading.value = false;
     }

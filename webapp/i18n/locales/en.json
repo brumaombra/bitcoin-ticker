@@ -71,7 +71,14 @@
         "wifiUnknownStatus": "The device returned an unknown Wi-Fi connection status.",
         "wifiTimeout": "The device did not finish connecting to Wi-Fi in time.",
         "wifiFailed": "Failed to connect to WiFi",
-        "wifiConnectError": "An error occurred while connecting to the Wi-Fi network"
+        "wifiConnectError": "An error occurred while connecting to the Wi-Fi network",
+        "backendErrors": {
+            "missing_required_fields": "Some information is missing. Please check the form and try again.",
+            "request_body_read_failed": "The device could not process the request. Please try again.",
+            "invalid_json": "The device received data in an unexpected format. Please try again.",
+            "clear_settings_failed": "The device could not reset the saved settings. Please try again.",
+            "missing_api_key": "Please enter an API key before saving."
+        }
     },
     "pages": {
         "apiKey": {

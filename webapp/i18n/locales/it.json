@@ -71,7 +71,14 @@
         "wifiUnknownStatus": "Il dispositivo ha restituito uno stato di connessione Wi-Fi sconosciuto.",
         "wifiTimeout": "Il dispositivo non ha completato la connessione Wi-Fi in tempo.",
         "wifiFailed": "Connessione al WiFi non riuscita",
-        "wifiConnectError": "Si e verificato un errore durante la connessione alla rete Wi-Fi"
+        "wifiConnectError": "Si e verificato un errore durante la connessione alla rete Wi-Fi",
+        "backendErrors": {
+            "missing_required_fields": "Mancano alcune informazioni. Controlla i campi e riprova.",
+            "request_body_read_failed": "Il dispositivo non e riuscito a elaborare la richiesta. Riprova.",
+            "invalid_json": "Il dispositivo ha ricevuto dati in un formato non valido. Riprova.",
+            "clear_settings_failed": "Il dispositivo non e riuscito a reimpostare le impostazioni salvate. Riprova.",
+            "missing_api_key": "Inserisci una chiave API prima di salvare."
+        }
     },
     "pages": {
         "apiKey": {

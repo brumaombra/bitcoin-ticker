@@ -18,71 +18,51 @@ const buildDeviceUrl = (path, query = null) => {
 
 // Fetch the list of visible WiFi networks
 export const getNetworks = async () => {
-    try {
-        const url = buildDeviceUrl('/api/networks');
-        const response = await $fetch(url);
-        return response.data?.networks || [];
-    } catch (error) {
-        throw new Error(translate('api.loadNetworks'));
-    }
+    const url = buildDeviceUrl('/api/networks');
+    const response = await $fetch(url);
+    return response.data?.networks || [];
 };
 
 // Fetch the saved device settings
 export const getSettings = async () => {
-    try {
-        const url = buildDeviceUrl('/api/settings');
-        const response = await $fetch(url);
-        return response.data || {};
-    } catch (error) {
-        throw new Error(translate('api.loadSettings'));
-    }
+    const url = buildDeviceUrl('/api/settings');
+    const response = await $fetch(url);
+    return response.data || {};
 };
 
 // Persist the current device settings
 export const saveSettings = async settings => {
-    try {
-        // Call the device API to save the settings
-        const url = buildDeviceUrl('/api/settings');
-        await $fetch(url, {
-            method: 'POST',
-            body: settings
-        });
+    // Call the device API to save the settings
+    const url = buildDeviceUrl('/api/settings');
+    await $fetch(url, {
+        method: 'POST',
+        body: settings
+    });
 
-        // Return result status
-        return true;
-    } catch (error) {
-        throw new Error(translate('api.saveSettings'));
-    }
+    // Return result status
+    return true;
 };
 
 // Reset the saved device settings and restart the firmware
 export const resetSettings = async () => {
-    try {
-        const url = buildDeviceUrl('/api/reset-settings');
-        const response = await $fetch(url);
-        return response.data || {};
-    } catch (error) {
-        throw new Error(translate('api.resetSettings'));
-    }
+    const url = buildDeviceUrl('/api/reset-settings');
+    const response = await $fetch(url);
+    return response.data || {};
 };
 
 // Save the market data API key on the device
 export const saveApiKey = async apiKey => {
-    try {
-        // Call the device API to save the API key
-        const url = buildDeviceUrl('/api/api-key');
-        await $fetch(url, {
-            method: 'POST',
-            body: {
-                apiKey
-            }
-        });
+    // Call the device API to save the API key
+    const url = buildDeviceUrl('/api/api-key');
+    await $fetch(url, {
+        method: 'POST',
+        body: {
+            apiKey
+        }
+    });
 
-        // Return result status
-        return true;
-    } catch (error) {
-        throw new Error(translate('api.saveApiKey'));
-    }
+    // Return result status
+    return true;
 };
 
 // Poll the device until the WiFi connection attempt completes

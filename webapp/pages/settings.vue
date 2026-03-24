@@ -61,7 +61,7 @@ const saveCurrentSettings = async () => {
             message: t('pages.settings.saveSuccess')
         });
     } catch (error) {
-        handleBackendErrors({ error, errorTranslated: t('pages.settings.saveError'), errorMessage: t('pages.settings.saveError'), showDialog: true });
+        handleBackendErrors({ error, defaultMessage: t('pages.settings.saveError'), showDialog: true });
     } finally {
         setBusy(false);
     }
@@ -78,7 +78,7 @@ const resetSavedSettings = async () => {
             message: result.message || t('pages.settings.resetInfoMessage')
         });
     } catch (error) {
-        handleBackendErrors({ error, errorTranslated: t('pages.settings.resetError'), errorMessage: t('pages.settings.resetError'), showDialog: true });
+        handleBackendErrors({ error, defaultMessage: t('pages.settings.resetError'), showDialog: true });
     } finally {
         setBusy(false);
     }
