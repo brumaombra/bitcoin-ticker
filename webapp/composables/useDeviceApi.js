@@ -1,4 +1,4 @@
-import { delay } from '~/composables/useUtils.js';
+import { delay, translate } from '~/composables/useUtils.js';
 
 // WiFi connection status codes returned by the device
 const connectionStatus = Object.freeze({
@@ -6,17 +6,6 @@ const connectionStatus = Object.freeze({
     WIFI_OK: 1,
     WIFI_KO: 0
 });
-
-// Translate a key through the active i18n instance when available
-const translate = (key, params = {}) => {
-    const nuxtApp = useNuxtApp();
-
-    if (typeof nuxtApp?.$i18n?.t === 'function') {
-        return nuxtApp.$i18n.t(key, params);
-    }
-
-    return key;
-};
 
 // Build a device endpoint URL with an optional query string
 const buildDeviceUrl = (path, query = null) => {
@@ -31,8 +20,8 @@ const buildDeviceUrl = (path, query = null) => {
 export const getNetworks = async () => {
     try {
         const url = buildDeviceUrl('/api/networks');
-        const data = await $fetch(url);
-        return data.networks || [];
+        const response = await $fetch(url);
+        return response.data?.networks || [];
     } catch (error) {
         throw new Error(translate('api.loadNetworks'));
     }
@@ -42,8 +31,8 @@ export const getNetworks = async () => {
 export const getSettings = async () => {
     try {
         const url = buildDeviceUrl('/api/settings');
-        const data = await $fetch(url);
-        return data || {};
+        const response = await $fetch(url);
+        return response.data || {};
     } catch (error) {
         throw new Error(translate('api.loadSettings'));
     }
@@ -54,13 +43,13 @@ export const saveSettings = async settings => {
     try {
         // Call the device API to save the settings
         const url = buildDeviceUrl('/api/settings');
-        const data = await $fetch(url, {
+        await $fetch(url, {
             method: 'POST',
             body: settings
         });
 
         // Return result status
-        return data.status === 'OK';
+        return true;
     } catch (error) {
         throw new Error(translate('api.saveSettings'));
     }
@@ -70,8 +59,8 @@ export const saveSettings = async settings => {
 export const resetSettings = async () => {
     try {
         const url = buildDeviceUrl('/api/reset-settings');
-        const data = await $fetch(url);
-        return data || {};
+        const response = await $fetch(url);
+        return response.data || {};
     } catch (error) {
         throw new Error(translate('api.resetSettings'));
     }
@@ -82,7 +71,7 @@ export const saveApiKey = async apiKey => {
     try {
         // Call the device API to save the API key
         const url = buildDeviceUrl('/api/api-key');
-        const data = await $fetch(url, {
+        await $fetch(url, {
             method: 'POST',
             body: {
                 apiKey
@@ -90,7 +79,7 @@ export const saveApiKey = async apiKey => {
         });
 
         // Return result status
-        return data.status === 'OK';
+        return true;
     } catch (error) {
         throw new Error(translate('api.saveApiKey'));
     }
@@ -103,17 +92,17 @@ const checkWiFiConnectionPolling = async () => {
     for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
         try {
             const url = buildDeviceUrl('/api/check-connection');
-            const data = await $fetch(url, { retry: 0 });
-            const status = Number(data?.status);
+            const response = await $fetch(url, { retry: 0 });
+            const status = Number(response.data?.connectionStatus);
 
             switch (status) {
                 case connectionStatus.WIFI_TRY:
                     break;
                 case connectionStatus.WIFI_OK:
                     return {
-                        ssid: data?.ssid || '',
-                        ip: data?.ip || '',
-                        hostname: data?.hostname || ''
+                        ssid: response.data?.ssid || '',
+                        ip: response.data?.ip || '',
+                        hostname: response.data?.hostname || ''
                     };
                 case connectionStatus.WIFI_KO:
                     throw new Error(translate('api.wifiWrongCredentials'));
@@ -137,10 +126,10 @@ export const connectToWiFi = async (ssid, password) => {
     try {
         // Call the device API to start the WiFi connection process
         const url = buildDeviceUrl('/api/connect', { ssid, password });
-        const data = await $fetch(url);
+        const response = await $fetch(url);
 
         // If the device is trying to connect, start polling for the result
-        if (Number(data.status) === connectionStatus.WIFI_TRY) {
+        if (Number(response.data?.connectionStatus) === connectionStatus.WIFI_TRY) {
             return await checkWiFiConnectionPolling();
         }
 

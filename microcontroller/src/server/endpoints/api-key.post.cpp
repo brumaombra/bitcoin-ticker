@@ -17,7 +17,7 @@ void setupApiKeyPostRoute() {
 
 		// If error, send error response
 		if (body.state == RequestBodyState::Error) {
-			request->send(500, "application/json", "{\"status\":\"error\",\"message\":\"Failed to read request body\"}");
+			sendErrorResponse(request, 500, "request_body_read_failed", "Failed to read request body");
 			return;
 		}
 
@@ -31,13 +31,13 @@ void setupApiKeyPostRoute() {
 
 		// If error, send error response
 		if (error) {
-			request->send(400, "application/json", "{\"status\":\"error\",\"message\":\"Invalid JSON\"}");
+			sendErrorResponse(request, 400, "invalid_json", "Invalid JSON");
 			return;
 		}
 
 		// Check required fields
 		if (doc["apiKey"].isNull()) {
-			request->send(400, "application/json", "{\"status\":\"error\",\"message\":\"Missing apiKey field\"}");
+			sendErrorResponse(request, 400, "missing_api_key", "Missing apiKey field");
 			return;
 		}
 
@@ -46,7 +46,7 @@ void setupApiKeyPostRoute() {
 		writeEEPROM();
 
 		// Send success response
-		request->send(200, "application/json", "{\"status\":\"OK\"}");
+		sendSuccessResponse(request);
 		printLogfln("API key changed");
 	});
 

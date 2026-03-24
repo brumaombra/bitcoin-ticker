@@ -14,7 +14,7 @@ const availableCryptoCoins = [
 ];
 
 // Translate a key through the active i18n instance when available
-const translate = (key, params = {}) => {
+export const translate = (key, params = {}) => {
     const nuxtApp = useNuxtApp();
 
     // If the function is available, return the translated string

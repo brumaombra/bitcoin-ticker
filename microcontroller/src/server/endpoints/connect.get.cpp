@@ -8,7 +8,7 @@ void setupConnectGetRoute() {
 	server.on("/api/connect", HTTP_GET, [](AsyncWebServerRequest *request) {
 		// Check required fields
 		if (!request->hasParam("ssid") || !request->hasParam("password")) {
-			request->send(400, "application/json", "{\"status\":\"KO\"}");
+			sendErrorResponse(request, 400, "missing_required_fields", "Missing required ssid or password");
 			return;
 		}
 
@@ -21,8 +21,9 @@ void setupConnectGetRoute() {
 		printLogfln("SSID: %s, Password: %s\n", wiFiSSID, wiFiPassword);
 
 		// Response
-		char jsonResponse[20];
-		snprintf(jsonResponse, sizeof(jsonResponse), "{\"status\":\"%d\"}", wiFiConnectionStatus);
-		request->send(200, "application/json", jsonResponse);
+		JsonDocument doc;
+		JsonObject data = doc.to<JsonObject>();
+		data["connectionStatus"] = static_cast<int>(wiFiConnectionStatus);
+		sendSuccessResponse(request, 200, &doc);
 	});
 }

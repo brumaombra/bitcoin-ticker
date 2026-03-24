@@ -1,5 +1,6 @@
 #include "../server.h"
 #include <Arduino.h>
+#include <ArduinoJson.h>
 #include "../../config/config.h"
 #include "../../storage/storage.h"
 
@@ -8,12 +9,15 @@ void setupResetSettingsGetRoute() {
 	server.on("/api/reset-settings", HTTP_GET, [](AsyncWebServerRequest *request) {
 		// Clear EEPROM
 		if (!clearEEPROM()) {
-			request->send(500, "application/json", "{\"status\":\"error\",\"message\":\"Failed to clear EEPROM\"}");
+			sendErrorResponse(request, 500, "clear_settings_failed", "Failed to clear EEPROM");
 			return;
 		}
 
 		// Send response and restart
-		request->send(200, "application/json", "{\"status\":\"OK\",\"message\":\"EEPROM cleared. Restarting...\"}");
+		JsonDocument doc;
+		JsonObject data = doc.to<JsonObject>();
+		data["message"] = "EEPROM cleared. Restarting...";
+		sendSuccessResponse(request, 200, &doc);
 		delay(500);
 		ESP.restart();
 	});

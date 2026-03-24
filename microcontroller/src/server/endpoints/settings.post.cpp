@@ -18,7 +18,7 @@ void setupSettingsPostRoute() {
 
 		// If error, send error response
 		if (body.state == RequestBodyState::Error) {
-			request->send(500, "application/json", "{\"status\":\"error\",\"message\":\"Failed to read request body\"}");
+			sendErrorResponse(request, 500, "request_body_read_failed", "Failed to read request body");
 			return;
 		}
 		
@@ -32,7 +32,7 @@ void setupSettingsPostRoute() {
 
 		// If error, send error response
 		if (error) {
-			request->send(400, "application/json", "{\"status\":\"error\",\"message\":\"Invalid JSON\"}");
+			sendErrorResponse(request, 400, "invalid_json", "Invalid JSON");
 			return;
 		}
 
@@ -67,7 +67,7 @@ void setupSettingsPostRoute() {
 		setMatrixSpeed(scrollSpeed);
 
 		// Send success response
-		request->send(200, "application/json", "{\"status\":\"OK\"}");
+		sendSuccessResponse(request);
 		printLogfln("Values settings changed");
 	});
 

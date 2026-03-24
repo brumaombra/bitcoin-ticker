@@ -35,10 +35,11 @@ namespace {
 		return false;
 	}
 
-	// Build a JSON string from the list of scanned networks
-	String buildNetworksJson(const std::vector<ScannedNetwork>& networks) {
+	// Build the JSON payload from the list of scanned networks
+	JsonDocument buildNetworksData(const std::vector<ScannedNetwork>& networks) {
 		JsonDocument doc;
-		JsonArray array = doc["networks"].to<JsonArray>();
+		JsonObject data = doc.to<JsonObject>();
+		JsonArray array = data["networks"].to<JsonArray>();
 
 		// Add each network to the JSON array
 		for (const ScannedNetwork& network : networks) {
@@ -51,12 +52,10 @@ namespace {
 		}
 
 		// Add the count
-		doc["count"] = networks.size();
+		data["count"] = networks.size();
 
-		// Create the JSON string
-		String json;
-		serializeJson(doc, json);
-		return json;
+		// Return the JSON document
+		return doc;
 	}
 }
 
@@ -100,8 +99,8 @@ void setupNetworksGetRoute() {
 			}
 
 			// Send the JSON object
-			String json = buildNetworksJson(uniqueNetworks);
-			request->send(200, "application/json", json);
+			JsonDocument doc = buildNetworksData(uniqueNetworks);
+			sendSuccessResponse(request, 200, &doc);
 		});
 	});
 }
