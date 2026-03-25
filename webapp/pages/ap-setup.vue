@@ -24,7 +24,8 @@ const { t } = useI18n();
 
 // Available network options
 const networkOptions = computed(() => {
-    return globalStore.value.networksList.map(network => ({
+    const networks = Array.isArray(globalStore.value?.networksList) ? globalStore.value.networksList : [];
+    return networks.map(network => ({
         value: network.ssid,
         label: network.ssid,
         meta: `${network.signal} dBm · Ch ${network.channel} · ${network.quality}% · ${network.secured ? t('pages.wifi.secured') : t('pages.wifi.open')}`

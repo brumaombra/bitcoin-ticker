@@ -53,6 +53,7 @@ namespace {
 
 		// Add the count
 		data["count"] = networks.size();
+		data["currentSsid"] = WiFi.status() == WL_CONNECTED ? WiFi.SSID() : "";
 
 		// Return the JSON document
 		return doc;

@@ -11,6 +11,7 @@ import Input from '~/components/ui/Input.vue';
 import Label from '~/components/ui/Label.vue';
 import Select from '~/components/ui/Select.vue';
 import PageIntroCard from '~/components/ui/PageIntroCard.vue';
+import WifiStatusPanel from '~/components/WifiStatusPanel.vue';
 
 const globalStore = useGlobalStore();
 const ssid = ref('');
@@ -18,9 +19,20 @@ const password = ref('');
 const isLoading = ref(false);
 const { t } = useI18n();
 
+// Device WiFi status summary for the card header
+const currentNetworkLabel = computed(() => {
+    return globalStore.value.currentNetworkSsid || t('pages.wifi.notConnected');
+});
+
+// Number of scanned networks reported by the ESP
+const scannedNetworksCount = computed(() => {
+    return Number(globalStore.value.networksCount || 0);
+});
+
 // Available network options
 const networkOptions = computed(() => {
-    return globalStore.value.networksList.map(network => ({
+    const networks = Array.isArray(globalStore.value?.networksList) ? globalStore.value.networksList : [];
+    return networks.map(network => ({
         value: network.ssid,
         label: network.ssid,
         meta: `${network.signal} dBm · Ch ${network.channel} · ${network.quality}% · ${network.secured ? t('pages.wifi.secured') : t('pages.wifi.open')}`
@@ -67,7 +79,10 @@ const refreshSSIDList = async () => {
     isLoading.value = true;
 
     try {
-        globalStore.value.networksList = await getNetworks();
+        const networksData = await getNetworks();
+        globalStore.value.networksList = networksData.networks;
+        globalStore.value.networksCount = networksData.count;
+        globalStore.value.currentNetworkSsid = networksData.currentSsid;
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.wifi.refreshError'), showDialog: true });
     } finally {
@@ -96,6 +111,10 @@ definePageMeta({
         <div class="min-w-0 flex-1">
             <Card>
                 <form class="space-y-5" @submit.prevent="handleConnectPress">
+                    <!-- Current network summary -->
+                    <WifiStatusPanel :current-network-label="currentNetworkLabel"
+                        :scanned-networks-count="scannedNetworksCount" />
+
                     <!-- Network selector -->
                     <div class="space-y-2">
                         <!-- Network header -->

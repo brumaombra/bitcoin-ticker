@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted } from 'vue';
 import { getNetworks, getSettings } from '~/composables/useDeviceApi.js';
-import { closeConfirmDialog, closeMessage, initializeCryptoCoin, initializeTheme, setBusy, setCryptoCoin, showMessage } from '~/composables/useUtils.js';
+import { closeConfirmDialog, closeMessage, handleBackendErrors, initializeCryptoCoin, initializeTheme, setBusy, setCryptoCoin } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Busy from '~/components/Busy.vue';
 import ConfirmDialog from '~/components/ConfirmDialog.vue';
@@ -23,7 +23,10 @@ const loadInitialData = async () => {
 
         // Load the networks if needed
         if (!globalStore.value.networksList.length) {
-            globalStore.value.networksList = await getNetworks();
+            const networksData = await getNetworks();
+            globalStore.value.networksList = networksData.networks;
+            globalStore.value.networksCount = networksData.count;
+            globalStore.value.currentNetworkSsid = networksData.currentSsid;
         }
 
         // Load the settings if needed
@@ -42,8 +45,7 @@ const loadInitialData = async () => {
             globalStore.value.settingsLoaded = true;
         }
     } catch (error) {
-        console.error(error);
-        showMessage({ type: 'Error', title: t('dialogs.errorTitle'), message: t('app.loadError') });
+        handleBackendErrors({ error, defaultMessage: t('app.loadError'), showDialog: true });
     } finally {
         setBusy(false); // Busy off
     }

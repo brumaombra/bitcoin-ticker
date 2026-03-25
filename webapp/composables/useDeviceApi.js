@@ -20,7 +20,7 @@ const buildDeviceUrl = (path, query = null) => {
 export const getNetworks = async () => {
     const url = buildDeviceUrl('/api/networks');
     const response = await $fetch(url);
-    return response.data?.networks || [];
+    return response.data || {};
 };
 
 // Fetch the saved device settings
