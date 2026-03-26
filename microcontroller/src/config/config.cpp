@@ -1,7 +1,31 @@
 #include "config.h"
 
-// Numeric formatting type
-formatNum formatType = FORMAT_US;
+namespace {
+    // Settings structure
+	Settings currentSettings = {
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,
+		"bitcoin",
+		FORMAT_US,
+		1,
+		1
+	};
+}
+
+// Get the current settings
+const Settings& getSettings() {
+	return currentSettings;
+}
+
+// Update the settings
+void setSettings(const Settings& settings) {
+	currentSettings = settings;
+}
 
 // Global message buffers shared by serial and scrolling functions
 char currentMessage[BUF_SIZE]; // Current message
@@ -14,7 +38,6 @@ const char mdnsHostname[] = "ticker";
 char wiFiSSID[35] = "";
 char wiFiPassword[70] = "";
 char apiKey[35] = "";
-char cryptoCoin[16] = "bitcoin";
 bool accessPointEnabled = false;
 bool disableAccessPoint = false;
 connectionStatus wiFiConnectionStatus = WIFI_KO;
@@ -28,14 +51,3 @@ uint8_t scrollDelay = 30;
 textEffect_t scrollEffect = PA_SCROLL_LEFT;
 textPosition_t scrollAlign = PA_LEFT;
 uint16_t scrollPause = 0;
-
-// Visibility booleans
-bool currentPriceVisible = true;
-bool priceChangeVisible = true;
-bool marketCapVisible = true;
-bool dailyHighLowVisible = true;
-bool yearHighLowVisible = true;
-bool openPriceVisible = true;
-bool volumeVisible = true;
-uint8_t matrixIntensity = 1;
-uint8_t scrollSpeed = 1;

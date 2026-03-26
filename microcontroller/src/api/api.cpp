@@ -19,12 +19,14 @@ namespace {
 
 // Get the selected crypto coin API ID
 static const char* getSelectedCryptoApiId() {
-	return strcmp(cryptoCoin, "kaspa") == 0 ? "kaspa" : "bitcoin";
+	const Settings& settings = getSettings();
+	return strcmp(settings.cryptoCoin, "kaspa") == 0 ? "kaspa" : "bitcoin";
 }
 
 // Get the selected crypto coin ticker label
 static const char* getSelectedCryptoTickerLabel() {
-	return strcmp(cryptoCoin, "kaspa") == 0 ? "KAS" : "BTC";
+	const Settings& settings = getSettings();
+	return strcmp(settings.cryptoCoin, "kaspa") == 0 ? "KAS" : "BTC";
 }
 
 // Get the main market data used by the ticker

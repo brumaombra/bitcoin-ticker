@@ -41,7 +41,8 @@ char* addThousandsSeparators(double value, int decimals, char decimalSeparator, 
 
 // Format currency
 void formatCurrency(double value, char* output, const byte length) {
-	if (formatType == FORMAT_US) {
+	const Settings& settings = getSettings();
+	if (settings.formatType == FORMAT_US) {
 		stringCopy(output, addThousandsSeparators(value * 100, 2, '.', ','), length);
 	} else {
 		stringCopy(output, addThousandsSeparators(value * 100, 2, ',', '.'), length);

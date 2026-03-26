@@ -9,6 +9,59 @@
 
 const int EEPROM_SIZE = 512; // EEPROM size
 
+namespace {
+    // Append the settings to a JSON document
+    void appendSettingsToJson(JsonDocument& doc, const Settings& settings) {
+        doc["currentPrice"] = settings.currentPriceVisible;
+        doc["priceChange"] = settings.priceChangeVisible;
+        doc["marketCap"] = settings.marketCapVisible;
+        doc["dailyHighLow"] = settings.dailyHighLowVisible;
+        doc["yearHighLow"] = settings.yearHighLowVisible;
+        doc["openPrice"] = settings.openPriceVisible;
+        doc["volume"] = settings.volumeVisible;
+        doc["cryptoCoin"] = settings.cryptoCoin;
+        doc["formatType"] = settings.formatType == FORMAT_US ? "US" : "EU";
+        doc["matrixIntensity"] = settings.matrixIntensity;
+        doc["scrollSpeed"] = settings.scrollSpeed;
+    }
+
+    // Read the settings from a JSON document and apply them to a settings snapshot
+    void readSettingsFromJson(JsonDocument& doc, Settings& settings) {
+        if (!doc["currentPrice"].isNull())
+            settings.currentPriceVisible = doc["currentPrice"].as<bool>();
+        if (!doc["priceChange"].isNull())
+            settings.priceChangeVisible = doc["priceChange"].as<bool>();
+        if (!doc["marketCap"].isNull())
+            settings.marketCapVisible = doc["marketCap"].as<bool>();
+        if (!doc["dailyHighLow"].isNull())
+            settings.dailyHighLowVisible = doc["dailyHighLow"].as<bool>();
+        if (!doc["yearHighLow"].isNull())
+            settings.yearHighLowVisible = doc["yearHighLow"].as<bool>();
+        if (!doc["openPrice"].isNull())
+            settings.openPriceVisible = doc["openPrice"].as<bool>();
+        if (!doc["volume"].isNull())
+            settings.volumeVisible = doc["volume"].as<bool>();
+        if (!doc["cryptoCoin"].isNull())
+            stringCopy(settings.cryptoCoin, doc["cryptoCoin"].as<const char*>(), sizeof(settings.cryptoCoin));
+        if (!doc["formatType"].isNull())
+            settings.formatType = strcmp(doc["formatType"].as<const char*>(), "US") == 0 ? FORMAT_US : FORMAT_EU;
+        if (!doc["matrixIntensity"].isNull())
+            settings.matrixIntensity = doc["matrixIntensity"].as<uint8_t>();
+        if (!doc["scrollSpeed"].isNull())
+            settings.scrollSpeed = doc["scrollSpeed"].as<uint8_t>();
+    }
+
+    // Read the credentials from a JSON document
+    void readCredentialsFromJson(JsonDocument& doc) {
+        if (!doc["apiKey"].isNull())
+            stringCopy(apiKey, doc["apiKey"], sizeof(apiKey));
+        if (!doc["ssid"].isNull())
+            stringCopy(wiFiSSID, doc["ssid"], sizeof(wiFiSSID));
+        if (!doc["password"].isNull())
+            stringCopy(wiFiPassword, doc["password"], sizeof(wiFiPassword));
+    }
+}
+
 // Read a JSON document from EEPROM by extracting the stored JSON payload.
 bool readEEPROM(JsonDocument& doc) {
     char eepromData[EEPROM_SIZE + 1];
@@ -51,7 +104,25 @@ bool readEEPROM(JsonDocument& doc) {
 
 // Write data to the EEPROM
 bool writeEEPROM() {
+    return saveSettingsToEEPROM(getSettings());
+}
+
+// Load the settings snapshot from EEPROM without mutating runtime state
+bool loadSettingsFromEEPROM(Settings& settings) {
 	JsonDocument doc; // JSON object
+    settings = getSettings();
+
+    if (!readEEPROM(doc)) {
+        return false;
+    }
+
+    readSettingsFromJson(doc, settings);
+    return true;
+}
+
+// Save a settings snapshot to EEPROM while preserving credentials and API key from runtime state
+bool saveSettingsToEEPROM(const Settings& settings) {
+    JsonDocument doc; // JSON object
 
     // Add the WiFi credentials to the JSON object
     if (strlen(wiFiSSID) != 0 && strlen(wiFiPassword) != 0) {
@@ -64,22 +135,8 @@ bool writeEEPROM() {
         doc["apiKey"] = apiKey;
     }
 
-    // Add the selected crypto coin to the JSON object
-    doc["cryptoCoin"] = cryptoCoin;
-
-    // Add the visibility settings to the JSON object
-    doc["currentPrice"] = currentPriceVisible;
-    doc["priceChange"] = priceChangeVisible;
-    doc["marketCap"] = marketCapVisible;
-    doc["dailyHighLow"] = dailyHighLowVisible;
-    doc["yearHighLow"] = yearHighLowVisible;
-    doc["openPrice"] = openPriceVisible;
-    doc["volume"] = volumeVisible;
-
-    // Add the various settings to the JSON object
-    doc["formatType"] = formatType == FORMAT_US ? "US" : "EU";
-    doc["matrixIntensity"] = matrixIntensity;
-    doc["scrollSpeed"] = scrollSpeed;
+    // Add the settings to the JSON object
+    appendSettingsToJson(doc, settings);
 
     // Write data to EEPROM
     EepromStream eepromStream(0, EEPROM_SIZE);
@@ -94,7 +151,7 @@ bool writeEEPROM() {
 
     // Commit changes
 	if (!EEPROM.commit()) {
-        return false; // Error while committing changes
+ 		return false; // Error while committing changes
     }
 
     // Mark as saved
@@ -119,72 +176,6 @@ bool clearEEPROM() {
     return true;
 }
 
-// Load the settings from the EEPROM
-void loadSettingFromEEPROM() {
-    JsonDocument doc; // JSON object
-
-    // Read the EEPROM
-	if (!readEEPROM(doc)) {
-		printLogfln("EEPROM is empty or invalid, writing default settings...");
-		writeEEPROM();
-		return;
-    }
-
-    // Load the API key
-    if (!doc["apiKey"].isNull()) {
-        stringCopy(apiKey, doc["apiKey"], sizeof(apiKey));
-    }
-
-    // Load the selected crypto coin
-    if (!doc["cryptoCoin"].isNull()) {
-        stringCopy(cryptoCoin, doc["cryptoCoin"].as<const char*>(), sizeof(cryptoCoin));
-    }
-    
-    // Load the WiFi credentials
-    if (!doc["ssid"].isNull()) {
-        stringCopy(wiFiSSID, doc["ssid"], sizeof(wiFiSSID));
-    }
-    if (!doc["password"].isNull()) {
-        stringCopy(wiFiPassword, doc["password"], sizeof(wiFiPassword));
-    }
-    
-    // Load the visibility settings
-    if (!doc["currentPrice"].isNull()) {
-        currentPriceVisible = doc["currentPrice"].as<bool>();
-    }
-    if (!doc["priceChange"].isNull()) {
-        priceChangeVisible = doc["priceChange"].as<bool>();
-    }
-    if (!doc["marketCap"].isNull()) {
-        marketCapVisible = doc["marketCap"].as<bool>();
-    }
-    if (!doc["dailyHighLow"].isNull()) {
-        dailyHighLowVisible = doc["dailyHighLow"].as<bool>();
-    }
-    if (!doc["yearHighLow"].isNull()) {
-        yearHighLowVisible = doc["yearHighLow"].as<bool>();
-    }
-    if (!doc["openPrice"].isNull()) {
-        openPriceVisible = doc["openPrice"].as<bool>();
-    }
-    if (!doc["volume"].isNull()) {
-        volumeVisible = doc["volume"].as<bool>();
-    }
-
-    // Load the various settings
-    if (!doc["formatType"].isNull()) {
-        formatType = strcmp(doc["formatType"].as<const char*>(), "US") == 0 ? FORMAT_US : FORMAT_EU;
-    }
-    if (!doc["matrixIntensity"].isNull()) {
-        matrixIntensity = doc["matrixIntensity"].as<uint8_t>();
-    }
-    if (!doc["scrollSpeed"].isNull()) {
-        scrollSpeed = doc["scrollSpeed"].as<uint8_t>();
-    }
-    
-	printLogfln("EEPROM data loaded successfully");
-}
-
 // Test read EEPROM
 void testReadEEPROM() {
     printLogfln("EEPROM size: %d", EEPROM.length()); // Print the size of the EEPROM
@@ -200,5 +191,17 @@ void testReadEEPROM() {
 // Setup EEPROM
 void setupEEPROM() {
 	EEPROM.begin(EEPROM_SIZE); // Start the EEPROM
-    loadSettingFromEEPROM(); // Load the settings from the EEPROM
+
+    JsonDocument doc; // JSON object
+    if (!readEEPROM(doc)) {
+        printLogfln("EEPROM is empty or invalid, writing default settings...");
+        writeEEPROM();
+        return;
+    }
+
+    readCredentialsFromJson(doc);
+    Settings settings = getSettings();
+    readSettingsFromJson(doc, settings);
+    setSettings(settings);
+    printLogfln("EEPROM data loaded successfully");
 }

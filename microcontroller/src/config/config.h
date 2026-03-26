@@ -15,7 +15,25 @@ constexpr uint8_t CS_PIN = D8; // SS
 
 // Numeric formatting type
 enum formatNum { FORMAT_US = 1, FORMAT_EU = 2 };
-extern formatNum formatType;
+
+// Settings structure
+struct Settings {
+	bool currentPriceVisible;
+	bool priceChangeVisible;
+	bool marketCapVisible;
+	bool dailyHighLowVisible;
+	bool yearHighLowVisible;
+	bool openPriceVisible;
+	bool volumeVisible;
+	char cryptoCoin[16];
+	formatNum formatType;
+	uint8_t matrixIntensity;
+	uint8_t scrollSpeed;
+};
+
+// Settings getter and setter
+const Settings& getSettings();
+void setSettings(const Settings& settings);
 
 // Global message buffers shared by serial and scrolling functions
 extern char currentMessage[BUF_SIZE]; // Current message
@@ -28,7 +46,6 @@ extern const char mdnsHostname[];
 extern char wiFiSSID[35];
 extern char wiFiPassword[70];
 extern char apiKey[35];
-extern char cryptoCoin[16];
 extern bool accessPointEnabled;
 extern bool disableAccessPoint;
 enum connectionStatus { WIFI_TRY = 2, WIFI_OK = 1, WIFI_KO = 0 };
@@ -44,16 +61,5 @@ extern uint8_t scrollDelay;
 extern textEffect_t scrollEffect;
 extern textPosition_t scrollAlign;
 extern uint16_t scrollPause;
-
-// Visibility booleans
-extern bool currentPriceVisible;
-extern bool priceChangeVisible;
-extern bool marketCapVisible;
-extern bool dailyHighLowVisible;
-extern bool yearHighLowVisible;
-extern bool openPriceVisible;
-extern bool volumeVisible;
-extern uint8_t matrixIntensity;
-extern uint8_t scrollSpeed;
 
 #endif
