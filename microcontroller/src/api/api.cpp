@@ -4,8 +4,6 @@
 #include <ESP8266HTTPClient.h>
 #include <WiFiClientSecure.h>
 #include "../config/config.h"
-#include "../utils/utils.h"
-#include "../storage/storage.h"
 #include "../matrix/matrix.h"
 #include "../serial/serial.h"
 
@@ -13,6 +11,11 @@ WiFiClientSecure clientSecure; // HTTPS client
 HTTPClient http; // HTTP object
 const char marketApiUrlTemplate[] = "https://api.coingecko.com/api/v3/coins/%s?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false"; // Market API URL template
 const char apiKeyHeaderName[] = "x-cg-demo-api-key"; // CoinGecko demo key header
+
+namespace {
+	MarketTickerData cachedMarketData = { "BTC", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	bool hasCachedMarketData = false;
+}
 
 // Get the selected crypto coin API ID
 static const char* getSelectedCryptoApiId() {
@@ -74,66 +77,35 @@ void setupWebClient() {
     http.setTimeout(5000); // Set timeout
 }
 
-// Create the scrolling message
-void createStockDataMessage(JsonDocument marketDoc) {
-	printLogfln("Creating message...");
-	const byte MAX_NUMBER_SIZE = 30; // Max length for the numbers
-	char tempString[MAX_NUMBER_SIZE]; // Temporary string 1
-	char tempString2[MAX_NUMBER_SIZE]; // Temporary string 2
-	double tempVal; // Temporary variable 1
-	double tempVal2; // Temporary variable 2
-	JsonVariant marketData = marketDoc["market_data"];
+// Parse the fetched market data into the runtime model
+static bool parseMarketData(JsonDocument& marketDoc, MarketTickerData& marketData) {
+	JsonVariant marketDataJson = marketDoc["market_data"];
 
 	// Check if the market data is present
-	if (marketData.isNull()) {
+	if (marketDataJson.isNull()) {
 		printLogfln("Missing CoinGecko market data");
-		return;
+		return false;
 	}
 
-	// Price
-	tempVal = marketData["current_price"]["usd"].as<double>();
-	tempVal2 = marketData["price_change_percentage_24h"].as<double>();
-	formatCurrency(tempVal, tempString, MAX_NUMBER_SIZE);
-	formatCurrency(tempVal2, tempString2, MAX_NUMBER_SIZE);
-	snprintf(stripMessagePrice, BUF_SIZE, " %s $ %s  (%s%%)", getSelectedCryptoTickerLabel(), tempString, tempString2);
+	// Parse the market data into the output model
+	marketData.tickerLabel = getSelectedCryptoTickerLabel();
+	marketData.currentPrice = marketDataJson["current_price"]["usd"].as<double>();
+	marketData.priceChangePercentage24h = marketDataJson["price_change_percentage_24h"].as<double>();
+	marketData.priceChange24h = marketDataJson["price_change_24h"].as<double>();
+	marketData.marketCap = marketDataJson["market_cap"]["usd"].as<double>();
+	marketData.dailyHigh = marketDataJson["high_24h"]["usd"].as<double>();
+	marketData.dailyLow = marketDataJson["low_24h"]["usd"].as<double>();
+	marketData.yearHigh = marketDataJson["ath"]["usd"].as<double>();
+	marketData.yearLow = marketDataJson["atl"]["usd"].as<double>();
+	marketData.openPrice = marketData.currentPrice - marketData.priceChange24h;
+	marketData.volume = marketDataJson["total_volume"]["usd"].as<double>();
 
-	// Daily Change
-	tempVal = marketData["price_change_24h"].as<double>();
-	formatCurrency(tempVal, tempString, MAX_NUMBER_SIZE);
-	snprintf(stripMessageDailyChange, BUF_SIZE, "Daily Change: $ %s", tempString);
-
-	// Market cap
-	tempVal = marketData["market_cap"]["usd"].as<double>();
-	formatCurrency(tempVal, tempString, MAX_NUMBER_SIZE);
-	snprintf(stripMessageMarketCap, BUF_SIZE, "Market Cap: $ %s", tempString);
-
-	// Daily High/Low
-	tempVal = marketData["high_24h"]["usd"].as<double>();
-	tempVal2 = marketData["low_24h"]["usd"].as<double>();
-	formatCurrency(tempVal, tempString, MAX_NUMBER_SIZE);
-	formatCurrency(tempVal2, tempString2, MAX_NUMBER_SIZE);
-	snprintf(stripMessageDailyHighLow, BUF_SIZE, "Daily High: $ %s  -  Daily Low: $ %s", tempString, tempString2);
-
-	// Year High/Low
-	tempVal = marketData["ath"]["usd"].as<double>();
-	tempVal2 = marketData["atl"]["usd"].as<double>();
-	formatCurrency(tempVal, tempString, MAX_NUMBER_SIZE);
-	formatCurrency(tempVal2, tempString2, MAX_NUMBER_SIZE);
-	snprintf(stripMessageYearHighLow, BUF_SIZE, "Year High: $ %s  -  Year Low: $ %s", tempString, tempString2);
-
-	// Open
-	tempVal = marketData["current_price"]["usd"].as<double>() - marketData["price_change_24h"].as<double>();
-	formatCurrency(tempVal, tempString, MAX_NUMBER_SIZE);
-	snprintf(stripMessageOpen, BUF_SIZE, "Open: $ %s", tempString);
-
-	// Volume
-	tempVal = marketData["total_volume"]["usd"].as<double>();
-	formatCurrency(tempVal, tempString, MAX_NUMBER_SIZE);
-	snprintf(stripMessageVolume, BUF_SIZE, "Volume: $ %s", tempString);
+	// Mark as successful
+	return true;
 }
 
-// Getting Bitcoin data
-bool getStockDataAPI() {
+// Fetch and parse the market data
+static bool getStockDataAPI(MarketTickerData& marketData) {
 	JsonDocument marketDoc;
 
 	// Fetch the market data
@@ -141,16 +113,13 @@ bool getStockDataAPI() {
 		return false;
 	}
 
-	// Create the scrolling message
-	createStockDataMessage(marketDoc);
-
-	// All OK
-	return true;
+	// Parse the result into the output model
+	return parseMarketData(marketDoc, marketData);
 }
 
 // Call the API to get the data
-bool callAPI() {
-	currentMillis = millis();
+bool callAPI(MarketTickerData& marketData) {
+	const unsigned long currentMillis = millis();
 
 	// Call the API every 6 minutes (To limit usage)
 	if (currentMillis - timestampStockData > 360000 || timestampStockData == 0) {
@@ -164,16 +133,31 @@ bool callAPI() {
 
 		// Get the data
 		printLogfln("Calling the API...");
-		if (!getStockDataAPI()) {
+		MarketTickerData refreshedMarketData;
+
+		// If error, print the message on the matrix and return false
+		if (!getStockDataAPI(refreshedMarketData)) {
 			const char errorMessageServer[] = "Error while calling the API. Retrying...";
 			printLogfln(errorMessageServer);
 			printOnLedMatrix(errorMessageServer, sizeof(errorMessageServer)); // Print the message on the matrix
 			return false; // If error, return false
 		}
 
+		// Update the cache with the refreshed data
+		cachedMarketData = refreshedMarketData;
+		hasCachedMarketData = true;
+
 		// Update the timestamp
 		timestampStockData = currentMillis;
 	}
+
+	// If no cached data, return false
+	if (!hasCachedMarketData) {
+		return false;
+	}
+
+	// Return the cached data
+	marketData = cachedMarketData;
 
 	// If no error, return true
 	return true;

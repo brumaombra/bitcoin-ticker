@@ -5,6 +5,66 @@
 #include "../wifi/wifi.h"
 #include "../serial/serial.h"
 
+namespace {
+	constexpr uint16_t PRICE_MESSAGE_PAUSE = 30000;
+	constexpr byte MAX_NUMBER_SIZE = 30;
+
+	// Format the current price message
+	void formatPriceMessage(char* message, size_t messageLength, const MarketTickerData& marketData) {
+		char tempString[MAX_NUMBER_SIZE];
+		char tempString2[MAX_NUMBER_SIZE];
+		formatCurrency(marketData.currentPrice, tempString, MAX_NUMBER_SIZE);
+		formatCurrency(marketData.priceChangePercentage24h, tempString2, MAX_NUMBER_SIZE);
+		snprintf(message, messageLength, " %s $ %s  (%s%%)", marketData.tickerLabel, tempString, tempString2);
+	}
+
+	// Format the price change message
+	void formatChangeMessage(char* message, size_t messageLength, const MarketTickerData& marketData) {
+		char tempString[MAX_NUMBER_SIZE];
+		formatCurrency(marketData.priceChange24h, tempString, MAX_NUMBER_SIZE);
+		snprintf(message, messageLength, "Daily Change: $ %s", tempString);
+	}
+
+	// Format the market cap message
+	void formatMarketCapMessage(char* message, size_t messageLength, const MarketTickerData& marketData) {
+		char tempString[MAX_NUMBER_SIZE];
+		formatCurrency(marketData.marketCap, tempString, MAX_NUMBER_SIZE);
+		snprintf(message, messageLength, "Market Cap: $ %s", tempString);
+	}
+
+	// Format the daily high/low message
+	void formatDailyHighLowMessage(char* message, size_t messageLength, const MarketTickerData& marketData) {
+		char tempString[MAX_NUMBER_SIZE];
+		char tempString2[MAX_NUMBER_SIZE];
+		formatCurrency(marketData.dailyHigh, tempString, MAX_NUMBER_SIZE);
+		formatCurrency(marketData.dailyLow, tempString2, MAX_NUMBER_SIZE);
+		snprintf(message, messageLength, "Daily High: $ %s  -  Daily Low: $ %s", tempString, tempString2);
+	}
+
+	// Format the year high/low message
+	void formatYearHighLowMessage(char* message, size_t messageLength, const MarketTickerData& marketData) {
+		char tempString[MAX_NUMBER_SIZE];
+		char tempString2[MAX_NUMBER_SIZE];
+		formatCurrency(marketData.yearHigh, tempString, MAX_NUMBER_SIZE);
+		formatCurrency(marketData.yearLow, tempString2, MAX_NUMBER_SIZE);
+		snprintf(message, messageLength, "Year High: $ %s  -  Year Low: $ %s", tempString, tempString2);
+	}
+
+	// Format the open price message
+	void formatOpenMessage(char* message, size_t messageLength, const MarketTickerData& marketData) {
+		char tempString[MAX_NUMBER_SIZE];
+		formatCurrency(marketData.openPrice, tempString, MAX_NUMBER_SIZE);
+		snprintf(message, messageLength, "Open: $ %s", tempString);
+	}
+
+	// Format the volume message
+	void formatVolumeMessage(char* message, size_t messageLength, const MarketTickerData& marketData) {
+		char tempString[MAX_NUMBER_SIZE];
+		formatCurrency(marketData.volume, tempString, MAX_NUMBER_SIZE);
+		snprintf(message, messageLength, "Volume: $ %s", tempString);
+	}
+}
+
 // Print the message on the matrix
 void printOnLedMatrix(const char* message, const byte stringLength, uint16_t messageStill) {
 	if (!LED_MATRIX_ENABLED) {
@@ -54,57 +114,102 @@ void manageLedMatrix() {
 		return; // If scrolling, exit the function
 	if (!checkWifiConnection()) // Check if connected to WiFi
 		return; // If not connected, exit the function
-	if (!callAPI()) // Call the API
+	MarketTickerData marketData;
+	if (!callAPI(marketData)) // Call the API
 		return; // If error, exit the function
+	
+	char message[BUF_SIZE];
 
 	// Print messagges
 	switch (switchText) {
 		case PRINT_PRICE:
 			printLogfln("Section: PRICE");
-			if (currentPriceVisible) // Check if current price is visible
-				printOnLedMatrix(stripMessagePrice, BUF_SIZE, 30000); // Print the message on the matrix
+
+			// Check if current price is visible
+			if (currentPriceVisible) {
+				formatPriceMessage(message, sizeof(message), marketData);
+				printOnLedMatrix(message, sizeof(message), PRICE_MESSAGE_PAUSE); // Print the message on the matrix
+			}
+
+			// Move to the next section
 			switchText = PRINT_CHANGE;
 			break;
 
 		case PRINT_CHANGE:
 			printLogfln("Section: CHANGE");
-			if (priceChangeVisible) // Check if price change is visible
-				printOnLedMatrix(stripMessageDailyChange, BUF_SIZE); // Print the message on the matrix
+
+			// Check if price change is visible
+			if (priceChangeVisible) {
+				formatChangeMessage(message, sizeof(message), marketData);
+				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
+			}
+
+			// Move to the next section
 			switchText = PRINT_MARKET_CAP;
 			break;
 		
 		case PRINT_MARKET_CAP:
 			printLogfln("Section: MARKET CAP");
-			if (marketCapVisible) // Check if market cap is visible
-				printOnLedMatrix(stripMessageMarketCap, BUF_SIZE); // Print the message on the matrix
+
+			// Check if market cap is visible
+			if (marketCapVisible) {
+				formatMarketCapMessage(message, sizeof(message), marketData);
+				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
+			}
+
+			// Move to the next section
 			switchText = PRINT_DAILY_HIGH_LOW;
 			break;
 
 		case PRINT_DAILY_HIGH_LOW:
 			printLogfln("Section: DAILY HIGHLOW");
-			if (dailyHighLowVisible) // Check if daily high/low is visible
-				printOnLedMatrix(stripMessageDailyHighLow, BUF_SIZE); // Print the message on the matrix
+
+			// Check if daily high/low is visible
+			if (dailyHighLowVisible) {
+				formatDailyHighLowMessage(message, sizeof(message), marketData);
+				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
+			}
+
+			// Move to the next section
 			switchText = PRINT_YEAR_HIGH_LOW;
 			break;
 
 		case PRINT_YEAR_HIGH_LOW:
 			printLogfln("Section: YEAR HIGHLOW");
-			if (yearHighLowVisible) // Check if year high/low is visible
-				printOnLedMatrix(stripMessageYearHighLow, BUF_SIZE); // Print the message on the matrix
+
+			// Check if year high/low is visible
+			if (yearHighLowVisible) {
+				formatYearHighLowMessage(message, sizeof(message), marketData);
+				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
+			}
+
+			// Move to the next section
 			switchText = PRINT_OPEN;
 			break;
 
 		case PRINT_OPEN:
 			printLogfln("Section: OPEN");
-			if (openPriceVisible) // Check if open price is visible
-				printOnLedMatrix(stripMessageOpen, BUF_SIZE); // Print the message on the matrix
+
+			// Check if open price is visible
+			if (openPriceVisible) {
+				formatOpenMessage(message, sizeof(message), marketData);
+				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
+			}
+
+			// Move to the next section
 			switchText = PRINT_VOLUME;
 			break;
 			
 		case PRINT_VOLUME:
 			printLogfln("Section: VOLUME");
-			if (volumeVisible) // Check if volume is visible
-				printOnLedMatrix(stripMessageVolume, BUF_SIZE); // Print the message on the matrix
+
+			// Check if volume is visible
+			if (volumeVisible) {
+				formatVolumeMessage(message, sizeof(message), marketData);
+				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
+			}
+
+			// Move to the next section
 			switchText = PRINT_PRICE;
 			break;
 	}

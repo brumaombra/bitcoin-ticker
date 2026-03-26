@@ -5,13 +5,6 @@ formatNum formatType = FORMAT_US;
 
 // Global message buffers shared by serial and scrolling functions
 char currentMessage[BUF_SIZE]; // Current message
-char stripMessagePrice[BUF_SIZE]; // Price
-char stripMessageDailyChange[BUF_SIZE]; // Change
-char stripMessageMarketCap[BUF_SIZE]; // Market Cap
-char stripMessageDailyHighLow[BUF_SIZE]; // Daily High/Low
-char stripMessageYearHighLow[BUF_SIZE]; // Year High/Low
-char stripMessageOpen[BUF_SIZE]; // Open
-char stripMessageVolume[BUF_SIZE]; // Volume
 
 // WiFi and client configuration
 AsyncWebServer server(80);
@@ -25,7 +18,6 @@ char cryptoCoin[16] = "bitcoin";
 bool accessPointEnabled = false;
 bool disableAccessPoint = false;
 connectionStatus wiFiConnectionStatus = WIFI_KO;
-unsigned long currentMillis;
 unsigned long timestampStockData = 0;
 unsigned long timestampWiFiConnection = 0;
 

@@ -19,13 +19,6 @@ extern formatNum formatType;
 
 // Global message buffers shared by serial and scrolling functions
 extern char currentMessage[BUF_SIZE]; // Current message
-extern char stripMessagePrice[BUF_SIZE]; // Price
-extern char stripMessageDailyChange[BUF_SIZE]; // Change
-extern char stripMessageMarketCap[BUF_SIZE]; // Market Cap
-extern char stripMessageDailyHighLow[BUF_SIZE]; // Daily High/Low
-extern char stripMessageYearHighLow[BUF_SIZE]; // Year High/Low
-extern char stripMessageOpen[BUF_SIZE]; // Open
-extern char stripMessageVolume[BUF_SIZE]; // Volume
 
 // WiFi and client configuration
 extern AsyncWebServer server;
@@ -40,7 +33,6 @@ extern bool accessPointEnabled;
 extern bool disableAccessPoint;
 enum connectionStatus { WIFI_TRY = 2, WIFI_OK = 1, WIFI_KO = 0 };
 extern connectionStatus wiFiConnectionStatus;
-extern unsigned long currentMillis;
 extern unsigned long timestampStockData;
 extern unsigned long timestampWiFiConnection;
 
