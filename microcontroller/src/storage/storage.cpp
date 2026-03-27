@@ -10,55 +10,63 @@
 const int EEPROM_SIZE = 512; // EEPROM size
 
 namespace {
-    // Append the settings to a JSON document
-    void appendSettingsToJson(JsonDocument& doc, const Settings& settings) {
-        doc["currentPrice"] = settings.currentPriceVisible;
-        doc["priceChange"] = settings.priceChangeVisible;
-        doc["marketCap"] = settings.marketCapVisible;
-        doc["dailyHighLow"] = settings.dailyHighLowVisible;
-        doc["yearHighLow"] = settings.yearHighLowVisible;
-        doc["openPrice"] = settings.openPriceVisible;
-        doc["volume"] = settings.volumeVisible;
-        doc["cryptoCoin"] = settings.cryptoCoin;
-        doc["formatType"] = settings.formatType == FORMAT_US ? "US" : "EU";
-        doc["matrixIntensity"] = settings.matrixIntensity;
-        doc["scrollSpeed"] = settings.scrollSpeed;
+    // Append the config to a JSON document
+    void appendConfigToJson(JsonDocument& doc, const DeviceConfig& config) {
+        // Add the config fields to the JSON object
+        doc["currentPrice"] = config.currentPriceVisible;
+        doc["priceChange"] = config.priceChangeVisible;
+        doc["marketCap"] = config.marketCapVisible;
+        doc["dailyHighLow"] = config.dailyHighLowVisible;
+        doc["yearHighLow"] = config.yearHighLowVisible;
+        doc["openPrice"] = config.openPriceVisible;
+        doc["volume"] = config.volumeVisible;
+        doc["cryptoCoin"] = config.cryptoCoin;
+        doc["formatType"] = config.formatType == FORMAT_US ? "US" : "EU";
+        doc["matrixIntensity"] = config.matrixIntensity;
+        doc["scrollSpeed"] = config.scrollSpeed;
+
+        // Add WiFi credentials if present
+        if (strlen(config.ssid) != 0 && strlen(config.password) != 0) {
+            doc["ssid"] = config.ssid;
+            doc["password"] = config.password;
+        }
+
+        // Add API key if present
+        if (strlen(config.apiKey) != 0) {
+            doc["apiKey"] = config.apiKey;
+        }
     }
 
-    // Read the settings from a JSON document and apply them to a settings snapshot
-    void readSettingsFromJson(JsonDocument& doc, Settings& settings) {
+    // Read the config from a JSON document and apply it to a config snapshot
+    void readConfigFromJson(JsonDocument& doc, DeviceConfig& config) {
         if (!doc["currentPrice"].isNull())
-            settings.currentPriceVisible = doc["currentPrice"].as<bool>();
+            config.currentPriceVisible = doc["currentPrice"].as<bool>();
         if (!doc["priceChange"].isNull())
-            settings.priceChangeVisible = doc["priceChange"].as<bool>();
+            config.priceChangeVisible = doc["priceChange"].as<bool>();
         if (!doc["marketCap"].isNull())
-            settings.marketCapVisible = doc["marketCap"].as<bool>();
+            config.marketCapVisible = doc["marketCap"].as<bool>();
         if (!doc["dailyHighLow"].isNull())
-            settings.dailyHighLowVisible = doc["dailyHighLow"].as<bool>();
+            config.dailyHighLowVisible = doc["dailyHighLow"].as<bool>();
         if (!doc["yearHighLow"].isNull())
-            settings.yearHighLowVisible = doc["yearHighLow"].as<bool>();
+            config.yearHighLowVisible = doc["yearHighLow"].as<bool>();
         if (!doc["openPrice"].isNull())
-            settings.openPriceVisible = doc["openPrice"].as<bool>();
+            config.openPriceVisible = doc["openPrice"].as<bool>();
         if (!doc["volume"].isNull())
-            settings.volumeVisible = doc["volume"].as<bool>();
+            config.volumeVisible = doc["volume"].as<bool>();
         if (!doc["cryptoCoin"].isNull())
-            stringCopy(settings.cryptoCoin, doc["cryptoCoin"].as<const char*>(), sizeof(settings.cryptoCoin));
+            stringCopy(config.cryptoCoin, doc["cryptoCoin"].as<const char*>(), sizeof(config.cryptoCoin));
         if (!doc["formatType"].isNull())
-            settings.formatType = strcmp(doc["formatType"].as<const char*>(), "US") == 0 ? FORMAT_US : FORMAT_EU;
+            config.formatType = strcmp(doc["formatType"].as<const char*>(), "US") == 0 ? FORMAT_US : FORMAT_EU;
         if (!doc["matrixIntensity"].isNull())
-            settings.matrixIntensity = doc["matrixIntensity"].as<uint8_t>();
+            config.matrixIntensity = doc["matrixIntensity"].as<uint8_t>();
         if (!doc["scrollSpeed"].isNull())
-            settings.scrollSpeed = doc["scrollSpeed"].as<uint8_t>();
-    }
-
-    // Read the credentials from a JSON document
-    void readCredentialsFromJson(JsonDocument& doc) {
+            config.scrollSpeed = doc["scrollSpeed"].as<uint8_t>();
         if (!doc["apiKey"].isNull())
-            stringCopy(apiKey, doc["apiKey"], sizeof(apiKey));
+            stringCopy(config.apiKey, doc["apiKey"], sizeof(config.apiKey));
         if (!doc["ssid"].isNull())
-            stringCopy(wiFiSSID, doc["ssid"], sizeof(wiFiSSID));
+            stringCopy(config.ssid, doc["ssid"], sizeof(config.ssid));
         if (!doc["password"].isNull())
-            stringCopy(wiFiPassword, doc["password"], sizeof(wiFiPassword));
+            stringCopy(config.password, doc["password"], sizeof(config.password));
     }
 }
 
@@ -104,39 +112,32 @@ bool readEEPROM(JsonDocument& doc) {
 
 // Write data to the EEPROM
 bool writeEEPROM() {
-    return saveSettingsToEEPROM(getSettings());
+    const DeviceConfig& config = getDeviceConfig();
+    return saveDeviceConfigToEEPROM(config);
 }
 
-// Load the settings snapshot from EEPROM without mutating runtime state
-bool loadSettingsFromEEPROM(Settings& settings) {
-	JsonDocument doc; // JSON object
-    settings = getSettings();
+// Load the config snapshot from EEPROM without mutating runtime state
+bool loadDeviceConfigFromEEPROM(DeviceConfig& config) {
+    // Get the current config
+    config = getDeviceConfig();
 
+    // Read the config from EEPROM
+    JsonDocument doc;
     if (!readEEPROM(doc)) {
         return false;
     }
 
-    readSettingsFromJson(doc, settings);
+    // Apply the read config to the provided config snapshot
+    readConfigFromJson(doc, config);
     return true;
 }
 
-// Save a settings snapshot to EEPROM while preserving credentials and API key from runtime state
-bool saveSettingsToEEPROM(const Settings& settings) {
+// Save the config snapshot to EEPROM
+bool saveDeviceConfigToEEPROM(const DeviceConfig& config) {
     JsonDocument doc; // JSON object
 
-    // Add the WiFi credentials to the JSON object
-    if (strlen(wiFiSSID) != 0 && strlen(wiFiPassword) != 0) {
-        doc["ssid"] = wiFiSSID;
-        doc["password"] = wiFiPassword;
-    }
-
-    // Add the API key to the JSON object
-    if (strlen(apiKey) != 0) {
-        doc["apiKey"] = apiKey;
-    }
-
-    // Add the settings to the JSON object
-    appendSettingsToJson(doc, settings);
+    // Add the config to the JSON object
+    appendConfigToJson(doc, config);
 
     // Write data to EEPROM
     EepromStream eepromStream(0, EEPROM_SIZE);
@@ -145,6 +146,7 @@ bool saveSettingsToEEPROM(const Settings& settings) {
         return false; // Error while writing on EEPROM
     }
 
+    // Add a null terminator if there is space
     if (jsonSize < EEPROM_SIZE) {
         EEPROM.write(jsonSize, '\0');
     }
@@ -190,18 +192,20 @@ void testReadEEPROM() {
 
 // Setup EEPROM
 void setupEEPROM() {
-	EEPROM.begin(EEPROM_SIZE); // Start the EEPROM
+    // Start the EEPROM
+	EEPROM.begin(EEPROM_SIZE);
 
-    JsonDocument doc; // JSON object
+    // Read the config from EEPROM
+    JsonDocument doc;
     if (!readEEPROM(doc)) {
         printLogfln("EEPROM is empty or invalid, writing default settings...");
         writeEEPROM();
         return;
     }
 
-    readCredentialsFromJson(doc);
-    Settings settings = getSettings();
-    readSettingsFromJson(doc, settings);
-    setSettings(settings);
+    // Apply the read config to the runtime state
+    DeviceConfig config = getDeviceConfig();
+    readConfigFromJson(doc, config);
+    setDeviceConfig(config);
     printLogfln("EEPROM data loaded successfully");
 }

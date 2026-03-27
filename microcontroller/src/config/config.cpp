@@ -1,8 +1,7 @@
 #include "config.h"
 
 namespace {
-    // Settings structure
-	Settings currentSettings = {
+	DeviceConfig currentConfig = {
 		true,
 		true,
 		true,
@@ -13,18 +12,21 @@ namespace {
 		"bitcoin",
 		FORMAT_US,
 		1,
-		1
+		1,
+		"",
+		"",
+		""
 	};
 }
 
-// Get the current settings
-const Settings& getSettings() {
-	return currentSettings;
+// Get the current device config
+const DeviceConfig& getDeviceConfig() {
+	return currentConfig;
 }
 
-// Update the settings
-void setSettings(const Settings& settings) {
-	currentSettings = settings;
+// Update the device config
+void setDeviceConfig(const DeviceConfig& config) {
+	currentConfig = config;
 }
 
 // Global message buffers shared by serial and scrolling functions
@@ -35,9 +37,6 @@ AsyncWebServer server(80);
 WiFiClient client;
 const char accessPointSSID[] = "Bitcoin-Ticker";
 const char mdnsHostname[] = "ticker";
-char wiFiSSID[35] = "";
-char wiFiPassword[70] = "";
-char apiKey[35] = "";
 bool accessPointEnabled = false;
 bool disableAccessPoint = false;
 connectionStatus wiFiConnectionStatus = WIFI_KO;

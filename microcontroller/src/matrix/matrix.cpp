@@ -100,8 +100,8 @@ void setupLedMatrix() {
 	}
 
 	P.begin(); // Start the LED matrix
-	const Settings& settings = getSettings();
-	setMatrixIntensity(settings.matrixIntensity); // Set the intensity of the matrix
+	const DeviceConfig& config = getDeviceConfig();
+	setMatrixIntensity(config.matrixIntensity); // Set the intensity of the matrix
 	printOnLedMatrix("Initializing...", BUF_SIZE); // Print the message on the matrix
 }
 
@@ -119,8 +119,8 @@ void manageLedMatrix() {
 	if (!callAPI(marketData)) // Call the API
 		return; // If error, exit the function
 
-	// Get the current settings
-	const Settings& settings = getSettings();
+	// Get the current config
+	const DeviceConfig& config = getDeviceConfig();
 	
 	char message[BUF_SIZE];
 
@@ -130,7 +130,7 @@ void manageLedMatrix() {
 			printLogfln("Section: PRICE");
 
 			// Check if current price is visible
-			if (settings.currentPriceVisible) {
+			if (config.currentPriceVisible) {
 				formatPriceMessage(message, sizeof(message), marketData);
 				printOnLedMatrix(message, sizeof(message), PRICE_MESSAGE_PAUSE); // Print the message on the matrix
 			}
@@ -143,7 +143,7 @@ void manageLedMatrix() {
 			printLogfln("Section: CHANGE");
 
 			// Check if price change is visible
-			if (settings.priceChangeVisible) {
+			if (config.priceChangeVisible) {
 				formatChangeMessage(message, sizeof(message), marketData);
 				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
 			}
@@ -156,7 +156,7 @@ void manageLedMatrix() {
 			printLogfln("Section: MARKET CAP");
 
 			// Check if market cap is visible
-			if (settings.marketCapVisible) {
+			if (config.marketCapVisible) {
 				formatMarketCapMessage(message, sizeof(message), marketData);
 				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
 			}
@@ -169,7 +169,7 @@ void manageLedMatrix() {
 			printLogfln("Section: DAILY HIGHLOW");
 
 			// Check if daily high/low is visible
-			if (settings.dailyHighLowVisible) {
+			if (config.dailyHighLowVisible) {
 				formatDailyHighLowMessage(message, sizeof(message), marketData);
 				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
 			}
@@ -182,7 +182,7 @@ void manageLedMatrix() {
 			printLogfln("Section: YEAR HIGHLOW");
 
 			// Check if year high/low is visible
-			if (settings.yearHighLowVisible) {
+			if (config.yearHighLowVisible) {
 				formatYearHighLowMessage(message, sizeof(message), marketData);
 				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
 			}
@@ -195,7 +195,7 @@ void manageLedMatrix() {
 			printLogfln("Section: OPEN");
 
 			// Check if open price is visible
-			if (settings.openPriceVisible) {
+			if (config.openPriceVisible) {
 				formatOpenMessage(message, sizeof(message), marketData);
 				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
 			}
@@ -208,7 +208,7 @@ void manageLedMatrix() {
 			printLogfln("Section: VOLUME");
 
 			// Check if volume is visible
-			if (settings.volumeVisible) {
+			if (config.volumeVisible) {
 				formatVolumeMessage(message, sizeof(message), marketData);
 				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
 			}

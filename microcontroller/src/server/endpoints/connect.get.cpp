@@ -5,8 +5,8 @@
 #include "../../serial/serial.h"
 
 namespace {
-	constexpr size_t MAX_WIFI_SSID_LENGTH = sizeof(wiFiSSID) - 1;
-	constexpr size_t MAX_WIFI_PASSWORD_LENGTH = sizeof(wiFiPassword) - 1;
+	constexpr size_t MAX_WIFI_SSID_LENGTH = WIFI_SSID_SIZE - 1;
+	constexpr size_t MAX_WIFI_PASSWORD_LENGTH = WIFI_PASSWORD_SIZE - 1;
 
 	// Validate the credential parameters
 	bool validateCredentialParam(AsyncWebServerRequest* request, const char* fieldName, const String& value, size_t maxLength, bool allowEmpty) {
@@ -48,13 +48,15 @@ void setupConnectGetRoute() {
 			return;
 		}
 
-		// Save the new credentials into temp variables
-		stringCopy(wiFiSSID, ssidValue.c_str(), sizeof(wiFiSSID));
-		stringCopy(wiFiPassword, passwordValue.c_str(), sizeof(wiFiPassword));
+		// Save the new credentials into the runtime config
+		DeviceConfig config = getDeviceConfig();
+		stringCopy(config.ssid, ssidValue.c_str(), sizeof(config.ssid));
+		stringCopy(config.password, passwordValue.c_str(), sizeof(config.password));
+		setDeviceConfig(config);
 		wiFiConnectionStatus = WIFI_TRY;
 
 		// Print the new credentials
-		printLogfln("SSID: %s, Password: %s\n", wiFiSSID, wiFiPassword);
+		printLogfln("SSID: %s, Password: %s\n", config.ssid, config.password);
 
 		// Response
 		JsonDocument doc;

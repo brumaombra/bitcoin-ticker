@@ -159,44 +159,44 @@ void setupSettingsPostRoute() {
 			return;
 		}
 
-		// Get the current settings
-		Settings settings = getSettings();
+		// Get the current config
+		DeviceConfig config = getDeviceConfig();
 
 		// Update the settings with the new values
 		if (!doc["currentPrice"].isNull())
-			settings.currentPriceVisible = doc["currentPrice"].as<bool>();
+			config.currentPriceVisible = doc["currentPrice"].as<bool>();
 		if (!doc["priceChange"].isNull())
-			settings.priceChangeVisible = doc["priceChange"].as<bool>();
+			config.priceChangeVisible = doc["priceChange"].as<bool>();
 		if (!doc["marketCap"].isNull())
-			settings.marketCapVisible = doc["marketCap"].as<bool>();
+			config.marketCapVisible = doc["marketCap"].as<bool>();
 		if (!doc["dailyHighLow"].isNull())
-			settings.dailyHighLowVisible = doc["dailyHighLow"].as<bool>();
+			config.dailyHighLowVisible = doc["dailyHighLow"].as<bool>();
 		if (!doc["yearHighLow"].isNull())
-			settings.yearHighLowVisible = doc["yearHighLow"].as<bool>();
+			config.yearHighLowVisible = doc["yearHighLow"].as<bool>();
 		if (!doc["openPrice"].isNull())
-			settings.openPriceVisible = doc["openPrice"].as<bool>();
+			config.openPriceVisible = doc["openPrice"].as<bool>();
 		if (!doc["volume"].isNull())
-			settings.volumeVisible = doc["volume"].as<bool>();
+			config.volumeVisible = doc["volume"].as<bool>();
 		if (!doc["cryptoCoin"].isNull())
-			stringCopy(settings.cryptoCoin, doc["cryptoCoin"].as<const char*>(), sizeof(settings.cryptoCoin));
+			stringCopy(config.cryptoCoin, doc["cryptoCoin"].as<const char*>(), sizeof(config.cryptoCoin));
 		if (!doc["formatType"].isNull())
-			settings.formatType = strcmp(doc["formatType"].as<const char*>(), "US") == 0 ? FORMAT_US : FORMAT_EU;
+			config.formatType = strcmp(doc["formatType"].as<const char*>(), "US") == 0 ? FORMAT_US : FORMAT_EU;
 		if (!doc["matrixIntensity"].isNull())
-			settings.matrixIntensity = doc["matrixIntensity"].as<uint8_t>();
+			config.matrixIntensity = doc["matrixIntensity"].as<uint8_t>();
 		if (!doc["scrollSpeed"].isNull())
-			settings.scrollSpeed = doc["scrollSpeed"].as<uint8_t>();
+			config.scrollSpeed = doc["scrollSpeed"].as<uint8_t>();
 
 		// Persist the changes before mutating runtime state
-		if (!saveSettingsToEEPROM(settings)) {
+		if (!saveDeviceConfigToEEPROM(config)) {
 			sendErrorResponse(request, 500, "settings_save_failed", "Failed to save settings");
 			return;
 		}
 
 		// Apply changes
-		setSettings(settings);
+		setDeviceConfig(config);
 		timestampStockData = 0;
-		setMatrixIntensity(settings.matrixIntensity);
-		setMatrixSpeed(settings.scrollSpeed);
+		setMatrixIntensity(config.matrixIntensity);
+		setMatrixSpeed(config.scrollSpeed);
 
 		// Send success response
 		sendSuccessResponse(request);

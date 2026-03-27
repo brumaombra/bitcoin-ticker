@@ -19,14 +19,14 @@ namespace {
 
 // Get the selected crypto coin API ID
 static const char* getSelectedCryptoApiId() {
-	const Settings& settings = getSettings();
-	return strcmp(settings.cryptoCoin, "kaspa") == 0 ? "kaspa" : "bitcoin";
+	const DeviceConfig& config = getDeviceConfig();
+	return strcmp(config.cryptoCoin, "kaspa") == 0 ? "kaspa" : "bitcoin";
 }
 
 // Get the selected crypto coin ticker label
 static const char* getSelectedCryptoTickerLabel() {
-	const Settings& settings = getSettings();
-	return strcmp(settings.cryptoCoin, "kaspa") == 0 ? "KAS" : "BTC";
+	const DeviceConfig& config = getDeviceConfig();
+	return strcmp(config.cryptoCoin, "kaspa") == 0 ? "KAS" : "BTC";
 }
 
 // Get the main market data used by the ticker
@@ -50,7 +50,7 @@ static bool fetchMarketData(JsonDocument &doc) {
 	printLogfln("Requesting URL: %s", url);
 	http.begin(clientSecure, url);
 	http.addHeader("Accept", "application/json");
-	http.addHeader(apiKeyHeaderName, apiKey);
+	http.addHeader(apiKeyHeaderName, getDeviceConfig().apiKey);
 
 	// Send the request
 	const int httpCode = http.GET();
@@ -126,7 +126,7 @@ bool callAPI(MarketTickerData& marketData) {
 	// Call the API every 6 minutes (To limit usage)
 	if (currentMillis - timestampStockData > 360000 || timestampStockData == 0) {
 		// Check if the API key is present
-		if (apiKey[0] == '\0') {
+		if (getDeviceConfig().apiKey[0] == '\0') {
 			const char errorMessageApi[] = "API key is not present. Use the web page to insert the key and try again.";
 			printLogfln(errorMessageApi);
 			printOnLedMatrix(errorMessageApi, sizeof(errorMessageApi)); // Print the message on the matrix

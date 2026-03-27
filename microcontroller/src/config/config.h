@@ -16,8 +16,12 @@ constexpr uint8_t CS_PIN = D8; // SS
 // Numeric formatting type
 enum formatNum { FORMAT_US = 1, FORMAT_EU = 2 };
 
-// Settings structure
-struct Settings {
+constexpr size_t WIFI_SSID_SIZE = 35;
+constexpr size_t WIFI_PASSWORD_SIZE = 70;
+constexpr size_t API_KEY_SIZE = 35;
+constexpr size_t CRYPTO_COIN_SIZE = 16;
+
+struct DeviceConfig {
 	bool currentPriceVisible;
 	bool priceChangeVisible;
 	bool marketCapVisible;
@@ -25,15 +29,18 @@ struct Settings {
 	bool yearHighLowVisible;
 	bool openPriceVisible;
 	bool volumeVisible;
-	char cryptoCoin[16];
+	char cryptoCoin[CRYPTO_COIN_SIZE];
 	formatNum formatType;
 	uint8_t matrixIntensity;
 	uint8_t scrollSpeed;
+	char ssid[WIFI_SSID_SIZE];
+	char password[WIFI_PASSWORD_SIZE];
+	char apiKey[API_KEY_SIZE];
 };
 
-// Settings getter and setter
-const Settings& getSettings();
-void setSettings(const Settings& settings);
+// Device config getter and setter
+const DeviceConfig& getDeviceConfig();
+void setDeviceConfig(const DeviceConfig& config);
 
 // Global message buffers shared by serial and scrolling functions
 extern char currentMessage[BUF_SIZE]; // Current message
@@ -43,9 +50,6 @@ extern AsyncWebServer server;
 extern WiFiClient client;
 extern const char accessPointSSID[];
 extern const char mdnsHostname[];
-extern char wiFiSSID[35];
-extern char wiFiPassword[70];
-extern char apiKey[35];
 extern bool accessPointEnabled;
 extern bool disableAccessPoint;
 enum connectionStatus { WIFI_TRY = 2, WIFI_OK = 1, WIFI_KO = 0 };

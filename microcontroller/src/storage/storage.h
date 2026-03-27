@@ -8,8 +8,8 @@ void setupEEPROM();
 bool readEEPROM(JsonDocument& doc);
 void testReadEEPROM();
 bool clearEEPROM();
-bool loadSettingsFromEEPROM(Settings& settings);
-bool saveSettingsToEEPROM(const Settings& settings);
+bool loadDeviceConfigFromEEPROM(DeviceConfig& config);
+bool saveDeviceConfigToEEPROM(const DeviceConfig& config);
 bool writeEEPROM();
 
 #endif

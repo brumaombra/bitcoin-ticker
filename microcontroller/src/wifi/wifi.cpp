@@ -46,7 +46,8 @@ namespace {
 
 // Connecting to WiFi
 bool connectToWiFi() {
-    WiFi.begin(wiFiSSID, wiFiPassword);
+	const DeviceConfig& config = getDeviceConfig();
+	WiFi.begin(config.ssid, config.password);
     byte maxTry = 50;
     byte count = 0;
     printLog("Connecting to WiFi");
@@ -54,8 +55,10 @@ bool connectToWiFi() {
 	// Wait for connection
     while (WiFi.status() != WL_CONNECTED) {
         if (count >= maxTry) {
-            wiFiSSID[0] = '\0';
-            wiFiPassword[0] = '\0';
+			DeviceConfig nextConfig = getDeviceConfig();
+			nextConfig.ssid[0] = '\0';
+			nextConfig.password[0] = '\0';
+			setDeviceConfig(nextConfig);
             return false;
         }
         count++;
@@ -126,7 +129,8 @@ bool manageWiFiConnection() {
 		stopMdns();
 		
 		// Check if credentials are already present
-		if (wiFiSSID[0] != '\0' && wiFiPassword[0] != '\0') {
+		const DeviceConfig& config = getDeviceConfig();
+		if (config.ssid[0] != '\0' && config.password[0] != '\0') {
 			if (connectToWiFi()) { // Connecting to WiFi
 				return true; // Connection success
 			} else {

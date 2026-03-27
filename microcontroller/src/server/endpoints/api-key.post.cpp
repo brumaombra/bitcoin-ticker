@@ -7,7 +7,7 @@
 #include "../../serial/serial.h"
 
 namespace {
-	constexpr size_t MAX_API_KEY_LENGTH = sizeof(apiKey) - 1;
+	constexpr size_t MAX_API_KEY_LENGTH = API_KEY_SIZE - 1;
 
 	// Validate the apiKey field
 	bool validateApiKeyField(AsyncWebServerRequest* request, JsonVariantConst value) {
@@ -79,7 +79,9 @@ void setupApiKeyPostRoute() {
 		}
 
 		// Save the new API key and write to EEPROM
-		stringCopy(apiKey, doc["apiKey"].as<const char*>(), sizeof(apiKey));
+		DeviceConfig config = getDeviceConfig();
+		stringCopy(config.apiKey, doc["apiKey"].as<const char*>(), sizeof(config.apiKey));
+		setDeviceConfig(config);
 		writeEEPROM();
 
 		// Send success response
