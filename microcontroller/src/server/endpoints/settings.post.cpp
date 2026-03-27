@@ -3,7 +3,7 @@
 #include <cstring>
 #include "../../config/config.h"
 #include "../../utils/utils.h"
-#include "../../storage/storage.h"
+#include "../../eeprom/eeprom.h"
 #include "../../matrix/matrix.h"
 #include "../../serial/serial.h"
 

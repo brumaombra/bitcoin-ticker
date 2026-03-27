@@ -1,4 +1,4 @@
-#include "storage.h"
+#include "eeprom.h"
 #include <EEPROM.h>
 #include <StreamUtils.h>
 #include <ArduinoJson.h>
@@ -176,18 +176,6 @@ bool clearEEPROM() {
     // Mark as cleared
     printLogfln("EEPROM cleared");
     return true;
-}
-
-// Test read EEPROM
-void testReadEEPROM() {
-    printLogfln("EEPROM size: %d", EEPROM.length()); // Print the size of the EEPROM
-    
-    // Print the content of the EEPROM
-    printLog("EEPROM data: ");
-    for (int i = 0; i < EEPROM_SIZE; i++) {
-        printLog(char(EEPROM.read(i)));
-    }
-    printLogln("");
 }
 
 // Setup EEPROM

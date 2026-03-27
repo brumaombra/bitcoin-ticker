@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include "../../config/config.h"
-#include "../../storage/storage.h"
+#include "../../eeprom/eeprom.h"
 
 // Clear all saved settings from EEPROM and restart
 void setupResetSettingsGetRoute() {

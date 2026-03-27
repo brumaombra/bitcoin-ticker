@@ -1,6 +1,6 @@
 #include "../server.h"
 #include <ArduinoJson.h>
-#include "../../storage/storage.h"
+#include "../../eeprom/eeprom.h"
 
 // Get the current settings
 void setupSettingsGetRoute() {

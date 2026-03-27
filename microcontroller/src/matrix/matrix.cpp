@@ -67,38 +67,22 @@ namespace {
 
 // Print the message on the matrix
 void printOnLedMatrix(const char* message, const byte stringLength, uint16_t messageStill) {
-	if (!LED_MATRIX_ENABLED) {
-		return;
-	}
-
 	stringCopy(currentMessage, message, stringLength); // Copy the message
 	P.displayText(currentMessage, scrollAlign, scrollDelay, messageStill, scrollEffect, scrollEffect); // Print the message on the matrix
 }
 
 // Set the intensity of the matrix
 void setMatrixIntensity(uint8_t intensity) {
-	if (!LED_MATRIX_ENABLED) {
-		return;
-	}
-
 	P.setIntensity(intensity); // Set LED intensity (0-15, 15 is brightest)
 }
 
 // Set the speed of the matrix
 void setMatrixSpeed(uint8_t speed) {
-	if (!LED_MATRIX_ENABLED) {
-		return;
-	}
-
     scrollDelay = map(speed, 0, 15, 100, 20); // Map 0-15 to 100-20ms (slower to faster)
 }
 
 // Setup the LED matrix
 void setupLedMatrix() {
-	if (!LED_MATRIX_ENABLED) {
-		return;
-	}
-
 	P.begin(); // Start the LED matrix
 	const DeviceConfig& config = getDeviceConfig();
 	setMatrixIntensity(config.matrixIntensity); // Set the intensity of the matrix
@@ -107,24 +91,29 @@ void setupLedMatrix() {
 
 // Manage the LED matrix
 void manageLedMatrix() {
-	if (!LED_MATRIX_ENABLED) {
+	// If currently scrolling, exit
+	if (!P.displayAnimate()) {
+		return;
+	}
+	
+	// Check if connected to WiFi
+	if (!checkWifiConnection()) {
 		return;
 	}
 
-	if (!P.displayAnimate())
-		return; // If scrolling, exit the function
-	if (!checkWifiConnection()) // Check if connected to WiFi
-		return; // If not connected, exit the function
+	// Call the API
 	MarketTickerData marketData;
-	if (!callAPI(marketData)) // Call the API
-		return; // If error, exit the function
+	if (!callAPI(marketData)) {
+		return;
+	}
 
 	// Get the current config
 	const DeviceConfig& config = getDeviceConfig();
 	
+	// Single buffer for all the messages
 	char message[BUF_SIZE];
 
-	// Print messagges
+	// Print messages
 	switch (switchText) {
 		case PRINT_PRICE:
 			printLogfln("Section: PRICE");

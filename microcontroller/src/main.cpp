@@ -1,5 +1,5 @@
 #include "serial/serial.h"
-#include "storage/storage.h"
+#include "eeprom/eeprom.h"
 #include "api/api.h"
 #include "wifi/wifi.h"
 #include "matrix/matrix.h"

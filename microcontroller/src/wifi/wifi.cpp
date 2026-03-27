@@ -3,7 +3,7 @@
 #include <DNSServer.h>
 #include <ESP8266mDNS.h>
 #include "../config/config.h"
-#include "../storage/storage.h"
+#include "../eeprom/eeprom.h"
 #include "../matrix/matrix.h"
 #include "../serial/serial.h"
 
