@@ -5,14 +5,14 @@ import { resetSettings, saveSettings } from '~/composables/useDeviceApi.js';
 import { getCryptoCoins, handleBackendErrors, setBusy, setCryptoCoin, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Button from '~/components/ui/Button.vue';
-import Card from '~/components/ui/Card.vue';
+import { Card } from '~/components/shadcn/card';
 import CardHeader from '~/components/ui/CardHeader.vue';
 import FormInfoText from '~/components/ui/FormInfoText.vue';
 import PageIntroCard from '~/components/ui/PageIntroCard.vue';
 import SettingToggleItem from '~/components/ui/SettingToggleItem.vue';
 import SliderInput from '~/components/ui/SliderInput.vue';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/shadcn/select';
-import Label from '~/components/ui/Label.vue';
+import { Label } from '~/components/shadcn/label';
 
 const globalStore = useGlobalStore();
 const cryptoCoins = getCryptoCoins();
@@ -137,7 +137,7 @@ definePageMeta({
             <!-- Settings form -->
             <form class="space-y-6" @submit.prevent="handleSavePress">
                 <!-- Visibility card -->
-                <Card>
+                <Card class="px-6">
                     <!-- Visibility section -->
                     <CardHeader :title="t('pages.settings.visibilityTitle')"
                         :description="t('pages.settings.visibilityDescription')" />
@@ -189,7 +189,7 @@ definePageMeta({
                 </Card>
 
                 <!-- Formatting & motion card -->
-                <Card>
+                <Card class="px-6">
                     <!-- Formatting section -->
                     <CardHeader :title="t('pages.settings.formattingTitle')"
                         :description="t('pages.settings.formattingDescription')" />
@@ -205,7 +205,10 @@ definePageMeta({
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem v-for="option in cryptoCoinOptions" :key="option.value" :value="option.value" :text-value="option.label">
-                                        {{ option.label }}
+                                        <div class="flex flex-col">
+                                            <span>{{ option.label }}</span>
+                                            <span class="text-xs text-muted-foreground">{{ option.meta }}</span>
+                                        </div>
                                     </SelectItem>
                                 </SelectContent>
                             </Select>
@@ -221,7 +224,10 @@ definePageMeta({
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem v-for="option in separatorOptions" :key="option.value" :value="option.value" :text-value="option.label">
-                                        {{ option.label }}
+                                        <div class="flex flex-col">
+                                            <span>{{ option.label }}</span>
+                                            <span class="text-xs text-muted-foreground">{{ option.meta }}</span>
+                                        </div>
                                     </SelectItem>
                                 </SelectContent>
                             </Select>

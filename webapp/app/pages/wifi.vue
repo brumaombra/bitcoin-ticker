@@ -5,10 +5,10 @@ import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Button from '~/components/ui/Button.vue';
-import Card from '~/components/ui/Card.vue';
+import { Card } from '~/components/shadcn/card';
 import InfoBox from '~/components/ui/InfoBox.vue';
 import { Input } from '~/components/shadcn/input';
-import Label from '~/components/ui/Label.vue';
+import { Label } from '~/components/shadcn/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/shadcn/select';
 import PageIntroCard from '~/components/ui/PageIntroCard.vue';
 import WifiStatusPanel from '~/components/WifiStatusPanel.vue';
@@ -109,7 +109,7 @@ definePageMeta({
 
         <!-- Connection form -->
         <div class="min-w-0 flex-1">
-            <Card>
+            <Card class="px-6">
                 <form class="space-y-5" @submit.prevent="handleConnectPress">
                     <!-- Current network summary -->
                     <WifiStatusPanel :current-network-label="currentNetworkLabel"

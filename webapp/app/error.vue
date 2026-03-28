@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
 import Button from '~/components/ui/Button.vue';
-import Card from '~/components/ui/Card.vue';
+import { Card } from '~/components/shadcn/card';
 import LanguageSelector from '~/components/ui/LanguageSelector.vue';
 import ThemeSelector from '~/components/ui/ThemeSelector.vue';
 
@@ -58,7 +58,7 @@ const handleBackHome = async () => {
                     <ThemeSelector />
                 </div>
 
-                <Card>
+                <Card class="px-6">
                     <!-- Brand -->
                     <BrandLogo :brand-name="t('app.title')" />
 

@@ -7,10 +7,10 @@ import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
 import Button from '~/components/ui/Button.vue';
-import Card from '~/components/ui/Card.vue';
+import { Card } from '~/components/shadcn/card';
 import InfoBox from '~/components/ui/InfoBox.vue';
 import { Input } from '~/components/shadcn/input';
-import Label from '~/components/ui/Label.vue';
+import { Label } from '~/components/shadcn/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/shadcn/select';
 import CardHeaderWithIcon from '~/components/ui/CardHeaderWithIcon.vue';
 import LanguageSelector from '~/components/ui/LanguageSelector.vue';
@@ -99,7 +99,7 @@ const refreshSSIDList = async () => {
                 <BrandLogo :brand-name="t('app.title')" />
 
                 <!-- Setup card -->
-                <Card>
+                <Card class="px-6">
                     <!-- Header with icon -->
                     <CardHeaderWithIcon :eyebrow="t('pages.apSetup.eyebrow')"
                         :title="t('pages.apSetup.title')"

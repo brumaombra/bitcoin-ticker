@@ -4,9 +4,9 @@ import { computed, ref } from 'vue';
 import { saveApiKey } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
 import Button from '~/components/ui/Button.vue';
-import Card from '~/components/ui/Card.vue';
+import { Card } from '~/components/shadcn/card';
 import InfoBox from '~/components/ui/InfoBox.vue';
-import Label from '~/components/ui/Label.vue';
+import { Label } from '~/components/shadcn/label';
 import { Input } from '~/components/shadcn/input';
 import PageIntroCard from '~/components/ui/PageIntroCard.vue';
 
@@ -72,7 +72,7 @@ definePageMeta({
 
         <!-- API key form -->
         <div class="min-w-0 flex-1">
-            <Card>
+            <Card class="px-6">
                 <form class="space-y-5" @submit.prevent="handleSavePress">
                     <!-- API key input -->
                     <div class="space-y-2">
