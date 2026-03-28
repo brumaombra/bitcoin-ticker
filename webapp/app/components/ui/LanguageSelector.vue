@@ -50,7 +50,7 @@ const handleSelectLanguage = async language => {
         </PopoverTrigger>
 
         <!-- Menu -->
-        <PopoverContent side="bottom" align="end" :side-offset="8" class="w-44 !p-0 shadow-xl">
+        <PopoverContent side="bottom" align="end" :side-offset="8" class="w-44 !p-0">
             <DropdownMenu :title="t('language.title')" :options="languageOptions" :current="locale" @select="handleSelectLanguage">
                 <template #option-leading="{ option }">
                     <component :is="getFlagComponent(option.flagCode)" class="h-4 w-[1.35rem] rounded-[2px]" />

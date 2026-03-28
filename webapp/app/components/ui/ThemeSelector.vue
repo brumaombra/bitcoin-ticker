@@ -53,7 +53,7 @@ const handleSelectTheme = theme => {
         </PopoverTrigger>
 
         <!-- Theme options -->
-        <PopoverContent side="bottom" align="end" :side-offset="8" class="w-44 !p-0 shadow-xl">
+        <PopoverContent side="bottom" align="end" :side-offset="8" class="w-44 !p-0">
             <DropdownMenu :title="t('theme.title')" :options="themeOptions" :current="globalStore.themeMode" @select="handleSelectTheme">
                 <template #option-leading="{ option }">
                     <component :is="option.icon" :stroke-width="1.8" class="h-4 w-4" />
