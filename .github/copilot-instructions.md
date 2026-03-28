@@ -5,7 +5,7 @@
 Bitcoin Ticker is a two-part project for an ESP8266-based LED matrix Bitcoin display.
 
 - `microcontroller/` contains the PlatformIO firmware for a NodeMCU ESP8266. It manages WiFi, local storage, an embedded HTTP server, API requests, and MAX7219 LED matrix output.
-- `webapp/` contains the Nuxt 3 configuration UI used to set WiFi credentials, API key, and display settings for the device.
+- `webapp/` contains the Nuxt 4 configuration UI used to set WiFi credentials, API key, and display settings for the device.
 
 The firmware is the runtime for the physical ticker. The webapp is a separate frontend that mirrors the device configuration flow and should stay aligned with the firmware API and settings model.
 
@@ -21,5 +21,5 @@ The firmware is the runtime for the physical ticker. The webapp is a separate fr
 1. Keep the split between firmware and webapp clear. Do not mix embedded-device logic into the frontend or frontend-specific behavior into firmware modules.
 2. Preserve existing module boundaries in `microcontroller/src/`; prefer extending the relevant subsystem instead of adding cross-cutting logic to `main.cpp`.
 3. When changing settings, routes, payloads, or validation rules, verify the firmware handlers and the Nuxt UI still match.
-4. Keep the webapp lightweight and compatible with the current Nuxt 3 stack already in the repo.
+4. Keep the webapp lightweight and compatible with the current Nuxt 4 stack already in the repo.
 5. Prefer minimal, hardware-aware changes in firmware: avoid unnecessary dynamic allocation, blocking behavior, and broad refactors unless they are required.

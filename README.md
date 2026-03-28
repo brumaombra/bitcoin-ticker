@@ -4,13 +4,13 @@
 
 ### Forge a real-time Bitcoin display for ESP8266 and MAX7219.
 
-Bitcoin Ticker is a two-part project for building a WiFi-connected Bitcoin display with an ESP8266 microcontroller, a MAX7219 LED matrix, and a Nuxt 3 web app for configuration.
+Bitcoin Ticker is a two-part project for building a WiFi-connected Bitcoin display with an ESP8266 microcontroller, a MAX7219 LED matrix, and a Nuxt 4 web app for configuration.
 
 <p>
   <a href="https://github.com/brumaombra/bitcoin-ticker"><img alt="GitHub Repo" src="https://img.shields.io/badge/github-brumaombra%2Fbitcoin--ticker-111111?logo=github"></a>
   <img alt="ESP8266" src="https://img.shields.io/badge/esp8266-ESP8266-E7352C?logo=espressif&logoColor=white">
   <img alt="PlatformIO" src="https://img.shields.io/badge/platformio-6.1.5-FF6B35?logo=platformio&logoColor=white">
-  <img alt="Nuxt 3" src="https://img.shields.io/badge/nuxt-3-00DC82?logo=nuxt&logoColor=white">
+  <img alt="Nuxt 4" src="https://img.shields.io/badge/nuxt-4-00DC82?logo=nuxt&logoColor=white">
   <img alt="License MIT" src="https://img.shields.io/badge/license-MIT-2563EB">
 </p>
 
@@ -38,7 +38,7 @@ Bitcoin Ticker is designed for a simple hardware-to-web workflow: the ESP8266 fe
 - ESP8266 firmware with WiFi, flash-backed local storage, and embedded HTTP configuration
 - Web-based configuration for WiFi credentials, API key, and display settings
 - Adjustable scroll speed, selected metrics, and matrix behavior
-- Nuxt 3 interface that mirrors the firmware configuration flow
+- Nuxt 4 interface that mirrors the firmware configuration flow
 - Reusable frontend UI primitives, shared dialogs, and confirmation flows
 - English and Italian localization with browser language detection
 
@@ -118,15 +118,15 @@ The Nuxt app provides the browser-based device configuration interface.
 - Controls display behavior and matrix preferences
 - Supports English and Italian localization
 - Includes confirm and message dialogs for critical actions
-- Uses reusable UI primitives under `webapp/components/ui/`
-- Shares device API helpers and theme utilities in `webapp/composables/`
+- Uses reusable UI primitives under `webapp/app/components/ui/`
+- Shares device API helpers and theme utilities in `webapp/app/composables/`
 
 Important web app areas:
 
-- `webapp/pages/` for the main setup screens
-- `webapp/components/ui/` for shared interface elements
-- `webapp/composables/useDeviceApi.js` for device communication
-- `webapp/composables/useUtils.js` for theme, dialog, and app helpers
+- `webapp/app/pages/` for the main setup screens
+- `webapp/app/components/ui/` for shared interface elements
+- `webapp/app/composables/useDeviceApi.js` for device communication
+- `webapp/app/composables/useUtils.js` for theme, dialog, and app helpers
 - `webapp/i18n/locales/` for translations
 
 <a id="build-and-deploy"></a>

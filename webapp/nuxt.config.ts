@@ -1,6 +1,8 @@
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineNuxtConfig({
+    srcDir: 'app/',
+
     ssr: false,
 
     app: {
@@ -43,7 +45,13 @@ export default defineNuxtConfig({
     vite: {
         plugins: [
             tailwindcss()
-        ]
+        ],
+        optimizeDeps: {
+            include: [
+                '@hugeicons/vue',
+                '@hugeicons/core-free-icons',
+            ]
+        }
     },
 
     devtools: {
