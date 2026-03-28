@@ -11,7 +11,7 @@ import FormInfoText from '~/components/ui/FormInfoText.vue';
 import PageIntroCard from '~/components/ui/PageIntroCard.vue';
 import SettingToggleItem from '~/components/ui/SettingToggleItem.vue';
 import SliderInput from '~/components/ui/SliderInput.vue';
-import Select from '~/components/ui/Select.vue';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/shadcn/select';
 import Label from '~/components/ui/Label.vue';
 
 const globalStore = useGlobalStore();
@@ -199,14 +199,32 @@ definePageMeta({
                         <!-- Crypto coin -->
                         <div class="space-y-2">
                             <Label for="cryptoCoin">{{ t('pages.settings.cryptoCoin.label') }}</Label>
-                            <Select id="cryptoCoin" v-model="settings.cryptoCoin" :option-list="cryptoCoinOptions" :placeholder="t('pages.settings.cryptoCoin.placeholder')" @change="setCryptoCoin" />
+                            <Select v-model="settings.cryptoCoin" @update:modelValue="setCryptoCoin">
+                                <SelectTrigger id="cryptoCoin" class="w-full">
+                                    <SelectValue :placeholder="t('pages.settings.cryptoCoin.placeholder')" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem v-for="option in cryptoCoinOptions" :key="option.value" :value="option.value" :text-value="option.label">
+                                        {{ option.label }}
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
                             <FormInfoText>{{ t('pages.settings.cryptoCoin.note') }}</FormInfoText>
                         </div>
 
                         <!-- Thousands separator format -->
                         <div class="space-y-2">
                             <Label for="selectFormatType">{{ t('pages.settings.formatType.label') }}</Label>
-                            <Select id="selectFormatType" v-model="settings.formatType" :option-list="separatorOptions" :placeholder="t('pages.settings.formatType.placeholder')" />
+                            <Select v-model="settings.formatType">
+                                <SelectTrigger id="selectFormatType" class="w-full">
+                                    <SelectValue :placeholder="t('pages.settings.formatType.placeholder')" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem v-for="option in separatorOptions" :key="option.value" :value="option.value" :text-value="option.label">
+                                        {{ option.label }}
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
                             <FormInfoText>{{ t('pages.settings.formatType.note') }}</FormInfoText>
                         </div>
 

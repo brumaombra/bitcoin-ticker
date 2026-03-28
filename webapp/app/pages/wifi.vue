@@ -7,9 +7,9 @@ import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
 import InfoBox from '~/components/ui/InfoBox.vue';
-import Input from '~/components/ui/Input.vue';
+import { Input } from '~/components/shadcn/input';
 import Label from '~/components/ui/Label.vue';
-import Select from '~/components/ui/Select.vue';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/shadcn/select';
 import PageIntroCard from '~/components/ui/PageIntroCard.vue';
 import WifiStatusPanel from '~/components/WifiStatusPanel.vue';
 
@@ -130,7 +130,19 @@ definePageMeta({
                         </div>
 
                         <!-- Network select -->
-                        <Select id="ssid" v-model="ssid" :placeholder="t('pages.wifi.networkPlaceholder')" :option-list="networkOptions" />
+                        <Select v-model="ssid">
+                            <SelectTrigger id="ssid" class="w-full">
+                                <SelectValue :placeholder="t('pages.wifi.networkPlaceholder')" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem v-for="option in networkOptions" :key="option.value" :value="option.value" :text-value="option.label">
+                                    <div class="flex flex-col">
+                                        <span>{{ option.label }}</span>
+                                        <span class="text-xs text-muted-foreground">{{ option.meta }}</span>
+                                    </div>
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
 
                     <!-- Password input -->

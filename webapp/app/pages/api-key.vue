@@ -7,7 +7,7 @@ import Button from '~/components/ui/Button.vue';
 import Card from '~/components/ui/Card.vue';
 import InfoBox from '~/components/ui/InfoBox.vue';
 import Label from '~/components/ui/Label.vue';
-import Input from '~/components/ui/Input.vue';
+import { Input } from '~/components/shadcn/input';
 import PageIntroCard from '~/components/ui/PageIntroCard.vue';
 
 const apiKey = ref('');
