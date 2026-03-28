@@ -1,4 +1,5 @@
 <script setup>
+import { Label } from '~/components/shadcn/label';
 import { Switch } from '~/components/shadcn/switch';
 
 // Props
@@ -17,9 +18,9 @@ const emits = defineEmits(['update:modelValue']);
     <div class="rounded border border-[var(--border-light)] px-4 py-3 dark:border-[var(--border-dark)]">
         <div class="flex items-center justify-between gap-4">
             <!-- Label -->
-            <span class="text-xs font-bold text-[var(--text-primary-light)] dark:text-[var(--text-primary-dark)] sm:text-sm">
+            <Label :for="props.id" class="text-xs font-bold sm:text-sm">
                 {{ props.label }}
-            </span>
+            </Label>
 
             <!-- Toggle switch -->
             <Switch :id="props.id"
