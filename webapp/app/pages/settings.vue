@@ -1,5 +1,5 @@
 <script setup>
-import { Settings01Icon } from '@hugeicons/core-free-icons';
+import { Settings } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { resetSettings, saveSettings } from '~/composables/useDeviceApi.js';
 import { getCryptoCoins, handleBackendErrors, setBusy, setCryptoCoin, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
@@ -131,7 +131,7 @@ definePageMeta({
             <PageIntroCard :eyebrow="t('pages.settings.eyebrow')"
                 :title="t('pages.settings.title')"
                 :description="t('pages.settings.description')"
-                :icon="Settings01Icon"
+                :icon="Settings"
                 :icon-label="t('nav.settings.label')" />
 
             <!-- Settings form -->

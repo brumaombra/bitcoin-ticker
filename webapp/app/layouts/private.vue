@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { Key01Icon, Settings01Icon, Wifi01Icon } from '@hugeicons/core-free-icons';
+import { KeyRound, Settings, Wifi } from 'lucide-vue-next';
 import AppShell from '~/components/ui/AppShell.vue';
 
 const { t } = useI18n();
@@ -11,19 +11,19 @@ const sidebarItems = computed(() => ([{
     path: '/wifi',
     label: t('nav.wifi.label'),
     description: t('nav.wifi.description'),
-    icon: Wifi01Icon
+    icon: Wifi
 }, {
     id: 'settings',
     path: '/settings',
     label: t('nav.settings.label'),
     description: t('nav.settings.description'),
-    icon: Settings01Icon
+    icon: Settings
 }, {
     id: 'api-key',
     path: '/api-key',
     label: t('nav.apiKey.label'),
     description: t('nav.apiKey.description'),
-    icon: Key01Icon
+    icon: KeyRound
 }]));
 </script>
 

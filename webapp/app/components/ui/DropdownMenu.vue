@@ -1,6 +1,5 @@
 <script setup>
-import { HugeiconsIcon } from '@hugeicons/vue';
-import { Tick01Icon } from '@hugeicons/core-free-icons';
+import { Check } from 'lucide-vue-next';
 
 // Props
 const props = defineProps({
@@ -59,10 +58,7 @@ const handleSelect = optionKey => {
                 <span class="flex-1">{{ option.label }}</span>
 
                 <!-- Selected indicator -->
-                <HugeiconsIcon v-if="isCurrentOption(option)"
-                    :icon="Tick01Icon"
-                    :size="16"
-                    color="currentColor"
+                <Check v-if="isCurrentOption(option)"
                     :stroke-width="1.8"
                     class="h-4 w-4 shrink-0 text-[var(--button-primary-light)] dark:text-[var(--text-primary-dark)]" />
             </button>

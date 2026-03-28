@@ -1,5 +1,5 @@
 <script setup>
-import { Key01Icon } from '@hugeicons/core-free-icons';
+import { KeyRound } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { saveApiKey } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
@@ -66,7 +66,7 @@ definePageMeta({
             <PageIntroCard :eyebrow="t('pages.apiKey.eyebrow')"
                 :title="t('pages.apiKey.title')"
                 :description="t('pages.apiKey.description')"
-                :icon="Key01Icon"
+                :icon="KeyRound"
                 :icon-label="t('pages.apiKey.label')" />
         </div>
 

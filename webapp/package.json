@@ -11,8 +11,6 @@
         "postinstall": "nuxt prepare"
     },
     "dependencies": {
-        "@hugeicons/core-free-icons": "4.0.0",
-        "@hugeicons/vue": "1.0.5",
         "@nuxtjs/i18n": "10.2.3",
         "@vueuse/core": "14.2.1",
         "class-variance-authority": "0.7.1",

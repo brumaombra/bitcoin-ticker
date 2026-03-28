@@ -1,7 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { HugeiconsIcon } from '@hugeicons/vue';
-import { ComputerIcon, Moon02Icon, Sun01Icon } from '@hugeicons/core-free-icons';
+import { Monitor, Moon, Sun } from 'lucide-vue-next';
 import { getThemes, setTheme } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Dropdown from '~/components/ui/Dropdown.vue';
@@ -25,11 +24,11 @@ const themeOptions = computed(() => {
 // Resolve the icon for each theme mode
 const getThemeIcon = theme => {
     if (theme === 'light') {
-        return Sun01Icon;
+        return Sun;
     } else if (theme === 'dark') {
-        return Moon02Icon;
+        return Moon;
     } else {
-        return ComputerIcon;
+        return Monitor;
     }
 };
 
@@ -55,14 +54,14 @@ const handleSelectTheme = theme => {
         <!-- Trigger -->
         <template #trigger>
             <IconButton :aria-label="t('theme.toggleMenu')" @click="toggleDropdown">
-                <HugeiconsIcon :icon="currentThemeIcon" :size="20" color="currentColor" :stroke-width="1.8" class="h-5 w-5" />
+                <component :is="currentThemeIcon" :stroke-width="1.8" class="h-5 w-5" />
             </IconButton>
         </template>
 
         <!-- Theme options -->
         <DropdownMenu :title="t('theme.title')" :options="themeOptions" :current="globalStore.themeMode" @select="handleSelectTheme">
             <template #option-leading="{ option }">
-                <HugeiconsIcon :icon="option.icon" :size="16" color="currentColor" :stroke-width="1.8" class="h-4 w-4" />
+                <component :is="option.icon" :stroke-width="1.8" class="h-4 w-4" />
             </template>
         </DropdownMenu>
     </Dropdown>

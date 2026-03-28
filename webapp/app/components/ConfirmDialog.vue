@@ -1,7 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { HugeiconsIcon } from '@hugeicons/vue';
-import { InformationCircleIcon } from '@hugeicons/core-free-icons';
+import { Info } from 'lucide-vue-next';
 import { Button } from '~/components/shadcn/button';
 import Dialog from '~/components/ui/Dialog.vue';
 
@@ -14,7 +13,7 @@ const props = defineProps({
     cancelText: { type: String, default: '' },
     confirmButtonType: { type: String, default: 'default', validator: value => ['default', 'outline', 'ghost'].includes(value) },
     cancelButtonType: { type: String, default: 'outline', validator: value => ['default', 'outline', 'ghost'].includes(value) },
-    icon: { type: Object, default: () => InformationCircleIcon }
+    icon: { type: [Object, Function], default: () => Info }
 });
 
 // Emits
@@ -44,7 +43,7 @@ const handleConfirmPress = () => {
         <div class="sm:flex sm:items-start">
             <!-- Icon -->
             <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full border border-[var(--border-light)] bg-[var(--bg-selected-light)] sm:mx-0 sm:size-10 dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)]">
-                <HugeiconsIcon :icon="props.icon" :size="24" color="currentColor" :stroke-width="1.8" class="size-6 text-[var(--button-primary-light)] dark:text-[var(--button-primary-dark)]" />
+                <component :is="props.icon" :stroke-width="1.8" class="size-6 text-[var(--button-primary-light)] dark:text-[var(--button-primary-dark)]" />
             </div>
 
             <!-- Message content -->

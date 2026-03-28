@@ -1,6 +1,5 @@
 <script setup>
-import { HugeiconsIcon } from '@hugeicons/vue';
-import { InformationCircleIcon, Wifi01Icon } from '@hugeicons/core-free-icons';
+import { Info, Wifi } from 'lucide-vue-next';
 
 // Props
 const props = defineProps({
@@ -19,7 +18,7 @@ const { t } = useI18n();
                 <div class="flex items-start gap-3">
                     <!-- WiFi status icon -->
                     <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[color:color-mix(in_srgb,var(--button-primary-light)_14%,white)] text-[var(--button-primary-light)] dark:bg-[color:color-mix(in_srgb,var(--button-primary-dark)_18%,black)] dark:text-[var(--button-primary-dark)]">
-                        <HugeiconsIcon :icon="Wifi01Icon" :size="18" color="currentColor" :stroke-width="1.8" class="h-[18px] w-[18px]" />
+                        <Wifi :stroke-width="1.8" class="h-[18px] w-[18px]" />
                     </div>
 
                     <!-- Current network info -->
@@ -35,7 +34,7 @@ const { t } = useI18n();
                 <div class="flex items-start gap-3">
                     <!-- Networks count icon -->
                     <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[color:color-mix(in_srgb,var(--bg-selected-light)_72%,white)] text-[var(--text-primary-light)] dark:bg-[color:color-mix(in_srgb,var(--bg-selected-dark)_78%,black)] dark:text-[var(--text-primary-dark)]">
-                        <HugeiconsIcon :icon="InformationCircleIcon" :size="18" color="currentColor" :stroke-width="1.8" class="h-[18px] w-[18px]" />
+                        <Info :stroke-width="1.8" class="h-[18px] w-[18px]" />
                     </div>
 
                     <!-- Networks count info -->

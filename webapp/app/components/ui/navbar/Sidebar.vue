@@ -1,5 +1,4 @@
 <script setup>
-import { HugeiconsIcon } from '@hugeicons/vue';
 import { useRoute } from 'vue-router';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
 
@@ -66,7 +65,7 @@ const handleClose = () => {
                         <li v-for="item in props.sidebarItems" :key="item.id">
                             <NuxtLink :to="localePath(item.path)" class="group flex items-center gap-3 rounded border px-3 py-2.5 text-sm font-medium transition-all duration-200 sm:gap-4 sm:px-4 sm:py-3" :class="getNavigationItemClasses(item.path)" @click="handleClose">
                                 <!-- Navigation icon -->
-                                <HugeiconsIcon :icon="item.icon" :size="18" color="currentColor" :stroke-width="1.8" :aria-label="item.label" role="img" class="h-4 w-4 shrink-0 opacity-90 transition-opacity duration-200 group-hover:opacity-100 sm:h-5 sm:w-5" />
+                                <component :is="item.icon" :stroke-width="1.8" :aria-label="item.label" role="img" class="h-4 w-4 shrink-0 opacity-90 transition-opacity duration-200 group-hover:opacity-100 sm:h-5 sm:w-5" />
 
                                 <!-- Navigation text -->
                                 <div class="min-w-0">

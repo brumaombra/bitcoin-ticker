@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { HugeiconsIcon } from '@hugeicons/vue';
-import { Menu02Icon } from '@hugeicons/core-free-icons';
+import { Menu } from 'lucide-vue-next';
 import IconButton from '~/components/ui/IconButton.vue';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
 import LanguageSelector from '~/components/ui/LanguageSelector.vue';
@@ -43,7 +42,7 @@ const handleCloseSidebar = () => {
                 <!-- Mobile sidebar toggle -->
                 <div class="xl:hidden">
                     <IconButton :aria-label="t('nav.openNavigation')" @click="handleToggleSidebar">
-                        <HugeiconsIcon :icon="Menu02Icon" :size="20" color="currentColor" :stroke-width="1.8" class="h-5 w-5" />
+                        <Menu :stroke-width="1.8" class="h-5 w-5" />
                     </IconButton>
                 </div>
 

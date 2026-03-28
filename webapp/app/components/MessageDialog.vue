@@ -1,7 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { HugeiconsIcon } from '@hugeicons/vue';
-import { AlertCircleIcon, InformationCircleIcon, Tick01Icon } from '@hugeicons/core-free-icons';
+import { Check, CircleAlert, Info } from 'lucide-vue-next';
 import { Button } from '~/components/shadcn/button';
 import Dialog from '~/components/ui/Dialog.vue';
 
@@ -45,17 +44,17 @@ const closeDialog = () => {
         <div class="sm:flex sm:items-start">
             <!-- Error icon -->
             <div v-if="props.type === 'Error'" class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full border border-red-200 bg-red-50 sm:mx-0 sm:size-10 dark:border-red-900/50 dark:bg-red-950/30">
-                <HugeiconsIcon :icon="AlertCircleIcon" :size="24" color="currentColor" :stroke-width="1.8" class="size-6 text-red-600" />
+                <CircleAlert :stroke-width="1.8" class="size-6 text-red-600" />
             </div>
 
             <!-- Success icon -->
             <div v-if="props.type === 'Success'" class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full border border-green-200 bg-green-50 sm:mx-0 sm:size-10 dark:border-green-900/50 dark:bg-green-950/30">
-                <HugeiconsIcon :icon="Tick01Icon" :size="24" color="currentColor" :stroke-width="1.8" class="size-6 text-green-600" />
+                <Check :stroke-width="1.8" class="size-6 text-green-600" />
             </div>
 
             <!-- Info icon -->
             <div v-if="props.type === 'Info'" class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full border border-[var(--border-light)] bg-[var(--bg-selected-light)] sm:mx-0 sm:size-10 dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)]">
-                <HugeiconsIcon :icon="InformationCircleIcon" :size="24" color="currentColor" :stroke-width="1.8" class="size-6 text-blue-600" />
+                <Info :stroke-width="1.8" class="size-6 text-blue-600" />
             </div>
 
             <!-- Message content -->

@@ -54,13 +54,12 @@ export default defineNuxtConfig({
         ],
         optimizeDeps: {
             include: [
-                '@hugeicons/vue',
-                '@hugeicons/core-free-icons',
                 '@vueuse/core',
                 'clsx',
                 'tailwind-merge',
                 'lucide-vue-next',
-                'reka-ui'
+                'reka-ui',
+                'class-variance-authority'
             ]
         }
     },

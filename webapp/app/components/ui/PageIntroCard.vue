@@ -7,7 +7,7 @@ const props = defineProps({
     eyebrow: { type: String, required: true },
     title: { type: String, required: true },
     description: { type: String, required: true },
-    icon: { type: Object, required: true },
+    icon: { type: [Object, Function], required: true },
     iconLabel: { type: String, default: '' }
 });
 </script>

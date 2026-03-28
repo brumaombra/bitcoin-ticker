@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Wifi01Icon } from '@hugeicons/core-free-icons';
+import { Wifi } from 'lucide-vue-next';
 import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
@@ -103,7 +103,7 @@ const refreshSSIDList = async () => {
                     <!-- Header with icon -->
                     <CardHeaderWithIcon :eyebrow="t('pages.apSetup.eyebrow')"
                         :title="t('pages.apSetup.title')"
-                        :icon="Wifi01Icon"
+                        :icon="Wifi"
                         :icon-label="t('nav.wifi.label')" />
 
                     <!-- Main form -->
