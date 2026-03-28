@@ -16,9 +16,9 @@ const emits = defineEmits(['update:modelValue']);
 
 <template>
     <div class="rounded border border-[var(--border-light)] px-4 py-3 dark:border-[var(--border-dark)]">
-        <div class="flex items-center justify-between gap-4">
+        <div class="flex items-start justify-between gap-4">
             <!-- Label -->
-            <Label :for="props.id" class="text-xs font-bold sm:text-sm">
+            <Label :for="props.id" class="font-bold">
                 {{ props.label }}
             </Label>
 

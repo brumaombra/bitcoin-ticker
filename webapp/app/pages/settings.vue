@@ -124,17 +124,18 @@ definePageMeta({
 </script>
 
 <template>
-    <div class="mx-auto flex w-full flex-col gap-6">
-        <div class="grid gap-6 xl:grid-cols-[minmax(0,320px),minmax(0,1fr)]">
+    <div class="mx-auto flex w-full min-w-0 flex-col gap-6">
+        <div class="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,320px),minmax(0,1fr)]">
             <!-- Page intro -->
-            <PageIntroCard :eyebrow="t('pages.settings.eyebrow')"
+            <PageIntroCard class="min-w-0"
+                :eyebrow="t('pages.settings.eyebrow')"
                 :title="t('pages.settings.title')"
                 :description="t('pages.settings.description')"
                 :icon="Settings"
                 :icon-label="t('nav.settings.label')" />
 
             <!-- Settings form -->
-            <form class="space-y-6" @submit.prevent="handleSavePress">
+            <form class="min-w-0 space-y-6" @submit.prevent="handleSavePress">
                 <!-- Visibility card -->
                 <Card>
                     <!-- Visibility section -->
@@ -262,7 +263,7 @@ definePageMeta({
                 <!-- Action buttons -->
                 <div class="flex flex-col gap-3 md:flex-row md:justify-end">
                     <Button variant="default" type="submit" class="w-full md:w-auto">{{ t('pages.settings.saveAction') }}</Button>
-                    <Button variant="outline" class="w-full md:w-auto" @click="handleResetPress">{{ t('pages.settings.resetAction') }}</Button>
+                    <Button variant="outline" type="button" class="w-full md:w-auto" @click="handleResetPress">{{ t('pages.settings.resetAction') }}</Button>
                 </div>
             </form>
         </div>
