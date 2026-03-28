@@ -24,13 +24,13 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
     data-slot="switch"
     v-bind="forwarded"
     :class="cn(
-      'peer data-[state=checked]:bg-primary data-[state=unchecked]:bg-input focus-visible:border-ring focus-visible:ring-ring/50 dark:data-[state=unchecked]:bg-input/80 inline-flex h-[1.15rem] w-8 shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
+      'peer relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded border border-[var(--border-light)] bg-[var(--button-secondary-light)] transition-all duration-200 outline-none focus-visible:border-[var(--border-hover-light)] focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-60 data-[state=checked]:border-[var(--button-primary-light)] data-[state=checked]:bg-[var(--bg-selected-light)] dark:border-[var(--border-dark)] dark:bg-[var(--button-secondary-dark)] dark:focus-visible:border-[var(--border-hover-dark)] dark:data-[state=checked]:border-[var(--button-primary-dark)] dark:data-[state=checked]:bg-[var(--bg-selected-dark)]',
       props.class,
     )"
   >
     <SwitchThumb
       data-slot="switch-thumb"
-      :class="cn('bg-background dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground pointer-events-none block size-4 rounded-full ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0')"
+      :class="cn('pointer-events-none absolute left-[4px] top-1/2 block h-4 w-4 -translate-y-1/2 rounded-[0.2rem] bg-[var(--text-secondary-light)] ring-0 transition-all duration-200 data-[state=checked]:translate-x-6 data-[state=checked]:bg-[var(--button-primary-light)] dark:bg-[var(--text-secondary-dark)] dark:data-[state=checked]:bg-[var(--button-primary-dark)]')"
     >
       <slot name="thumb" v-bind="slotProps" />
     </SwitchThumb>

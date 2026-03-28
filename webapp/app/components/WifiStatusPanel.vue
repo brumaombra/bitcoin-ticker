@@ -11,10 +11,10 @@ const { t } = useI18n();
 </script>
 
 <template>
-    <div class="overflow-hidden rounded border border-[var(--border-light)] bg-[linear-gradient(135deg,color-mix(in_srgb,var(--bg-selected-light)_86%,white),var(--bg-card-light))] dark:border-[var(--border-dark)] dark:bg-[linear-gradient(135deg,color-mix(in_srgb,var(--bg-selected-dark)_88%,black),var(--bg-card-dark))]">
+    <div class="overflow-hidden rounded border border-[var(--border-light)] bg-[var(--bg-surface-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-surface-dark)]">
         <div class="grid gap-px bg-[var(--border-light)] sm:grid-cols-2 dark:bg-[var(--border-dark)]">
             <!-- Current network status panel -->
-            <div class="bg-[color:color-mix(in_srgb,var(--bg-card-light)_92%,transparent)] p-4 dark:bg-[color:color-mix(in_srgb,var(--bg-card-dark)_92%,transparent)]">
+            <div class="bg-[var(--bg-surface-light)] p-4 dark:bg-[var(--bg-surface-dark)]">
                 <div class="flex items-start gap-3">
                     <!-- WiFi status icon -->
                     <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[color:color-mix(in_srgb,var(--button-primary-light)_14%,white)] text-[var(--button-primary-light)] dark:bg-[color:color-mix(in_srgb,var(--button-primary-dark)_18%,black)] dark:text-[var(--button-primary-dark)]">
@@ -30,7 +30,7 @@ const { t } = useI18n();
             </div>
 
             <!-- Detected networks count panel -->
-            <div class="bg-[color:color-mix(in_srgb,var(--bg-card-light)_92%,transparent)] p-4 dark:bg-[color:color-mix(in_srgb,var(--bg-card-dark)_92%,transparent)]">
+            <div class="bg-[var(--bg-surface-light)] p-4 dark:bg-[var(--bg-surface-dark)]">
                 <div class="flex items-start gap-3">
                     <!-- Networks count icon -->
                     <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[color:color-mix(in_srgb,var(--bg-selected-light)_72%,white)] text-[var(--text-primary-light)] dark:bg-[color:color-mix(in_srgb,var(--bg-selected-dark)_78%,black)] dark:text-[var(--text-primary-dark)]">

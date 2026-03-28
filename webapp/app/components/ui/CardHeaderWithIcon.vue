@@ -11,7 +11,7 @@ const props = defineProps({
 <template>
     <div class="mb-5 flex items-center gap-3 sm:mb-6 sm:gap-4">
         <!-- Leading icon -->
-        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded border border-[var(--border-light)] bg-[var(--bg-selected-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-selected-dark)] sm:h-14 sm:w-14">
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded border border-[var(--border-light)] bg-[var(--bg-surface-light)] dark:border-[var(--border-dark)] dark:bg-[var(--bg-surface-dark)] sm:h-14 sm:w-14">
             <component :is="props.icon"
                 :aria-label="props.iconLabel || undefined"
                 role="img"
