@@ -10,7 +10,7 @@ import CardHeader from '~/components/ui/CardHeader.vue';
 import FormInfoText from '~/components/ui/FormInfoText.vue';
 import PageIntroCard from '~/components/ui/PageIntroCard.vue';
 import SettingToggleItem from '~/components/ui/SettingToggleItem.vue';
-import SliderInput from '~/components/ui/SliderInput.vue';
+import { Slider } from '~/components/shadcn/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/shadcn/select';
 import { Label } from '~/components/shadcn/label';
 
@@ -240,7 +240,7 @@ definePageMeta({
                                 <Label for="matrixIntensity">{{ t('pages.settings.matrixIntensity.label') }}</Label>
                                 <span class="text-sm font-semibold text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ matrixIntensityPercentage }}%</span>
                             </div>
-                            <SliderInput id="matrixIntensity" v-model="settings.matrixIntensity" :min="0" :max="15" />
+                            <Slider :model-value="[settings.matrixIntensity]" :min="0" :max="15" @update:model-value="val => settings.matrixIntensity = val[0]" />
                             <FormInfoText class="mt-2">{{ t('pages.settings.matrixIntensity.note') }}</FormInfoText>
                         </div>
 
@@ -250,7 +250,7 @@ definePageMeta({
                                 <Label for="scrollSpeed">{{ t('pages.settings.scrollSpeed.label') }}</Label>
                                 <span class="text-sm font-semibold text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ scrollSpeedPercentage }}%</span>
                             </div>
-                            <SliderInput id="scrollSpeed" v-model="settings.scrollSpeed" :min="0" :max="15" />
+                            <Slider :model-value="[settings.scrollSpeed]" :min="0" :max="15" @update:model-value="val => settings.scrollSpeed = val[0]" />
                             <FormInfoText class="mt-2">{{ t('pages.settings.scrollSpeed.note') }}</FormInfoText>
                         </div>
                     </div>
