@@ -1,14 +1,14 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Wifi } from 'lucide-vue-next';
+import { Info, Wifi } from 'lucide-vue-next';
 import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
+import { Alert, AlertDescription, AlertTitle } from '~/components/shadcn/alert';
 import { Button } from '~/components/shadcn/button';
 import { Card } from '~/components/shadcn/card';
-import InfoBox from '~/components/ui/InfoBox.vue';
 import { Input } from '~/components/shadcn/input';
 import { Label } from '~/components/shadcn/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/shadcn/select';
@@ -145,9 +145,13 @@ const refreshSSIDList = async () => {
                         </div>
 
                         <!-- Connection note -->
-                        <InfoBox>
-                            {{ t('pages.wifi.note') }}
-                        </InfoBox>
+                        <Alert>
+                            <Info :stroke-width="1.8" />
+                            <AlertTitle>{{ t('common.note') }}</AlertTitle>
+                            <AlertDescription>
+                                {{ t('pages.wifi.note') }}
+                            </AlertDescription>
+                        </Alert>
 
                         <!-- Submit button -->
                         <Button variant="default" type="submit" class="w-full" :disabled="!ssid || !password">{{ t('pages.wifi.connectAction') }}</Button>

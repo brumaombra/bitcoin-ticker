@@ -1,11 +1,11 @@
 <script setup>
-import { KeyRound } from 'lucide-vue-next';
+import { Info, KeyRound } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { saveApiKey } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
+import { Alert, AlertDescription, AlertTitle } from '~/components/shadcn/alert';
 import { Button } from '~/components/shadcn/button';
 import { Card } from '~/components/shadcn/card';
-import InfoBox from '~/components/ui/InfoBox.vue';
 import { Label } from '~/components/shadcn/label';
 import { Input } from '~/components/shadcn/input';
 import PageIntroCard from '~/components/ui/PageIntroCard.vue';
@@ -81,9 +81,13 @@ definePageMeta({
                     </div>
 
                     <!-- API key guidance -->
-                    <InfoBox>
-                        {{ t('pages.apiKey.note') }}
-                    </InfoBox>
+                    <Alert>
+                        <Info :stroke-width="1.8" />
+                        <AlertTitle>{{ t('common.note') }}</AlertTitle>
+                        <AlertDescription>
+                            {{ t('pages.apiKey.note') }}
+                        </AlertDescription>
+                    </Alert>
 
                     <!-- Submit button -->
                     <Button variant="default" type="submit" class="w-full" :disabled="!isFormValid">{{ t('pages.apiKey.saveAction') }}</Button>

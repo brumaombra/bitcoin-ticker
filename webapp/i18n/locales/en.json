@@ -6,6 +6,7 @@
     "common": {
         "close": "Close",
         "cancel": "Cancel",
+        "note": "Note",
         "save": "Save",
         "refresh": "Refresh",
         "refreshing": "Refreshing...",

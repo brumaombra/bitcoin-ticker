@@ -6,6 +6,7 @@
     "common": {
         "close": "Chiudi",
         "cancel": "Annulla",
+        "note": "Nota",
         "save": "Salva",
         "refresh": "Aggiorna",
         "refreshing": "Aggiornamento...",
