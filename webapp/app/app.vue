@@ -4,8 +4,8 @@ import { getNetworks, getSettings } from '~/composables/useDeviceApi.js';
 import { closeConfirmDialog, closeMessage, handleBackendErrors, initializeCryptoCoin, initializeTheme, setBusy, setCryptoCoin } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import Busy from '~/components/Busy.vue';
-import ConfirmDialog from '~/components/ConfirmDialog.vue';
-import MessageDialog from '~/components/MessageDialog.vue';
+import ConfirmDialog from '~/components/ui/ConfirmDialog.vue';
+import MessageDialog from '~/components/ui/MessageDialog.vue';
 
 const globalStore = useGlobalStore();
 const { t } = useI18n();
