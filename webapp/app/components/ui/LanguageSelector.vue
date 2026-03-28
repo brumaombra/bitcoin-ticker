@@ -1,8 +1,9 @@
 <script setup>
 import { computed, ref } from 'vue';
+import { Check } from 'lucide-vue-next';
 import { Button } from '~/components/shadcn/button';
+import { Command, CommandGroup, CommandItem, CommandList } from '~/components/shadcn/command';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/shadcn/popover';
-import DropdownMenu from '~/components/ui/DropdownMenu.vue';
 import EnglishFlag from '~/components/ui/flags/EnglishFlag.vue';
 import ItalianFlag from '~/components/ui/flags/ItalianFlag.vue';
 
@@ -51,11 +52,17 @@ const handleSelectLanguage = async language => {
 
         <!-- Menu -->
         <PopoverContent side="bottom" align="end" :side-offset="8" class="w-44 !p-0">
-            <DropdownMenu :title="t('language.title')" :options="languageOptions" :current="locale" @select="handleSelectLanguage">
-                <template #option-leading="{ option }">
-                    <component :is="getFlagComponent(option.flagCode)" class="h-4 w-[1.35rem] rounded-[2px]" />
-                </template>
-            </DropdownMenu>
+            <Command :model-value="locale">
+                <CommandList>
+                    <CommandGroup :heading="t('language.title')">
+                        <CommandItem v-for="option in languageOptions" :key="option.key" :value="option.key" @select="handleSelectLanguage(option.key)">
+                            <component :is="getFlagComponent(option.flagCode)" class="h-4 w-[1.35rem] rounded-[2px]" />
+                            <span class="flex-1">{{ option.label }}</span>
+                            <Check :stroke-width="1.8" class="ml-auto h-4 w-4 shrink-0" :class="locale === option.key ? 'opacity-100' : 'opacity-0'" />
+                        </CommandItem>
+                    </CommandGroup>
+                </CommandList>
+            </Command>
         </PopoverContent>
     </Popover>
 </template>

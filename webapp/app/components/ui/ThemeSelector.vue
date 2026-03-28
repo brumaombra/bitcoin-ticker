@@ -1,11 +1,11 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Monitor, Moon, Sun } from 'lucide-vue-next';
+import { Check, Monitor, Moon, Sun } from 'lucide-vue-next';
 import { getThemes, setTheme } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import { Button } from '~/components/shadcn/button';
+import { Command, CommandGroup, CommandItem, CommandList } from '~/components/shadcn/command';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/shadcn/popover';
-import DropdownMenu from '~/components/ui/DropdownMenu.vue';
 
 const isOpen = ref(false);
 const globalStore = useGlobalStore();
@@ -54,11 +54,17 @@ const handleSelectTheme = theme => {
 
         <!-- Theme options -->
         <PopoverContent side="bottom" align="end" :side-offset="8" class="w-44 !p-0">
-            <DropdownMenu :title="t('theme.title')" :options="themeOptions" :current="globalStore.themeMode" @select="handleSelectTheme">
-                <template #option-leading="{ option }">
-                    <component :is="option.icon" :stroke-width="1.8" class="h-4 w-4" />
-                </template>
-            </DropdownMenu>
+            <Command :model-value="globalStore.themeMode">
+                <CommandList>
+                    <CommandGroup :heading="t('theme.title')">
+                        <CommandItem v-for="option in themeOptions" :key="option.key" :value="option.key" @select="handleSelectTheme(option.key)">
+                            <component :is="option.icon" :stroke-width="1.8" class="h-4 w-4" />
+                            <span class="flex-1">{{ option.label }}</span>
+                            <Check :stroke-width="1.8" class="ml-auto h-4 w-4 shrink-0" :class="globalStore.themeMode === option.key ? 'opacity-100' : 'opacity-0'" />
+                        </CommandItem>
+                    </CommandGroup>
+                </CommandList>
+            </Command>
         </PopoverContent>
     </Popover>
 </template>
