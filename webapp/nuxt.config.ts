@@ -22,7 +22,8 @@ export default defineNuxtConfig({
     ],
 
     modules: [
-        '@nuxtjs/i18n'
+        '@nuxtjs/i18n',
+        'shadcn-nuxt'
     ],
 
     i18n: {
@@ -40,6 +41,11 @@ export default defineNuxtConfig({
             { code: 'en', name: 'English', language: 'en-US', file: 'en.json' },
             { code: 'it', name: 'Italiano', language: 'it-IT', file: 'it.json' }
         ]
+    },
+
+    shadcn: {
+        prefix: '',
+        componentDir: './app/components/shadcn'
     },
 
     vite: {
