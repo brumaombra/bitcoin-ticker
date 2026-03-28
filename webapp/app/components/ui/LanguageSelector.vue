@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
-import Dropdown from '~/components/ui/Dropdown.vue';
+import { Popover, PopoverContent, PopoverTrigger } from '~/components/shadcn/popover';
 import DropdownMenu from '~/components/ui/DropdownMenu.vue';
 import IconButton from '~/components/ui/IconButton.vue';
 import EnglishFlag from '~/components/ui/flags/EnglishFlag.vue';
@@ -34,11 +34,6 @@ const getFlagComponent = flagCode => {
     }
 };
 
-// Toggle the language menu
-const toggleDropdown = () => {
-    isOpen.value = !isOpen.value;
-};
-
 // Apply a selected language and close the menu
 const handleSelectLanguage = async language => {
     await setLocale(language);
@@ -47,19 +42,20 @@ const handleSelectLanguage = async language => {
 </script>
 
 <template>
-    <Dropdown v-model:open="isOpen" width="w-44">
-        <!-- Trigger -->
-        <template #trigger>
-            <IconButton :aria-label="t('language.toggleMenu')" @click="toggleDropdown">
+    <Popover v-model:open="isOpen">
+        <PopoverTrigger as-child>
+            <IconButton :aria-label="t('language.toggleMenu')">
                 <component :is="getFlagComponent(currentLanguage?.flagCode)" class="h-4 w-[1.35rem] rounded-[2px]" />
             </IconButton>
-        </template>
+        </PopoverTrigger>
 
         <!-- Menu -->
-        <DropdownMenu :title="t('language.title')" :options="languageOptions" :current="locale" @select="handleSelectLanguage">
-            <template #option-leading="{ option }">
-                <component :is="getFlagComponent(option.flagCode)" class="h-4 w-[1.35rem] rounded-[2px]" />
-            </template>
-        </DropdownMenu>
-    </Dropdown>
+        <PopoverContent side="bottom" align="end" :side-offset="8" class="w-44 !p-0 shadow-xl">
+            <DropdownMenu :title="t('language.title')" :options="languageOptions" :current="locale" @select="handleSelectLanguage">
+                <template #option-leading="{ option }">
+                    <component :is="getFlagComponent(option.flagCode)" class="h-4 w-[1.35rem] rounded-[2px]" />
+                </template>
+            </DropdownMenu>
+        </PopoverContent>
+    </Popover>
 </template>

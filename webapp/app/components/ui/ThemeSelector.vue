@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import { Monitor, Moon, Sun } from 'lucide-vue-next';
 import { getThemes, setTheme } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
-import Dropdown from '~/components/ui/Dropdown.vue';
+import { Popover, PopoverContent, PopoverTrigger } from '~/components/shadcn/popover';
 import DropdownMenu from '~/components/ui/DropdownMenu.vue';
 import IconButton from '~/components/ui/IconButton.vue';
 
@@ -37,11 +37,6 @@ const currentThemeIcon = computed(() => {
     return getThemeIcon(globalStore.value.themeMode);
 });
 
-// Toggle the theme menu
-const toggleDropdown = () => {
-    isOpen.value = !isOpen.value;
-};
-
 // Apply the selected theme and close the menu
 const handleSelectTheme = theme => {
     setTheme(theme);
@@ -50,19 +45,20 @@ const handleSelectTheme = theme => {
 </script>
 
 <template>
-    <Dropdown v-model:open="isOpen" width="w-44">
-        <!-- Trigger -->
-        <template #trigger>
-            <IconButton :aria-label="t('theme.toggleMenu')" @click="toggleDropdown">
+    <Popover v-model:open="isOpen">
+        <PopoverTrigger as-child>
+            <IconButton :aria-label="t('theme.toggleMenu')">
                 <component :is="currentThemeIcon" :stroke-width="1.8" class="h-5 w-5" />
             </IconButton>
-        </template>
+        </PopoverTrigger>
 
         <!-- Theme options -->
-        <DropdownMenu :title="t('theme.title')" :options="themeOptions" :current="globalStore.themeMode" @select="handleSelectTheme">
-            <template #option-leading="{ option }">
-                <component :is="option.icon" :stroke-width="1.8" class="h-4 w-4" />
-            </template>
-        </DropdownMenu>
-    </Dropdown>
+        <PopoverContent side="bottom" align="end" :side-offset="8" class="w-44 !p-0 shadow-xl">
+            <DropdownMenu :title="t('theme.title')" :options="themeOptions" :current="globalStore.themeMode" @select="handleSelectTheme">
+                <template #option-leading="{ option }">
+                    <component :is="option.icon" :stroke-width="1.8" class="h-4 w-4" />
+                </template>
+            </DropdownMenu>
+        </PopoverContent>
+    </Popover>
 </template>
