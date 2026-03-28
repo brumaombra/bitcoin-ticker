@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { Menu } from 'lucide-vue-next';
-import IconButton from '~/components/ui/IconButton.vue';
+import { Button } from '~/components/shadcn/button';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
 import LanguageSelector from '~/components/ui/LanguageSelector.vue';
 import ThemeSelector from '~/components/ui/ThemeSelector.vue';
@@ -41,9 +41,9 @@ const handleCloseSidebar = () => {
             <div class="flex items-center gap-3">
                 <!-- Mobile sidebar toggle -->
                 <div class="xl:hidden">
-                    <IconButton :aria-label="t('nav.openNavigation')" @click="handleToggleSidebar">
+                    <Button variant="outline" size="icon" :aria-label="t('nav.openNavigation')" @click="handleToggleSidebar">
                         <Menu :stroke-width="1.8" class="h-5 w-5" />
-                    </IconButton>
+                    </Button>
                 </div>
 
                 <!-- Compact logo -->

@@ -1,8 +1,8 @@
 <script setup>
 import { computed, ref } from 'vue';
+import { Button } from '~/components/shadcn/button';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/shadcn/popover';
 import DropdownMenu from '~/components/ui/DropdownMenu.vue';
-import IconButton from '~/components/ui/IconButton.vue';
 import EnglishFlag from '~/components/ui/flags/EnglishFlag.vue';
 import ItalianFlag from '~/components/ui/flags/ItalianFlag.vue';
 
@@ -44,9 +44,9 @@ const handleSelectLanguage = async language => {
 <template>
     <Popover v-model:open="isOpen">
         <PopoverTrigger as-child>
-            <IconButton :aria-label="t('language.toggleMenu')">
+            <Button variant="outline" size="icon" :aria-label="t('language.toggleMenu')">
                 <component :is="getFlagComponent(currentLanguage?.flagCode)" class="h-4 w-[1.35rem] rounded-[2px]" />
-            </IconButton>
+            </Button>
         </PopoverTrigger>
 
         <!-- Menu -->

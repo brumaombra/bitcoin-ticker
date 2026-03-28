@@ -3,9 +3,9 @@ import { computed, ref } from 'vue';
 import { Monitor, Moon, Sun } from 'lucide-vue-next';
 import { getThemes, setTheme } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
+import { Button } from '~/components/shadcn/button';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/shadcn/popover';
 import DropdownMenu from '~/components/ui/DropdownMenu.vue';
-import IconButton from '~/components/ui/IconButton.vue';
 
 const isOpen = ref(false);
 const globalStore = useGlobalStore();
@@ -47,9 +47,9 @@ const handleSelectTheme = theme => {
 <template>
     <Popover v-model:open="isOpen">
         <PopoverTrigger as-child>
-            <IconButton :aria-label="t('theme.toggleMenu')">
+            <Button variant="outline" size="icon" :aria-label="t('theme.toggleMenu')">
                 <component :is="currentThemeIcon" :stroke-width="1.8" class="h-5 w-5" />
-            </IconButton>
+            </Button>
         </PopoverTrigger>
 
         <!-- Theme options -->
