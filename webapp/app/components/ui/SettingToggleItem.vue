@@ -1,5 +1,5 @@
 <script setup>
-import ToggleSwitch from '~/components/ui/ToggleSwitch.vue';
+import { Switch } from '~/components/shadcn/switch';
 
 // Props
 const props = defineProps({
@@ -22,7 +22,7 @@ const emits = defineEmits(['update:modelValue']);
             </span>
 
             <!-- Toggle switch -->
-            <ToggleSwitch :id="props.id"
+            <Switch :id="props.id"
                 :model-value="props.modelValue"
                 @update:modelValue="emits('update:modelValue', $event)" />
         </div>

@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { HugeiconsIcon } from '@hugeicons/vue';
 import { InformationCircleIcon } from '@hugeicons/core-free-icons';
-import Button from '~/components/ui/Button.vue';
+import { Button } from '~/components/shadcn/button';
 import Dialog from '~/components/ui/Dialog.vue';
 
 // Props
@@ -12,8 +12,8 @@ const props = defineProps({
     message: { type: String, required: true },
     confirmText: { type: String, default: '' },
     cancelText: { type: String, default: '' },
-    confirmButtonType: { type: String, default: 'primary', validator: value => ['primary', 'secondary', 'ghost'].includes(value) },
-    cancelButtonType: { type: String, default: 'secondary', validator: value => ['primary', 'secondary', 'ghost'].includes(value) },
+    confirmButtonType: { type: String, default: 'default', validator: value => ['default', 'outline', 'ghost'].includes(value) },
+    cancelButtonType: { type: String, default: 'outline', validator: value => ['default', 'outline', 'ghost'].includes(value) },
     icon: { type: Object, default: () => InformationCircleIcon }
 });
 
@@ -61,8 +61,8 @@ const handleConfirmPress = () => {
 
         <template #footer>
             <div class="flex w-full flex-col gap-3 sm:w-auto sm:ml-auto sm:flex-row-reverse">
-                <Button :type="props.confirmButtonType" class="w-full sm:w-auto" @click="handleConfirmPress">{{ confirmLabel }}</Button>
-                <Button :type="props.cancelButtonType" class="w-full sm:w-auto" @click="handleCancelPress">{{ cancelLabel }}</Button>
+                <Button :variant="props.confirmButtonType" class="w-full sm:w-auto" @click="handleConfirmPress">{{ confirmLabel }}</Button>
+                <Button :variant="props.cancelButtonType" class="w-full sm:w-auto" @click="handleCancelPress">{{ cancelLabel }}</Button>
             </div>
         </template>
     </Dialog>

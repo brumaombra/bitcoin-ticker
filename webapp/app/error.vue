@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
-import Button from '~/components/ui/Button.vue';
+import { Button } from '~/components/shadcn/button';
 import { Card } from '~/components/shadcn/card';
 import LanguageSelector from '~/components/ui/LanguageSelector.vue';
 import ThemeSelector from '~/components/ui/ThemeSelector.vue';
@@ -83,7 +83,7 @@ const handleBackHome = async () => {
                     <!-- Actions -->
                     <div class="mt-8 flex flex-col gap-3 sm:flex-row">
                         <!-- Back home button -->
-                        <Button type="primary" @click="handleBackHome">
+                        <Button variant="default" @click="handleBackHome">
                             {{ t('errors.backToSetup') }}
                         </Button>
                     </div>

@@ -4,7 +4,7 @@ import { computed } from 'vue';
 import { resetSettings, saveSettings } from '~/composables/useDeviceApi.js';
 import { getCryptoCoins, handleBackendErrors, setBusy, setCryptoCoin, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
-import Button from '~/components/ui/Button.vue';
+import { Button } from '~/components/shadcn/button';
 import { Card } from '~/components/shadcn/card';
 import CardHeader from '~/components/ui/CardHeader.vue';
 import FormInfoText from '~/components/ui/FormInfoText.vue';
@@ -91,11 +91,11 @@ const handleSavePress = () => {
         message: t('pages.settings.saveConfirmMessage'),
         confirmButton: {
             text: t('pages.settings.saveAction'),
-            type: 'primary'
+            type: 'default'
         },
         cancelButton: {
             text: t('common.keepEditing'),
-            type: 'secondary'
+            type: 'outline'
         },
         onConfirm: saveCurrentSettings
     });
@@ -108,11 +108,11 @@ const handleResetPress = () => {
         message: t('pages.settings.resetConfirmMessage'),
         confirmButton: {
             text: t('pages.settings.resetAction'),
-            type: 'primary'
+            type: 'default'
         },
         cancelButton: {
             text: t('common.cancel'),
-            type: 'secondary'
+            type: 'outline'
         },
         onConfirm: resetSavedSettings
     });
@@ -258,8 +258,8 @@ definePageMeta({
 
                 <!-- Action buttons -->
                 <div class="flex flex-col gap-3 md:flex-row md:justify-end">
-                    <Button type="primary" native-type="submit" class="w-full md:w-auto">{{ t('pages.settings.saveAction') }}</Button>
-                    <Button type="secondary" class="w-full md:w-auto" @click="handleResetPress">{{ t('pages.settings.resetAction') }}</Button>
+                    <Button variant="default" type="submit" class="w-full md:w-auto">{{ t('pages.settings.saveAction') }}</Button>
+                    <Button variant="outline" class="w-full md:w-auto" @click="handleResetPress">{{ t('pages.settings.resetAction') }}</Button>
                 </div>
             </form>
         </div>

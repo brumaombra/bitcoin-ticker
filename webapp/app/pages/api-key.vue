@@ -3,7 +3,7 @@ import { Key01Icon } from '@hugeicons/core-free-icons';
 import { computed, ref } from 'vue';
 import { saveApiKey } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
-import Button from '~/components/ui/Button.vue';
+import { Button } from '~/components/shadcn/button';
 import { Card } from '~/components/shadcn/card';
 import InfoBox from '~/components/ui/InfoBox.vue';
 import { Label } from '~/components/shadcn/label';
@@ -43,11 +43,11 @@ const handleSavePress = () => {
         message: t('pages.apiKey.confirmMessage'),
         confirmButton: {
             text: t('pages.apiKey.saveAction'),
-            type: 'primary'
+            type: 'default'
         },
         cancelButton: {
             text: t('common.keepEditing'),
-            type: 'secondary'
+            type: 'outline'
         },
         onConfirm: saveCurrentApiKey
     });
@@ -86,7 +86,7 @@ definePageMeta({
                     </InfoBox>
 
                     <!-- Submit button -->
-                    <Button type="primary" native-type="submit" class="w-full" :disabled="!isFormValid">{{ t('pages.apiKey.saveAction') }}</Button>
+                    <Button variant="default" type="submit" class="w-full" :disabled="!isFormValid">{{ t('pages.apiKey.saveAction') }}</Button>
                 </form>
             </Card>
         </div>

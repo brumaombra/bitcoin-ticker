@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { HugeiconsIcon } from '@hugeicons/vue';
 import { AlertCircleIcon, InformationCircleIcon, Tick01Icon } from '@hugeicons/core-free-icons';
-import Button from '~/components/ui/Button.vue';
+import { Button } from '~/components/shadcn/button';
 import Dialog from '~/components/ui/Dialog.vue';
 
 // Props
@@ -70,7 +70,7 @@ const closeDialog = () => {
         <!-- Dialog footer -->
         <template #footer>
             <div class="sm:flex sm:justify-end">
-                <Button type="secondary" class="w-full sm:w-auto" @click="closeDialog">{{ t('common.close') }}</Button>
+                <Button variant="outline" class="w-full sm:w-auto" @click="closeDialog">{{ t('common.close') }}</Button>
             </div>
         </template>
     </Dialog>

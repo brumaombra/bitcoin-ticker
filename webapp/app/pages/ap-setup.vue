@@ -6,7 +6,7 @@ import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
-import Button from '~/components/ui/Button.vue';
+import { Button } from '~/components/shadcn/button';
 import { Card } from '~/components/shadcn/card';
 import InfoBox from '~/components/ui/InfoBox.vue';
 import { Input } from '~/components/shadcn/input';
@@ -57,11 +57,11 @@ const handleConnectPress = () => {
         message: t('pages.apSetup.connectConfirmMessage', { ssid: ssid.value }),
         confirmButton: {
             text: t('pages.wifi.connectAction'),
-            type: 'primary'
+            type: 'default'
         },
         cancelButton: {
             text: t('common.cancel'),
-            type: 'secondary'
+            type: 'outline'
         },
         onConfirm: connectDeviceToWiFi
     });
@@ -116,7 +116,7 @@ const refreshSSIDList = async () => {
                                 <Label for="ssid">{{ t('pages.wifi.availableNetworks') }}</Label>
 
                                 <!-- Refresh button -->
-                                <Button type="secondary" :disabled="isLoading" @click="refreshSSIDList">
+                                <Button variant="outline" :disabled="isLoading" @click="refreshSSIDList">
                                     <span v-if="isLoading">{{ t('common.refreshing') }}</span>
                                     <span v-else>{{ t('common.refresh') }}</span>
                                 </Button>
@@ -150,7 +150,7 @@ const refreshSSIDList = async () => {
                         </InfoBox>
 
                         <!-- Submit button -->
-                        <Button type="primary" native-type="submit" class="w-full" :disabled="!ssid || !password">{{ t('pages.wifi.connectAction') }}</Button>
+                        <Button variant="default" type="submit" class="w-full" :disabled="!ssid || !password">{{ t('pages.wifi.connectAction') }}</Button>
                     </form>
                 </Card>
             </div>

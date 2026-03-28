@@ -46,11 +46,11 @@ export const useGlobalStore = () => useState('global', () => ({
         onConfirm: null,
         onCancel: null,
         confirmButton: {
-            type: 'primary',
+            type: 'default',
             text: ''
         },
         cancelButton: {
-            type: 'secondary',
+            type: 'outline',
             text: ''
         }
     }
