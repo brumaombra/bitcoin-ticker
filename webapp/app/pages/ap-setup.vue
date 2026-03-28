@@ -1,14 +1,14 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Info, Wifi } from 'lucide-vue-next';
+import { Wifi01Icon } from '@hugeicons/core-free-icons';
 import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
-import { Alert, AlertDescription, AlertTitle } from '~/components/shadcn/alert';
 import { Button } from '~/components/shadcn/button';
-import { Card } from '~/components/shadcn/card';
+import { Card, CardContent, CardHeader, CardFooter } from '~/components/shadcn/card';
+import InfoBox from '~/components/ui/InfoBox.vue';
 import { Input } from '~/components/shadcn/input';
 import { Label } from '~/components/shadcn/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/shadcn/select';
@@ -57,11 +57,11 @@ const handleConnectPress = () => {
         message: t('pages.apSetup.connectConfirmMessage', { ssid: ssid.value }),
         confirmButton: {
             text: t('pages.wifi.connectAction'),
-            type: 'default'
+            type: 'primary'
         },
         cancelButton: {
             text: t('common.cancel'),
-            type: 'outline'
+            type: 'secondary'
         },
         onConfirm: connectDeviceToWiFi
     });
@@ -99,63 +99,65 @@ const refreshSSIDList = async () => {
                 <BrandLogo :brand-name="t('app.title')" />
 
                 <!-- Setup card -->
-                <Card class="px-6">
+                <Card>
                     <!-- Header with icon -->
-                    <CardHeaderWithIcon :eyebrow="t('pages.apSetup.eyebrow')"
-                        :title="t('pages.apSetup.title')"
-                        :icon="Wifi"
-                        :icon-label="t('nav.wifi.label')" />
+                    <CardHeader>
+                        <CardHeaderWithIcon :eyebrow="t('pages.apSetup.eyebrow')"
+                            :title="t('pages.apSetup.title')"
+                            :icon="Wifi01Icon"
+                            :icon-label="t('nav.wifi.label')" />
+                    </CardHeader>
 
-                    <!-- Main form -->
-                    <form class="mt-8 space-y-5" @submit.prevent="handleConnectPress">
-                        <!-- Network selector -->
-                        <div class="space-y-2">
-                            <!-- Network header -->
-                            <div class="flex items-center justify-between gap-3">
-                                <!-- Label -->
-                                <Label for="ssid">{{ t('pages.wifi.availableNetworks') }}</Label>
+                    <!-- Card content -->
+                    <CardContent class="pt-0">
+                        <form class="space-y-5" @submit.prevent="handleConnectPress">
+                            <!-- Network selector -->
+                            <div class="space-y-2">
+                                <!-- Network header -->
+                                <div class="flex items-center justify-between gap-3">
+                                    <!-- Label -->
+                                    <Label for="ssid">{{ t('pages.wifi.availableNetworks') }}</Label>
 
-                                <!-- Refresh button -->
-                                <Button variant="outline" :disabled="isLoading" @click="refreshSSIDList">
-                                    <span v-if="isLoading">{{ t('common.refreshing') }}</span>
-                                    <span v-else>{{ t('common.refresh') }}</span>
-                                </Button>
+                                    <!-- Refresh button -->
+                                    <Button variant="outline" :disabled="isLoading" @click="refreshSSIDList">
+                                        <span v-if="isLoading">{{ t('common.refreshing') }}</span>
+                                        <span v-else>{{ t('common.refresh') }}</span>
+                                    </Button>
+                                </div>
+
+                                <!-- Network select -->
+                                <Select v-model="ssid">
+                                    <SelectTrigger id="ssid" class="w-full">
+                                        <SelectValue :placeholder="t('pages.wifi.networkPlaceholder')" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem v-for="option in networkOptions" :key="option.value" :value="option.value" :text-value="option.label">
+                                            <div class="flex flex-col">
+                                                <span>{{ option.label }}</span>
+                                                <span class="text-xs text-muted-foreground">{{ option.meta }}</span>
+                                            </div>
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
 
-                            <!-- Network select -->
-                            <Select v-model="ssid">
-                                <SelectTrigger id="ssid" class="w-full">
-                                    <SelectValue :placeholder="t('pages.wifi.networkPlaceholder')" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem v-for="option in networkOptions" :key="option.value" :value="option.value" :text-value="option.label">
-                                        <div class="flex flex-col">
-                                            <span>{{ option.label }}</span>
-                                            <span class="text-xs text-muted-foreground">{{ option.meta }}</span>
-                                        </div>
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
+                            <!-- Password input -->
+                            <div class="space-y-2">
+                                <Label for="password">{{ t('pages.wifi.password') }}</Label>
+                                <Input id="password" v-model="password" type="password" :placeholder="t('pages.wifi.passwordPlaceholder')" />
+                            </div>
 
-                        <!-- Password input -->
-                        <div class="space-y-2">
-                            <Label for="password">{{ t('pages.wifi.password') }}</Label>
-                            <Input id="password" v-model="password" type="password" :placeholder="t('pages.wifi.passwordPlaceholder')" />
-                        </div>
-
-                        <!-- Connection note -->
-                        <Alert>
-                            <Info :stroke-width="1.8" />
-                            <AlertTitle>{{ t('common.note') }}</AlertTitle>
-                            <AlertDescription>
+                            <!-- Connection note -->
+                            <InfoBox>
                                 {{ t('pages.wifi.note') }}
-                            </AlertDescription>
-                        </Alert>
+                            </InfoBox>
+                        </form>
+                    </CardContent>
 
-                        <!-- Submit button -->
-                        <Button variant="default" type="submit" class="w-full" :disabled="!ssid || !password">{{ t('pages.wifi.connectAction') }}</Button>
-                    </form>
+                    <!-- Card footer -->
+                    <CardFooter>
+                        <Button variant="default" type="button" class="w-full" :disabled="!ssid || !password" @click="handleConnectPress">{{ t('pages.wifi.connectAction') }}</Button>
+                    </CardFooter>
                 </Card>
             </div>
         </main>

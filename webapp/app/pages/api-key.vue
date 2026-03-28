@@ -5,7 +5,7 @@ import { saveApiKey } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
 import { Alert, AlertDescription, AlertTitle } from '~/components/shadcn/alert';
 import { Button } from '~/components/shadcn/button';
-import { Card } from '~/components/shadcn/card';
+import { Card, CardContent, CardFooter } from '~/components/shadcn/card';
 import { Label } from '~/components/shadcn/label';
 import { Input } from '~/components/shadcn/input';
 import PageIntroCard from '~/components/ui/PageIntroCard.vue';
@@ -72,26 +72,31 @@ definePageMeta({
 
         <!-- API key form -->
         <div class="min-w-0 flex-1">
-            <Card class="px-6">
-                <form class="space-y-5" @submit.prevent="handleSavePress">
-                    <!-- API key input -->
-                    <div class="space-y-2">
-                        <Label for="apiKey">{{ t('pages.apiKey.label') }}</Label>
-                        <Input id="apiKey" v-model="apiKey" type="text" :placeholder="t('pages.apiKey.placeholder')" />
-                    </div>
+            <Card>
+                <!-- Card content -->
+                <CardContent>
+                    <form class="space-y-5" @submit.prevent="handleSavePress">
+                        <!-- API key input -->
+                        <div class="space-y-2">
+                            <Label for="apiKey">{{ t('pages.apiKey.label') }}</Label>
+                            <Input id="apiKey" v-model="apiKey" type="text" :placeholder="t('pages.apiKey.placeholder')" />
+                        </div>
 
-                    <!-- API key guidance -->
-                    <Alert>
-                        <Info :stroke-width="1.8" />
-                        <AlertTitle>{{ t('common.note') }}</AlertTitle>
-                        <AlertDescription>
-                            {{ t('pages.apiKey.note') }}
-                        </AlertDescription>
-                    </Alert>
+                        <!-- API key guidance -->
+                        <Alert>
+                            <Info :stroke-width="1.8" />
+                            <AlertTitle>{{ t('common.note') }}</AlertTitle>
+                            <AlertDescription>
+                                {{ t('pages.apiKey.note') }}
+                            </AlertDescription>
+                        </Alert>
+                    </form>
+                </CardContent>
 
-                    <!-- Submit button -->
-                    <Button variant="default" type="submit" class="w-full" :disabled="!isFormValid">{{ t('pages.apiKey.saveAction') }}</Button>
-                </form>
+                <!-- Card footer -->
+                <CardFooter>
+                    <Button variant="default" type="button" class="w-full" :disabled="!isFormValid" @click="handleSavePress">{{ t('pages.apiKey.saveAction') }}</Button>
+                </CardFooter>
             </Card>
         </div>
     </div>

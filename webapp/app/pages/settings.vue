@@ -5,8 +5,7 @@ import { resetSettings, saveSettings } from '~/composables/useDeviceApi.js';
 import { getCryptoCoins, handleBackendErrors, setBusy, setCryptoCoin, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import { Button } from '~/components/shadcn/button';
-import { Card } from '~/components/shadcn/card';
-import CardHeader from '~/components/ui/CardHeader.vue';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/shadcn/card';
 import FormInfoText from '~/components/ui/FormInfoText.vue';
 import PageIntroCard from '~/components/ui/PageIntroCard.vue';
 import SettingToggleItem from '~/components/ui/SettingToggleItem.vue';
@@ -137,13 +136,15 @@ definePageMeta({
             <!-- Settings form -->
             <form class="space-y-6" @submit.prevent="handleSavePress">
                 <!-- Visibility card -->
-                <Card class="px-6">
+                <Card>
                     <!-- Visibility section -->
-                    <CardHeader :title="t('pages.settings.visibilityTitle')"
-                        :description="t('pages.settings.visibilityDescription')" />
+                    <CardHeader>
+                        <CardTitle>{{ t('pages.settings.visibilityTitle') }}</CardTitle>
+                        <CardDescription>{{ t('pages.settings.visibilityDescription') }}</CardDescription>
+                    </CardHeader>
 
                     <!-- Visibility toggles -->
-                    <div class="space-y-3">
+                    <CardContent class="space-y-3">
                         <!-- Current price -->
                         <SettingToggleItem id="currentPrice"
                             v-model="settings.currentPrice"
@@ -185,17 +186,19 @@ definePageMeta({
                             v-model="settings.volume"
                             :label="t('pages.settings.visibility.volume.label')"
                             :description="t('pages.settings.visibility.volume.description')" />
-                    </div>
+                    </CardContent>
                 </Card>
 
                 <!-- Formatting & motion card -->
-                <Card class="px-6">
+                <Card>
                     <!-- Formatting section -->
-                    <CardHeader :title="t('pages.settings.formattingTitle')"
-                        :description="t('pages.settings.formattingDescription')" />
+                    <CardHeader>
+                        <CardTitle>{{ t('pages.settings.formattingTitle') }}</CardTitle>
+                        <CardDescription>{{ t('pages.settings.formattingDescription') }}</CardDescription>
+                    </CardHeader>
 
                     <!-- Formatting controls -->
-                    <div class="space-y-6">
+                    <CardContent class="space-y-6">
                         <!-- Crypto coin -->
                         <div class="space-y-2">
                             <Label for="cryptoCoin">{{ t('pages.settings.cryptoCoin.label') }}</Label>
@@ -253,7 +256,7 @@ definePageMeta({
                             <Slider :model-value="[settings.scrollSpeed]" :min="0" :max="15" @update:model-value="val => settings.scrollSpeed = val[0]" />
                             <FormInfoText class="mt-2">{{ t('pages.settings.scrollSpeed.note') }}</FormInfoText>
                         </div>
-                    </div>
+                    </CardContent>
                 </Card>
 
                 <!-- Action buttons -->

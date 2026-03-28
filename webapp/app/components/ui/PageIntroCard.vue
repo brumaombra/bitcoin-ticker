@@ -1,5 +1,5 @@
 <script setup>
-import { Card } from '~/components/shadcn/card';
+import { Card, CardContent, CardHeader } from '~/components/shadcn/card';
 import CardHeaderWithIcon from '~/components/ui/CardHeaderWithIcon.vue';
 
 // Props
@@ -13,16 +13,20 @@ const props = defineProps({
 </script>
 
 <template>
-    <Card class="px-6">
+    <Card>
         <!-- Header with icon -->
-        <CardHeaderWithIcon :eyebrow="props.eyebrow"
-            :title="props.title"
-            :icon="props.icon"
-            :icon-label="props.iconLabel" />
+        <CardHeader>
+            <CardHeaderWithIcon :eyebrow="props.eyebrow"
+                :title="props.title"
+                :icon="props.icon"
+                :icon-label="props.iconLabel" />
+        </CardHeader>
 
         <!-- Description -->
-        <p class="text-xs leading-5 text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)] sm:text-sm sm:leading-6">
-            {{ props.description }}
-        </p>
+        <CardContent>
+            <p class="text-xs leading-5 text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)] sm:text-sm sm:leading-6">
+                {{ props.description }}
+            </p>
+        </CardContent>
     </Card>
 </template>

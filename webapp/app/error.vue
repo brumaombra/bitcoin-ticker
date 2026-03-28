@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
 import { Button } from '~/components/shadcn/button';
-import { Card } from '~/components/shadcn/card';
+import { Card, CardContent, CardFooter } from '~/components/shadcn/card';
 import LanguageSelector from '~/components/ui/LanguageSelector.vue';
 import ThemeSelector from '~/components/ui/ThemeSelector.vue';
 
@@ -58,35 +58,38 @@ const handleBackHome = async () => {
                     <ThemeSelector />
                 </div>
 
-                <Card class="px-6">
-                    <!-- Brand -->
-                    <BrandLogo :brand-name="t('app.title')" />
+                <!-- Error card -->
+                <Card>
+                    <CardContent class="space-y-8">
+                        <!-- Brand -->
+                        <BrandLogo :brand-name="t('app.title')" />
 
-                    <!-- Error copy -->
-                    <div class="mt-8">
-                        <!-- Status code -->
-                        <div class="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--button-primary-light)] dark:text-[var(--button-primary-dark)]">
-                            {{ t('errors.label') }} {{ statusCode }}
+                        <!-- Error copy -->
+                        <div>
+                            <!-- Status code -->
+                            <div class="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--button-primary-light)] dark:text-[var(--button-primary-dark)]">
+                                {{ t('errors.label') }} {{ statusCode }}
+                            </div>
+
+                            <!-- Title -->
+                            <h1 class="mt-3 text-2xl font-bold">
+                                {{ title }}
+                            </h1>
+
+                            <!-- Message -->
+                            <p class="mt-4 text-sm leading-7 text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)] sm:text-base">
+                                {{ message }}
+                            </p>
                         </div>
-
-                        <!-- Title -->
-                        <h1 class="mt-3 text-2xl font-bold">
-                            {{ title }}
-                        </h1>
-
-                        <!-- Message -->
-                        <p class="mt-4 text-sm leading-7 text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)] sm:text-base">
-                            {{ message }}
-                        </p>
-                    </div>
+                    </CardContent>
 
                     <!-- Actions -->
-                    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                    <CardFooter class="flex-col gap-3 sm:flex-row">
                         <!-- Back home button -->
                         <Button variant="default" @click="handleBackHome">
                             {{ t('errors.backToSetup') }}
                         </Button>
-                    </div>
+                    </CardFooter>
                 </Card>
             </div>
         </main>
