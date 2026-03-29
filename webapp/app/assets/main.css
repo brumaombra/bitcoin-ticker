@@ -56,9 +56,6 @@ html {
 	--border-dark: #313948;
 	--border-hover-light: #a7b0bd;
 	--border-hover-dark: #5d6878;
-
-	--app-accent-gradient-light: radial-gradient(circle at top left, rgba(247, 147, 26, 0.18), transparent 34%), radial-gradient(circle at bottom right, rgba(247, 147, 26, 0.08), transparent 28%), linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(15, 23, 42, 0.03));
-	--app-accent-gradient-dark: radial-gradient(circle at top left, rgba(247, 147, 26, 0.2), transparent 32%), radial-gradient(circle at bottom right, rgba(247, 147, 26, 0.1), transparent 24%), linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(15, 23, 42, 0));
 	
 	/*********************** Shadcn UI variables ***********************/
 
@@ -104,8 +101,6 @@ html {
 	--button-primary-hover-dark: #df8112;
 	--button-primary-foreground-light: #ffffff;
 	--button-primary-foreground-dark: #1b1307;
-	--app-accent-gradient-light: radial-gradient(circle at top left, rgba(247, 147, 26, 0.18), transparent 34%), radial-gradient(circle at bottom right, rgba(247, 147, 26, 0.08), transparent 28%), linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(15, 23, 42, 0.03));
-	--app-accent-gradient-dark: radial-gradient(circle at top left, rgba(247, 147, 26, 0.2), transparent 32%), radial-gradient(circle at bottom right, rgba(247, 147, 26, 0.1), transparent 24%), linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(15, 23, 42, 0));
 }
 
 /* Kaspa theme */
@@ -116,8 +111,6 @@ html {
 	--button-primary-hover-dark: #5bb7ab;
 	--button-primary-foreground-light: #ffffff;
 	--button-primary-foreground-dark: #06211f;
-	--app-accent-gradient-light: radial-gradient(circle at top left, rgba(111, 199, 186, 0.2), transparent 34%), radial-gradient(circle at bottom right, rgba(111, 199, 186, 0.1), transparent 28%), linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(7, 24, 31, 0.035));
-	--app-accent-gradient-dark: radial-gradient(circle at top left, rgba(111, 199, 186, 0.22), transparent 32%), radial-gradient(circle at bottom right, rgba(111, 199, 186, 0.12), transparent 24%), linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(6, 24, 24, 0));
 }
 
 body {

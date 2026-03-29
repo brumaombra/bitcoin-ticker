@@ -19,6 +19,7 @@ import {
     SidebarRail,
     SidebarTrigger
 } from '~/components/shadcn/sidebar';
+import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
 import CryptoLogo from '~/components/ui/crypto/CryptoLogo.vue';
 import LanguageSelector from '~/components/ui/LanguageSelector.vue';
 import ThemeSelector from '~/components/ui/ThemeSelector.vue';
@@ -110,8 +111,10 @@ const activeItem = computed(() => {
             <SidebarRail />
         </ShadcnSidebar>
 
-        <SidebarInset class="min-h-screen min-w-0 bg-background text-foreground">
-            <header class="sticky top-0 z-20 flex h-16 shrink-0 items-center gap-2 border-b bg-background/80 px-4 backdrop-blur">
+        <SidebarInset class="relative min-h-screen min-w-0 bg-background text-foreground">
+            <BackgroundGrid />
+
+            <header class="sticky top-0 z-20 flex h-16 shrink-0 items-center gap-2 border-b border-sidebar-border bg-sidebar px-4 backdrop-blur">
                 <SidebarTrigger class="-ml-1" />
                 <Separator orientation="vertical" class="mr-2 data-[orientation=vertical]:h-4" />
 
@@ -125,7 +128,7 @@ const activeItem = computed(() => {
                 </div>
             </header>
 
-            <main class="min-w-0 flex-1">
+            <main class="relative z-10 min-w-0 flex-1">
                 <div class="mx-auto flex w-full min-w-0 max-w-6xl flex-col gap-6 p-4 sm:p-6 lg:p-8">
                     <div class="pb-10">
                         <slot />

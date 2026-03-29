@@ -1,14 +1,13 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Wifi01Icon } from '@hugeicons/core-free-icons';
+import { Info, Wifi } from 'lucide-vue-next';
 import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
-import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
+import { Alert, AlertDescription, AlertTitle } from '~/components/shadcn/alert';
 import { Button } from '~/components/shadcn/button';
 import { Card, CardContent, CardHeader, CardFooter } from '~/components/shadcn/card';
-import InfoBox from '~/components/ui/InfoBox.vue';
 import { Input } from '~/components/shadcn/input';
 import { Label } from '~/components/shadcn/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/shadcn/select';
@@ -72,7 +71,10 @@ const refreshSSIDList = async () => {
     isLoading.value = true;
 
     try {
-        globalStore.value.networksList = await getNetworks();
+        const networksData = await getNetworks();
+        globalStore.value.networksList = networksData.networks;
+        globalStore.value.networksCount = networksData.count;
+        globalStore.value.currentNetworkSsid = networksData.currentSsid;
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.wifi.refreshError'), showDialog: true });
     } finally {
@@ -83,11 +85,8 @@ const refreshSSIDList = async () => {
 
 <template>
     <div class="relative min-h-screen bg-[var(--bg-main-light)] text-[var(--text-primary-light)] dark:bg-[var(--bg-main-dark)] dark:text-[var(--text-primary-dark)]">
-        <!-- Background grid -->
-        <BackgroundGrid />
-
         <!-- Main content -->
-        <main class="relative z-10 mx-auto flex min-h-screen w-full max-w-2xl items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
+        <main class="mx-auto flex min-h-screen w-full max-w-2xl items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
             <div class="w-full space-y-6">
                 <!-- Toolbar -->
                 <div class="flex justify-end gap-3">
@@ -104,7 +103,7 @@ const refreshSSIDList = async () => {
                     <CardHeader>
                         <CardHeaderWithIcon :eyebrow="t('pages.apSetup.eyebrow')"
                             :title="t('pages.apSetup.title')"
-                            :icon="Wifi01Icon"
+                            :icon="Wifi"
                             :icon-label="t('nav.wifi.label')" />
                     </CardHeader>
 
@@ -119,7 +118,7 @@ const refreshSSIDList = async () => {
                                     <Label for="ssid">{{ t('pages.wifi.availableNetworks') }}</Label>
 
                                     <!-- Refresh button -->
-                                    <Button variant="outline" :disabled="isLoading" @click="refreshSSIDList">
+                                    <Button type="button" variant="outline" :disabled="isLoading" @click="refreshSSIDList">
                                         <span v-if="isLoading">{{ t('common.refreshing') }}</span>
                                         <span v-else>{{ t('common.refresh') }}</span>
                                     </Button>
@@ -148,9 +147,13 @@ const refreshSSIDList = async () => {
                             </div>
 
                             <!-- Connection note -->
-                            <InfoBox>
-                                {{ t('pages.wifi.note') }}
-                            </InfoBox>
+                            <Alert>
+                                <Info :stroke-width="1.8" />
+                                <AlertTitle>{{ t('common.note') }}</AlertTitle>
+                                <AlertDescription>
+                                    {{ t('pages.wifi.note') }}
+                                </AlertDescription>
+                            </Alert>
                         </form>
                     </CardContent>
 
