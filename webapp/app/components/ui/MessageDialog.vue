@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { Check, CircleAlert, Info } from 'lucide-vue-next';
-import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '~/components/shadcn/alert-dialog';
+import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '~/components/shadcn/alert-dialog';
 import { Button } from '~/components/shadcn/button';
 
 // Props
@@ -69,9 +69,7 @@ const closeDialog = () => {
 
             <!-- Footer -->
             <AlertDialogFooter>
-                <AlertDialogAction as-child>
-                    <Button variant="outline" class="w-full sm:w-auto">{{ t('common.close') }}</Button>
-                </AlertDialogAction>
+                <Button variant="outline" class="w-full sm:w-auto" @click="closeDialog">{{ t('common.close') }}</Button>
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>

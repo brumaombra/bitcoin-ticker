@@ -9,6 +9,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/com
 import FormInfoText from '~/components/ui/FormInfoText.vue';
 import PageIntroCard from '~/components/ui/PageIntroCard.vue';
 import SettingToggleItem from '~/components/ui/SettingToggleItem.vue';
+import BitcoinLogo from '~/components/ui/crypto/BitcoinLogo.vue';
+import KaspaLogo from '~/components/ui/crypto/KaspaLogo.vue';
 import { Slider } from '~/components/shadcn/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/shadcn/select';
 import { Label } from '~/components/shadcn/label';
@@ -36,12 +38,18 @@ const separatorOptions = computed(() => ([
     { value: 'EU', label: '21.000,00', meta: t('pages.settings.formatType.euMeta') }
 ]));
 
+// Resolve the icon for each crypto coin option
+const cryptoCoinLogos = {
+    bitcoin: BitcoinLogo,
+    kaspa: KaspaLogo
+};
+
 // Available crypto coin choices
 const cryptoCoinOptions = computed(() => {
     return cryptoCoins.map(coin => ({
         value: coin.id,
         label: t(`pages.settings.cryptoCoin.${coin.id}Label`),
-        meta: t(`pages.settings.cryptoCoin.${coin.id}Meta`)
+        icon: cryptoCoinLogos[coin.id] || BitcoinLogo
     }));
 });
 
@@ -209,9 +217,9 @@ definePageMeta({
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem v-for="option in cryptoCoinOptions" :key="option.value" :value="option.value" :text-value="option.label">
-                                        <div class="flex flex-col">
+                                        <div class="flex items-center gap-2">
+                                            <component :is="option.icon" class="size-6 shrink-0" />
                                             <span>{{ option.label }}</span>
-                                            <span class="text-xs text-muted-foreground">{{ option.meta }}</span>
                                         </div>
                                     </SelectItem>
                                 </SelectContent>

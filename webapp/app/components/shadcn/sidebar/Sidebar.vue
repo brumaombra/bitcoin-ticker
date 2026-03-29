@@ -18,6 +18,14 @@ const props = withDefaults(defineProps<SidebarProps>(), {
 })
 
 const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+
+function handleMobileSidebarClick(event: MouseEvent) {
+  const target = event.target as HTMLElement | null
+
+  if (target?.closest('[data-sidebar="menu-button"]')) {
+    setOpenMobile(false)
+  }
+}
 </script>
 
 <template>
@@ -45,7 +53,7 @@ const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
         <SheetTitle>Sidebar</SheetTitle>
         <SheetDescription>Displays the mobile sidebar.</SheetDescription>
       </SheetHeader>
-      <div class="flex h-full w-full flex-col">
+      <div class="flex h-full w-full flex-col" @click="handleMobileSidebarClick">
         <slot />
       </div>
     </SheetContent>

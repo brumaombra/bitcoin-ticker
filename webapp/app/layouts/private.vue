@@ -16,7 +16,6 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarProvider,
-    SidebarRail,
     SidebarTrigger
 } from '~/components/shadcn/sidebar';
 import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
@@ -107,8 +106,6 @@ const activeItem = computed(() => {
                     <ThemeSelector />
                 </div>
             </SidebarFooter>
-
-            <SidebarRail />
         </ShadcnSidebar>
 
         <SidebarInset class="relative min-h-screen min-w-0 bg-background text-foreground">
@@ -129,8 +126,8 @@ const activeItem = computed(() => {
             </header>
 
             <main class="relative z-10 min-w-0 flex-1">
-                <div class="mx-auto flex w-full min-w-0 max-w-6xl flex-col gap-6 p-4 sm:p-6 lg:p-8">
-                    <div class="pb-10">
+                <div class="mx-auto flex w-full min-w-0 max-w-6xl flex-col gap-6 p-3 sm:p-6 lg:p-8">
+                    <div class="pb-4">
                         <slot />
                     </div>
                 </div>

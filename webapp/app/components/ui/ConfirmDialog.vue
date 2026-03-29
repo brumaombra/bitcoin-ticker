@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { Info } from 'lucide-vue-next';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '~/components/shadcn/alert-dialog';
+import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '~/components/shadcn/alert-dialog';
 import { Button } from '~/components/shadcn/button';
 
 // Props
@@ -35,11 +35,13 @@ const handleOpenChange = value => {
 const handleCancelPress = () => {
     emits('cancel');
     emits('close');
+    emits('update:show', false);
 };
 
 // Handle confirm press
 const handleConfirmPress = () => {
     emits('confirm');
+    emits('update:show', false);
 };
 </script>
 
@@ -64,12 +66,8 @@ const handleConfirmPress = () => {
 
             <!-- Footer -->
             <AlertDialogFooter>
-                <AlertDialogCancel as-child>
-                    <Button :variant="props.cancelButtonType" class="w-full sm:w-auto" @click="handleCancelPress">{{ cancelLabel }}</Button>
-                </AlertDialogCancel>
-                <AlertDialogAction as-child>
-                    <Button :variant="props.confirmButtonType" class="w-full sm:w-auto" @click="handleConfirmPress">{{ confirmLabel }}</Button>
-                </AlertDialogAction>
+                <Button :variant="props.cancelButtonType" class="w-full sm:w-auto" @click="handleCancelPress">{{ cancelLabel }}</Button>
+                <Button :variant="props.confirmButtonType" class="w-full sm:w-auto" @click="handleConfirmPress">{{ confirmLabel }}</Button>
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>
