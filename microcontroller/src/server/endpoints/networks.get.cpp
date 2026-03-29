@@ -1,11 +1,12 @@
 #include "../server.h"
 #include <ArduinoJson.h>
-#include <ESP8266WiFi.h>
-#include <algorithm>
+#include <WiFi.h>
 #include <vector>
 #include "../../config/config.h"
 
 namespace {
+	constexpr int WIFI_SCAN_FAILED_STATUS = -2;
+
 	// Struct to hold scanned network information
 	struct ScannedNetwork {
 		String ssid;
@@ -15,6 +16,11 @@ namespace {
 		uint8_t quality;
 	};
 
+	// Cache for scanned networks and state tracking
+	std::vector<ScannedNetwork> cachedNetworks;
+	bool scanCallbackRegistered = false;
+	bool wifiScanInProgress = false;
+
 	// Calculate signal quality percentage from RSSI
 	uint8_t calculateSignalQuality(int32_t rssi) {
 		if (rssi <= -100) return 0;
@@ -22,21 +28,89 @@ namespace {
 		return static_cast<uint8_t>(2 * (rssi + 100));
 	}
 
-	// Check if a network with the given SSID already exists in the list
-	bool hasNetworkWithSsid(const std::vector<ScannedNetwork>& networks, const String& ssid) {
-		// Loop the networks and check if any has the same SSID
-		for (const ScannedNetwork& network : networks) {
-			if (network.ssid.equals(ssid)) {
-				return true;
+	// Read the current scan results from the Wi-Fi stack
+	std::vector<ScannedNetwork> collectScannedNetworks(int numNetworks) {
+		std::vector<ScannedNetwork> scannedNetworks;
+		scannedNetworks.reserve(numNetworks);
+
+		// Collect information for each scanned network
+		for (int i = 0; i < numNetworks; i++) {
+			const String ssid = WiFi.SSID(i);
+			if (ssid.length() == 0) {
+				continue;
 			}
+
+			ScannedNetwork network;
+			network.ssid = ssid;
+			network.rssi = WiFi.RSSI(i);
+			network.channel = WiFi.channel(i);
+			network.secured = WiFi.encryptionType(i) != WIFI_AUTH_OPEN;
+			network.quality = calculateSignalQuality(network.rssi);
+			scannedNetworks.push_back(network);
 		}
 
-		// No network with the same SSID found
-		return false;
+		// Clear the scan results from the Wi-Fi stack to free memory
+		WiFi.scanDelete();
+
+		// Return the results
+		return scannedNetworks;
+	}
+
+	// Register the ESP32 Wi-Fi scan done callback once
+	void ensureScanCallbackRegistered() {
+		// If the callback is already registered, do nothing
+		if (scanCallbackRegistered) {
+			return;
+		}
+
+		// Register a callback for when the Wi-Fi scan is complete
+		WiFi.onEvent([](arduino_event_id_t event, arduino_event_info_t info) {
+			// We only care about the scan done event, ignore others
+			if (event != ARDUINO_EVENT_WIFI_SCAN_DONE) {
+				return;
+			}
+
+			// Get the number of networks found and mark the scan as complete
+			const int numNetworks = WiFi.scanComplete();
+			wifiScanInProgress = false;
+
+			// If the scan failed, clear the cache and return
+			if (numNetworks < 0) {
+				cachedNetworks.clear();
+				WiFi.scanDelete();
+				return;
+			}
+
+			// Otherwise, read the scan results and cache them for future requests
+			cachedNetworks = collectScannedNetworks(numNetworks);
+		}, ARDUINO_EVENT_WIFI_SCAN_DONE);
+
+		// Mark the callback as registered to avoid registering it multiple times
+		scanCallbackRegistered = true;
+	}
+
+	// Start an asynchronous Wi-Fi scan to avoid blocking the async_tcp task
+	bool startAsyncScan() {
+		// Ensure the scan done callback is registered before starting a new scan
+		ensureScanCallbackRegistered();
+		if (wifiScanInProgress) {
+			return true;
+		}
+
+		// Start a new asynchronous Wi-Fi scan (non-blocking)
+		WiFi.scanDelete();
+		const int scanStatus = WiFi.scanNetworks(true, true);
+		if (scanStatus == WIFI_SCAN_FAILED_STATUS) {
+			return false;
+		}
+
+		// Mark the scan as in progress and return success
+		wifiScanInProgress = true;
+		return true;
 	}
 
 	// Build the JSON payload from the list of scanned networks
-	JsonDocument buildNetworksData(const std::vector<ScannedNetwork>& networks) {
+	JsonDocument buildNetworksData(const std::vector<ScannedNetwork>& networks, bool scanning) {
 		JsonDocument doc;
 		JsonObject data = doc.to<JsonObject>();
 		JsonArray array = data["networks"].to<JsonArray>();
@@ -54,6 +128,7 @@ namespace {
 		// Add the count
 		data["count"] = networks.size();
 		data["currentSsid"] = WiFi.status() == WL_CONNECTED ? WiFi.SSID() : "";
+		data["scanning"] = scanning;
 
 		// Return the JSON document
 		return doc;
@@ -63,45 +138,14 @@ namespace {
 // Get the list of available Wi-Fi networks
 void setupNetworksGetRoute() {
 	server.on("/api/networks", HTTP_GET, [](AsyncWebServerRequest *request) {
-		WiFi.scanNetworksAsync([request](int numNetworks) {
-			std::vector<ScannedNetwork> scannedNetworks;
-			scannedNetworks.reserve(numNetworks);
+		// Start a new scan if not already in progress, otherwise return the cached results
+		if (!startAsyncScan()) {
+			sendErrorResponse(request, 500, "wifi_scan_failed", "Unable to scan Wi-Fi networks.");
+			return;
+		}
 
-			// Add the networks to the JSON object
-			for (int i = 0; i < numNetworks; i++) {
-				// Skip networks with empty SSID
-				const String ssid = WiFi.SSID(i);
-				if (ssid.length() == 0) {
-					continue;
-				}
-
-				// Add the network to the list
-				ScannedNetwork network;
-				network.ssid = ssid;
-				network.rssi = WiFi.RSSI(i);
-				network.channel = WiFi.channel(i);
-				network.secured = WiFi.encryptionType(i) != ENC_TYPE_NONE;
-				network.quality = calculateSignalQuality(network.rssi);
-				scannedNetworks.push_back(network);
-			}
-
-			// Sort strongest networks first
-			std::sort(scannedNetworks.begin(), scannedNetworks.end(), [](const ScannedNetwork& left, const ScannedNetwork& right) {
-				if (left.rssi != right.rssi) return left.rssi > right.rssi;
-				return left.ssid < right.ssid;
-			});
-
-			// Remove duplicate SSIDs
-			std::vector<ScannedNetwork> uniqueNetworks;
-			uniqueNetworks.reserve(scannedNetworks.size());
-			for (const ScannedNetwork& network : scannedNetworks) {
-				if (hasNetworkWithSsid(uniqueNetworks, network.ssid)) continue;
-				uniqueNetworks.push_back(network);
-			}
-
-			// Send the JSON object
-			JsonDocument doc = buildNetworksData(uniqueNetworks);
-			sendSuccessResponse(request, 200, &doc);
-		});
+		// Build the JSON response with the current scan results
+		JsonDocument doc = buildNetworksData(cachedNetworks, wifiScanInProgress);
+		sendSuccessResponse(request, 200, &doc);
 	});
 }

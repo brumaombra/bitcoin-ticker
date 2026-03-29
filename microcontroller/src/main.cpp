@@ -9,6 +9,7 @@
 void setup() {
 	initSerial(); // Init serial
 	setupEEPROM(); // Setup EEPROM
+	initializeWiFiStack(); // Init ESP32 TCP/IP stack before AsyncWebServer starts
 	setupServer(); // Setup server
 	manageWiFiConnection(); // Manage WiFi connection
 	setupWebClient(); // Setup web client

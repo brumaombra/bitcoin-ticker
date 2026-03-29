@@ -4,14 +4,15 @@
 #include <MD_MAX72xx.h>
 #include <MD_Parola.h>
 #include <ESPAsyncWebServer.h>
+#include <WiFi.h>
 
 // Hardware configuration
 constexpr MD_MAX72XX::moduleType_t HARDWARE_TYPE = MD_MAX72XX::FC16_HW;
 constexpr uint16_t BUF_SIZE = 250; // Buffer length
 constexpr uint8_t MAX_DEVICES = 16; // Number of modules
-constexpr uint8_t CLK_PIN = D5; // SCK
-constexpr uint8_t DATA_PIN = D7; // MOSI
-constexpr uint8_t CS_PIN = D8; // SS
+constexpr uint8_t CLK_PIN = 18; // SCK
+constexpr uint8_t DATA_PIN = 23; // MOSI
+constexpr uint8_t CS_PIN = 5; // SS
 
 // Numeric formatting type
 enum formatNum { FORMAT_US = 1, FORMAT_EU = 2 };

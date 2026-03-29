@@ -1,7 +1,7 @@
 #include "api.h"
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include <ESP8266HTTPClient.h>
+#include <HTTPClient.h>
 #include <StreamUtils.h>
 #include <WiFiClientSecure.h>
 #include "../config/config.h"

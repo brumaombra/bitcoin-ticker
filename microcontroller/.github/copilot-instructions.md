@@ -1,6 +1,6 @@
 # Project Overview
 
-This repository contains ESP8266 firmware for a Bitcoin ticker built around an LED matrix display and an embedded web UI.
+This repository contains ESP32 firmware for a Bitcoin ticker built around an LED matrix display and an embedded web UI.
 
 ## Structure
 

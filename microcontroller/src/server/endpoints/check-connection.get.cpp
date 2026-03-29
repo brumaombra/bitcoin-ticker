@@ -1,6 +1,6 @@
 #include "../server.h"
 #include <ArduinoJson.h>
-#include <ESP8266WiFi.h>
+#include <WiFi.h>
 #include "../../config/config.h"
 
 namespace {
