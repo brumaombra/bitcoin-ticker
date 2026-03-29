@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <ESP8266HTTPClient.h>
+#include <StreamUtils.h>
 #include <WiFiClientSecure.h>
 #include "../config/config.h"
 #include "../matrix/matrix.h"
@@ -36,7 +37,7 @@ static bool fetchMarketData(JsonDocument &doc) {
 	// Filter just the needed data to save memory and speed up parsing
 	JsonDocument filter;
 	filter[0]["current_price"] = true;
-	filter[0]["price_change_percentage_24h"] = true;
+	filter[0]["price_change_percentage_24h_in_currency"] = true;
 	filter[0]["price_change_24h"] = true;
 	filter[0]["market_cap"] = true;
 	filter[0]["high_24h"] = true;
@@ -60,13 +61,9 @@ static bool fetchMarketData(JsonDocument &doc) {
 		return false;
 	}
 
-	// Print the raw response
-	const String responseBody = http.getString();
-	printLogln("CoinGecko raw response:");
-	printLogln(responseBody);
-
-	// Parse the response
-	DeserializationError error = deserializeJson(doc, responseBody, DeserializationOption::Filter(filter));
+	// CoinGecko can reply using chunked transfer encoding, decode it before JSON parsing
+	ChunkDecodingStream decodedStream(http.getStream());
+	DeserializationError error = deserializeJson(doc, decodedStream, DeserializationOption::Filter(filter));
 	if (error) {
 		printLogfln("Error while parsing the JSON: %s", error.c_str());
 		http.end();
