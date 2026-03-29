@@ -12,7 +12,7 @@ const props = defineProps<{
     data-slot="alert-dialog-footer"
     :class="
       cn(
-        'flex flex-col-reverse gap-2 sm:flex-row sm:justify-end',
+        'flex flex-col-reverse gap-3 border-t border-border px-5 py-4 sm:flex-row-reverse sm:px-6',
         props.class,
       )
     "
