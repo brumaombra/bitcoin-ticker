@@ -209,7 +209,7 @@ definePageMeta({
                     <!-- Formatting controls -->
                     <CardContent class="space-y-6">
                         <!-- Crypto coin -->
-                        <div class="space-y-2">
+                        <div class="space-y-3">
                             <Label for="cryptoCoin">{{ t('pages.settings.cryptoCoin.label') }}</Label>
                             <Select v-model="settings.cryptoCoin" @update:modelValue="setCryptoCoin">
                                 <SelectTrigger id="cryptoCoin" class="w-full">
@@ -228,7 +228,7 @@ definePageMeta({
                         </div>
 
                         <!-- Thousands separator format -->
-                        <div class="space-y-2">
+                        <div class="space-y-3">
                             <Label for="selectFormatType">{{ t('pages.settings.formatType.label') }}</Label>
                             <Select v-model="settings.formatType">
                                 <SelectTrigger id="selectFormatType" class="w-full">
@@ -247,7 +247,7 @@ definePageMeta({
                         </div>
 
                         <!-- Matrix intensity -->
-                        <div class="space-y-2">
+                        <div class="space-y-4">
                             <div class="flex items-center justify-between">
                                 <Label for="matrixIntensity">{{ t('pages.settings.matrixIntensity.label') }}</Label>
                                 <span class="text-sm font-semibold text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ matrixIntensityPercentage }}%</span>
@@ -257,7 +257,7 @@ definePageMeta({
                         </div>
 
                         <!-- Scroll speed -->
-                        <div class="space-y-2">
+                        <div class="space-y-4">
                             <div class="flex items-center justify-between">
                                 <Label for="scrollSpeed">{{ t('pages.settings.scrollSpeed.label') }}</Label>
                                 <span class="text-sm font-semibold text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ scrollSpeedPercentage }}%</span>

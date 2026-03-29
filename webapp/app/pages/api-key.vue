@@ -77,7 +77,7 @@ definePageMeta({
                 <CardContent>
                     <form class="space-y-5" @submit.prevent="handleSavePress">
                         <!-- API key input -->
-                        <div class="space-y-2">
+                        <div class="space-y-3">
                             <Label for="apiKey">{{ t('pages.apiKey.label') }}</Label>
                             <Input id="apiKey" v-model="apiKey" type="text" :placeholder="t('pages.apiKey.placeholder')" />
                         </div>

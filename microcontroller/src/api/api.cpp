@@ -9,7 +9,7 @@
 
 WiFiClientSecure clientSecure; // HTTPS client
 HTTPClient http; // HTTP object
-const char marketApiUrlTemplate[] = "https://api.coingecko.com/api/v3/coins/%s?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false"; // Market API URL template
+const char marketApiUrlTemplate[] = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=%s&price_change_percentage=24h"; // Market API URL template
 const char apiKeyHeaderName[] = "x-cg-demo-api-key"; // CoinGecko demo key header
 
 namespace {
@@ -35,15 +35,15 @@ static bool fetchMarketData(JsonDocument &doc) {
 
 	// Filter just the needed data to save memory and speed up parsing
 	JsonDocument filter;
-	filter["market_data"]["current_price"]["usd"] = true;
-	filter["market_data"]["price_change_percentage_24h"] = true;
-	filter["market_data"]["price_change_24h"] = true;
-	filter["market_data"]["market_cap"]["usd"] = true;
-	filter["market_data"]["high_24h"]["usd"] = true;
-	filter["market_data"]["low_24h"]["usd"] = true;
-	filter["market_data"]["total_volume"]["usd"] = true;
-	filter["market_data"]["ath"]["usd"] = true;
-	filter["market_data"]["atl"]["usd"] = true;
+	filter[0]["current_price"] = true;
+	filter[0]["price_change_percentage_24h"] = true;
+	filter[0]["price_change_24h"] = true;
+	filter[0]["market_cap"] = true;
+	filter[0]["high_24h"] = true;
+	filter[0]["low_24h"] = true;
+	filter[0]["total_volume"] = true;
+	filter[0]["ath"] = true;
+	filter[0]["atl"] = true;
 
 	// Prepare the HTTP request
 	snprintf(url, sizeof(url), marketApiUrlTemplate, getSelectedCryptoApiId());
@@ -60,8 +60,13 @@ static bool fetchMarketData(JsonDocument &doc) {
 		return false;
 	}
 
+	// Print the raw response
+	const String responseBody = http.getString();
+	printLogln("CoinGecko raw response:");
+	printLogln(responseBody);
+
 	// Parse the response
-	DeserializationError error = deserializeJson(doc, http.getStream(), DeserializationOption::Filter(filter));
+	DeserializationError error = deserializeJson(doc, responseBody, DeserializationOption::Filter(filter));
 	if (error) {
 		printLogfln("Error while parsing the JSON: %s", error.c_str());
 		http.end();
@@ -81,26 +86,26 @@ void setupWebClient() {
 
 // Parse the fetched market data into the runtime model
 static bool parseMarketData(JsonDocument& marketDoc, MarketTickerData& marketData) {
-	JsonVariant marketDataJson = marketDoc["market_data"];
+	JsonVariant marketDataJson = marketDoc[0];
 
 	// Check if the market data is present
 	if (marketDataJson.isNull()) {
-		printLogfln("Missing CoinGecko market data");
+		printLogfln("Missing CoinGecko market data item");
 		return false;
 	}
 
 	// Parse the market data into the output model
 	marketData.tickerLabel = getSelectedCryptoTickerLabel();
-	marketData.currentPrice = marketDataJson["current_price"]["usd"].as<double>();
-	marketData.priceChangePercentage24h = marketDataJson["price_change_percentage_24h"].as<double>();
+	marketData.currentPrice = marketDataJson["current_price"].as<double>();
+	marketData.priceChangePercentage24h = marketDataJson["price_change_percentage_24h_in_currency"].as<double>();
 	marketData.priceChange24h = marketDataJson["price_change_24h"].as<double>();
-	marketData.marketCap = marketDataJson["market_cap"]["usd"].as<double>();
-	marketData.dailyHigh = marketDataJson["high_24h"]["usd"].as<double>();
-	marketData.dailyLow = marketDataJson["low_24h"]["usd"].as<double>();
-	marketData.yearHigh = marketDataJson["ath"]["usd"].as<double>();
-	marketData.yearLow = marketDataJson["atl"]["usd"].as<double>();
+	marketData.marketCap = marketDataJson["market_cap"].as<double>();
+	marketData.dailyHigh = marketDataJson["high_24h"].as<double>();
+	marketData.dailyLow = marketDataJson["low_24h"].as<double>();
+	marketData.yearHigh = marketDataJson["ath"].as<double>();
+	marketData.yearLow = marketDataJson["atl"].as<double>();
 	marketData.openPrice = marketData.currentPrice - marketData.priceChange24h;
-	marketData.volume = marketDataJson["total_volume"]["usd"].as<double>();
+	marketData.volume = marketDataJson["total_volume"].as<double>();
 
 	// Mark as successful
 	return true;

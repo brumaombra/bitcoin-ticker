@@ -114,9 +114,9 @@ definePageMeta({
                             :scanned-networks-count="scannedNetworksCount" />
 
                         <!-- Network selector -->
-                        <div class="space-y-2">
+                        <div class="space-y-3">
                             <!-- Network header -->
-                            <div class="flex items-center justify-between gap-3">
+                            <div class="flex items-end justify-between gap-3">
                                 <!-- Label -->
                                 <Label for="ssid">{{ t('pages.wifi.availableNetworks') }}</Label>
 
@@ -144,7 +144,7 @@ definePageMeta({
                         </div>
 
                         <!-- Password input -->
-                        <div class="space-y-2">
+                        <div class="space-y-3">
                             <Label for="password">{{ t('pages.wifi.password') }}</Label>
                             <Input id="password" v-model="password" type="password" :placeholder="t('pages.wifi.passwordPlaceholder')" />
                         </div>
