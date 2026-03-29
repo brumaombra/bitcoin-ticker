@@ -4,6 +4,7 @@ import { Info, Wifi } from 'lucide-vue-next';
 import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
+import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
 import { Alert, AlertDescription, AlertTitle } from '~/components/shadcn/alert';
 import { Button } from '~/components/shadcn/button';
@@ -85,8 +86,10 @@ const refreshSSIDList = async () => {
 
 <template>
     <div class="relative min-h-screen bg-[var(--bg-main-light)] text-[var(--text-primary-light)] dark:bg-[var(--bg-main-dark)] dark:text-[var(--text-primary-dark)]">
+        <BackgroundGrid />
+
         <!-- Main content -->
-        <main class="mx-auto flex min-h-screen w-full max-w-2xl items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
+        <main class="relative z-10 mx-auto flex min-h-screen w-full max-w-2xl items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
             <div class="w-full space-y-6">
                 <!-- Toolbar -->
                 <div class="flex justify-end gap-3">

@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
 import BrandLogo from '~/components/ui/BrandLogo.vue';
 import { Button } from '~/components/shadcn/button';
 import { Card, CardContent, CardFooter } from '~/components/shadcn/card';
@@ -45,8 +46,11 @@ const handleBackHome = async () => {
 
 <template>
     <div class="relative min-h-screen bg-[var(--bg-main-light)] text-[var(--text-primary-light)] dark:bg-[var(--bg-main-dark)] dark:text-[var(--text-primary-dark)]">
+        <!-- Decorative background grid -->
+        <BackgroundGrid />
+
         <!-- Main content -->
-        <main class="mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
+        <main class="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
             <div class="w-full max-w-xl">
                 <!-- Toolbar -->
                 <div class="mb-4 flex justify-end gap-3">
@@ -80,7 +84,7 @@ const handleBackHome = async () => {
                     </CardContent>
 
                     <!-- Actions -->
-                    <CardFooter class="flex-col gap-3 sm:flex-row">
+                    <CardFooter class="items-start flex-col gap-3 sm:flex-row sm:items-center">
                         <!-- Back home button -->
                         <Button variant="default" @click="handleBackHome">
                             {{ t('errors.backToSetup') }}
