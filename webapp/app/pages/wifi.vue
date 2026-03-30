@@ -7,8 +7,8 @@ import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import { Alert, AlertDescription, AlertTitle } from '~/components/shadcn/alert';
 import { Button } from '~/components/shadcn/button';
 import { Card, CardContent, CardFooter } from '~/components/shadcn/card';
+import { Field, FieldGroup, FieldLabel } from '~/components/shadcn/field';
 import { Input } from '~/components/shadcn/input';
-import { Label } from '~/components/shadcn/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/shadcn/select';
 import PageIntroCard from '~/components/ui/PageIntroCard.vue';
 import WifiStatusPanel from '~/components/WifiStatusPanel.vue';
@@ -108,55 +108,57 @@ definePageMeta({
             <Card>
                 <!-- Card content -->
                 <CardContent>
-                    <form class="space-y-5" @submit.prevent="handleConnectPress">
-                        <!-- Current network summary -->
-                        <WifiStatusPanel :current-network-label="currentNetworkLabel"
-                            :scanned-networks-count="scannedNetworksCount" />
+                    <form @submit.prevent="handleConnectPress">
+                        <FieldGroup>
+                            <!-- Current network summary -->
+                            <WifiStatusPanel :current-network-label="currentNetworkLabel"
+                                :scanned-networks-count="scannedNetworksCount" />
 
-                        <!-- Network selector -->
-                        <div class="space-y-3">
-                            <!-- Network header -->
-                            <div class="flex items-end justify-between gap-3">
-                                <!-- Label -->
-                                <Label for="ssid">{{ t('pages.wifi.availableNetworks') }}</Label>
+                            <!-- Network selector -->
+                            <Field>
+                                <!-- Network header -->
+                                <div class="flex items-end justify-between gap-3">
+                                    <!-- Label -->
+                                    <FieldLabel for="ssid">{{ t('pages.wifi.availableNetworks') }}</FieldLabel>
 
-                                <!-- Refresh button -->
-                                <Button variant="outline" :disabled="isLoading" @click="refreshSSIDList">
-                                    <span v-if="isLoading">{{ t('common.refreshing') }}</span>
-                                    <span v-else>{{ t('common.refresh') }}</span>
-                                </Button>
-                            </div>
+                                    <!-- Refresh button -->
+                                    <Button variant="outline" :disabled="isLoading" @click="refreshSSIDList">
+                                        <span v-if="isLoading">{{ t('common.refreshing') }}</span>
+                                        <span v-else>{{ t('common.refresh') }}</span>
+                                    </Button>
+                                </div>
 
-                            <!-- Network select -->
-                            <Select v-model="ssid">
-                                <SelectTrigger id="ssid" class="w-full">
-                                    <SelectValue :placeholder="t('pages.wifi.networkPlaceholder')" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem v-for="option in networkOptions" :key="option.value" :value="option.value" :text-value="option.label">
-                                        <div class="flex flex-col">
-                                            <span>{{ option.label }}</span>
-                                            <span class="text-xs text-muted-foreground">{{ option.meta }}</span>
-                                        </div>
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
+                                <!-- Network select -->
+                                <Select v-model="ssid">
+                                    <SelectTrigger id="ssid" class="w-full">
+                                        <SelectValue :placeholder="t('pages.wifi.networkPlaceholder')" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem v-for="option in networkOptions" :key="option.value" :value="option.value" :text-value="option.label">
+                                            <div class="flex flex-col">
+                                                <span>{{ option.label }}</span>
+                                                <span class="text-xs text-muted-foreground">{{ option.meta }}</span>
+                                            </div>
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </Field>
 
-                        <!-- Password input -->
-                        <div class="space-y-3">
-                            <Label for="password">{{ t('pages.wifi.password') }}</Label>
-                            <Input id="password" v-model="password" type="password" :placeholder="t('pages.wifi.passwordPlaceholder')" />
-                        </div>
+                            <!-- Password input -->
+                            <Field>
+                                <FieldLabel for="password">{{ t('pages.wifi.password') }}</FieldLabel>
+                                <Input id="password" v-model="password" type="password" :placeholder="t('pages.wifi.passwordPlaceholder')" />
+                            </Field>
 
-                        <!-- Connection note -->
-                        <Alert>
-                            <Info :stroke-width="1.8" />
-                            <AlertTitle>{{ t('common.note') }}</AlertTitle>
-                            <AlertDescription>
-                                {{ t('pages.wifi.note') }}
-                            </AlertDescription>
-                        </Alert>
+                            <!-- Connection note -->
+                            <Alert>
+                                <Info :stroke-width="1.8" />
+                                <AlertTitle>{{ t('common.note') }}</AlertTitle>
+                                <AlertDescription>
+                                    {{ t('pages.wifi.note') }}
+                                </AlertDescription>
+                            </Alert>
+                        </FieldGroup>
                     </form>
                 </CardContent>
 

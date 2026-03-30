@@ -6,14 +6,13 @@ import { getCryptoCoins, handleBackendErrors, setBusy, setCryptoCoin, showConfir
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import { Button } from '~/components/shadcn/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/shadcn/card';
-import FormInfoText from '~/components/ui/FormInfoText.vue';
+import { Field, FieldDescription, FieldGroup, FieldLabel } from '~/components/shadcn/field';
 import PageIntroCard from '~/components/ui/PageIntroCard.vue';
 import SettingToggleItem from '~/components/ui/SettingToggleItem.vue';
 import BitcoinLogo from '~/components/ui/crypto/BitcoinLogo.vue';
 import KaspaLogo from '~/components/ui/crypto/KaspaLogo.vue';
 import { Slider } from '~/components/shadcn/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/shadcn/select';
-import { Label } from '~/components/shadcn/label';
 
 const globalStore = useGlobalStore();
 const cryptoCoins = getCryptoCoins();
@@ -207,64 +206,66 @@ definePageMeta({
                     </CardHeader>
 
                     <!-- Formatting controls -->
-                    <CardContent class="space-y-6">
-                        <!-- Crypto coin -->
-                        <div class="space-y-3">
-                            <Label for="cryptoCoin">{{ t('pages.settings.cryptoCoin.label') }}</Label>
-                            <Select v-model="settings.cryptoCoin" @update:modelValue="setCryptoCoin">
-                                <SelectTrigger id="cryptoCoin" class="w-full">
-                                    <SelectValue :placeholder="t('pages.settings.cryptoCoin.placeholder')" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem v-for="option in cryptoCoinOptions" :key="option.value" :value="option.value" :text-value="option.label">
-                                        <div class="flex items-center gap-2">
-                                            <component :is="option.icon" class="size-6 shrink-0" />
-                                            <span>{{ option.label }}</span>
-                                        </div>
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <FormInfoText>{{ t('pages.settings.cryptoCoin.note') }}</FormInfoText>
-                        </div>
+                    <CardContent>
+                        <FieldGroup>
+                            <!-- Crypto coin -->
+                            <Field>
+                                <FieldLabel for="cryptoCoin">{{ t('pages.settings.cryptoCoin.label') }}</FieldLabel>
+                                <Select v-model="settings.cryptoCoin" @update:modelValue="setCryptoCoin">
+                                    <SelectTrigger id="cryptoCoin" class="w-full">
+                                        <SelectValue :placeholder="t('pages.settings.cryptoCoin.placeholder')" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem v-for="option in cryptoCoinOptions" :key="option.value" :value="option.value" :text-value="option.label">
+                                            <div class="flex items-center gap-2">
+                                                <component :is="option.icon" class="size-6 shrink-0" />
+                                                <span>{{ option.label }}</span>
+                                            </div>
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <FieldDescription>{{ t('pages.settings.cryptoCoin.note') }}</FieldDescription>
+                            </Field>
 
-                        <!-- Thousands separator format -->
-                        <div class="space-y-3">
-                            <Label for="selectFormatType">{{ t('pages.settings.formatType.label') }}</Label>
-                            <Select v-model="settings.formatType">
-                                <SelectTrigger id="selectFormatType" class="w-full">
-                                    <SelectValue :placeholder="t('pages.settings.formatType.placeholder')" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem v-for="option in separatorOptions" :key="option.value" :value="option.value" :text-value="option.label">
-                                        <div class="flex flex-col">
-                                            <span>{{ option.label }}</span>
-                                            <span class="text-xs text-muted-foreground">{{ option.meta }}</span>
-                                        </div>
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <FormInfoText>{{ t('pages.settings.formatType.note') }}</FormInfoText>
-                        </div>
+                            <!-- Thousands separator format -->
+                            <Field>
+                                <FieldLabel for="selectFormatType">{{ t('pages.settings.formatType.label') }}</FieldLabel>
+                                <Select v-model="settings.formatType">
+                                    <SelectTrigger id="selectFormatType" class="w-full">
+                                        <SelectValue :placeholder="t('pages.settings.formatType.placeholder')" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem v-for="option in separatorOptions" :key="option.value" :value="option.value" :text-value="option.label">
+                                            <div class="flex flex-col">
+                                                <span>{{ option.label }}</span>
+                                                <span class="text-xs text-muted-foreground">{{ option.meta }}</span>
+                                            </div>
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <FieldDescription>{{ t('pages.settings.formatType.note') }}</FieldDescription>
+                            </Field>
 
-                        <!-- Matrix intensity -->
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <Label for="matrixIntensity">{{ t('pages.settings.matrixIntensity.label') }}</Label>
-                                <span class="text-sm font-semibold text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ matrixIntensityPercentage }}%</span>
-                            </div>
-                            <Slider :model-value="[settings.matrixIntensity]" :min="0" :max="15" @update:model-value="val => settings.matrixIntensity = val[0]" />
-                            <FormInfoText class="mt-2">{{ t('pages.settings.matrixIntensity.note') }}</FormInfoText>
-                        </div>
+                            <!-- Matrix intensity -->
+                            <Field class="gap-4">
+                                <div class="flex items-center justify-between">
+                                    <FieldLabel for="matrixIntensity">{{ t('pages.settings.matrixIntensity.label') }}</FieldLabel>
+                                    <span class="text-sm font-semibold text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ matrixIntensityPercentage }}%</span>
+                                </div>
+                                <Slider id="matrixIntensity" :model-value="[settings.matrixIntensity]" :min="0" :max="15" @update:model-value="val => settings.matrixIntensity = val[0]" />
+                                <FieldDescription>{{ t('pages.settings.matrixIntensity.note') }}</FieldDescription>
+                            </Field>
 
-                        <!-- Scroll speed -->
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <Label for="scrollSpeed">{{ t('pages.settings.scrollSpeed.label') }}</Label>
-                                <span class="text-sm font-semibold text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ scrollSpeedPercentage }}%</span>
-                            </div>
-                            <Slider :model-value="[settings.scrollSpeed]" :min="0" :max="15" @update:model-value="val => settings.scrollSpeed = val[0]" />
-                            <FormInfoText class="mt-2">{{ t('pages.settings.scrollSpeed.note') }}</FormInfoText>
-                        </div>
+                            <!-- Scroll speed -->
+                            <Field class="gap-4">
+                                <div class="flex items-center justify-between">
+                                    <FieldLabel for="scrollSpeed">{{ t('pages.settings.scrollSpeed.label') }}</FieldLabel>
+                                    <span class="text-sm font-semibold text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ scrollSpeedPercentage }}%</span>
+                                </div>
+                                <Slider id="scrollSpeed" :model-value="[settings.scrollSpeed]" :min="0" :max="15" @update:model-value="val => settings.scrollSpeed = val[0]" />
+                                <FieldDescription>{{ t('pages.settings.scrollSpeed.note') }}</FieldDescription>
+                            </Field>
+                        </FieldGroup>
                     </CardContent>
                 </Card>
 

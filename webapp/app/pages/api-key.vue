@@ -6,7 +6,7 @@ import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/
 import { Alert, AlertDescription, AlertTitle } from '~/components/shadcn/alert';
 import { Button } from '~/components/shadcn/button';
 import { Card, CardContent, CardFooter } from '~/components/shadcn/card';
-import { Label } from '~/components/shadcn/label';
+import { Field, FieldGroup, FieldLabel } from '~/components/shadcn/field';
 import { Input } from '~/components/shadcn/input';
 import PageIntroCard from '~/components/ui/PageIntroCard.vue';
 
@@ -75,21 +75,23 @@ definePageMeta({
             <Card>
                 <!-- Card content -->
                 <CardContent>
-                    <form class="space-y-5" @submit.prevent="handleSavePress">
-                        <!-- API key input -->
-                        <div class="space-y-3">
-                            <Label for="apiKey">{{ t('pages.apiKey.label') }}</Label>
-                            <Input id="apiKey" v-model="apiKey" type="text" :placeholder="t('pages.apiKey.placeholder')" />
-                        </div>
+                    <form @submit.prevent="handleSavePress">
+                        <FieldGroup>
+                            <!-- API key input -->
+                            <Field>
+                                <FieldLabel for="apiKey">{{ t('pages.apiKey.label') }}</FieldLabel>
+                                <Input id="apiKey" v-model="apiKey" type="text" :placeholder="t('pages.apiKey.placeholder')" />
+                            </Field>
 
-                        <!-- API key guidance -->
-                        <Alert>
-                            <Info :stroke-width="1.8" />
-                            <AlertTitle>{{ t('common.note') }}</AlertTitle>
-                            <AlertDescription>
-                                {{ t('pages.apiKey.note') }}
-                            </AlertDescription>
-                        </Alert>
+                            <!-- API key guidance -->
+                            <Alert>
+                                <Info :stroke-width="1.8" />
+                                <AlertTitle>{{ t('common.note') }}</AlertTitle>
+                                <AlertDescription>
+                                    {{ t('pages.apiKey.note') }}
+                                </AlertDescription>
+                            </Alert>
+                        </FieldGroup>
                     </form>
                 </CardContent>
 
