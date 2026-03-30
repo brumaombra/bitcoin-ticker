@@ -1,11 +1,11 @@
 <script setup>
 import { computed } from 'vue';
-import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
-import BrandLogo from '~/components/ui/BrandLogo.vue';
-import { Button } from '~/components/shadcn/button';
-import { Card, CardContent, CardFooter } from '~/components/shadcn/card';
-import LanguageSelector from '~/components/ui/LanguageSelector.vue';
-import ThemeSelector from '~/components/ui/ThemeSelector.vue';
+import BackgroundGrid from '~/components/BackgroundGrid.vue';
+import BrandLogo from '~/components/BrandLogo.vue';
+import { Button } from '~/components/ui/button';
+import { Card, CardContent, CardFooter } from '~/components/ui/card';
+import LanguageSelector from '~/components/LanguageSelector.vue';
+import ThemeSelector from '~/components/ThemeSelector.vue';
 
 // Props
 const props = defineProps({

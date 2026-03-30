@@ -2,7 +2,7 @@
 import type { HTMLAttributes } from "vue"
 import { computed } from "vue"
 import { cn } from "@/lib/utils"
-import { Skeleton } from '@/components/shadcn/skeleton'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const props = defineProps<{
   showIcon?: boolean
@@ -33,3 +33,4 @@ const width = computed(() => {
     />
   </div>
 </template>
+

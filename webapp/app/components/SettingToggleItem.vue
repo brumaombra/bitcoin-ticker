@@ -1,6 +1,6 @@
 <script setup>
-import { Label } from '~/components/shadcn/label';
-import { Switch } from '~/components/shadcn/switch';
+import { Label } from '~/components/ui/label';
+import { Switch } from '~/components/ui/switch';
 
 // Props
 const props = defineProps({

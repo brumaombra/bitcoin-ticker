@@ -1,5 +1,5 @@
 <script setup>
-import CryptoLogo from '~/components/ui/crypto/CryptoLogo.vue';
+import CryptoLogo from '~/components/crypto/CryptoLogo.vue';
 
 // Props
 const props = defineProps({

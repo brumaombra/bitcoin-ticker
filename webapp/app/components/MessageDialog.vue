@@ -1,8 +1,8 @@
 <script setup>
 import { computed } from 'vue';
 import { Check, CircleAlert, Info } from 'lucide-vue-next';
-import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '~/components/shadcn/alert-dialog';
-import { Button } from '~/components/shadcn/button';
+import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '~/components/ui/alert-dialog';
+import { Button } from '~/components/ui/button';
 
 // Props
 const props = defineProps({

@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { KeyRound, Settings, Wifi } from 'lucide-vue-next';
-import { Separator } from '~/components/shadcn/separator';
+import { Separator } from '~/components/ui/separator';
 import {
     Sidebar as ShadcnSidebar,
     SidebarContent,
@@ -17,11 +17,11 @@ import {
     SidebarMenuItem,
     SidebarProvider,
     SidebarTrigger
-} from '~/components/shadcn/sidebar';
-import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
-import CryptoLogo from '~/components/ui/crypto/CryptoLogo.vue';
-import LanguageSelector from '~/components/ui/LanguageSelector.vue';
-import ThemeSelector from '~/components/ui/ThemeSelector.vue';
+} from '~/components/ui/sidebar';
+import BackgroundGrid from '~/components/BackgroundGrid.vue';
+import CryptoLogo from '~/components/crypto/CryptoLogo.vue';
+import LanguageSelector from '~/components/LanguageSelector.vue';
+import ThemeSelector from '~/components/ThemeSelector.vue';
 
 const { t } = useI18n();
 const route = useRoute();

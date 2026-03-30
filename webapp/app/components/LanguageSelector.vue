@@ -1,11 +1,11 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Check } from 'lucide-vue-next';
-import { Button } from '~/components/shadcn/button';
-import { Command, CommandGroup, CommandItem, CommandList } from '~/components/shadcn/command';
-import { Popover, PopoverContent, PopoverTrigger } from '~/components/shadcn/popover';
-import EnglishFlag from '~/components/ui/flags/EnglishFlag.vue';
-import ItalianFlag from '~/components/ui/flags/ItalianFlag.vue';
+import { Button } from '~/components/ui/button';
+import { Command, CommandGroup, CommandItem, CommandList } from '~/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
+import EnglishFlag from '~/components/flags/EnglishFlag.vue';
+import ItalianFlag from '~/components/flags/ItalianFlag.vue';
 
 const isOpen = ref(false);
 const { locale, locales, setLocale, t } = useI18n();

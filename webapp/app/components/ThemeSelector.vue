@@ -3,9 +3,9 @@ import { computed, ref } from 'vue';
 import { Check, Monitor, Moon, Sun } from 'lucide-vue-next';
 import { getThemes, setTheme } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
-import { Button } from '~/components/shadcn/button';
-import { Command, CommandGroup, CommandItem, CommandList } from '~/components/shadcn/command';
-import { Popover, PopoverContent, PopoverTrigger } from '~/components/shadcn/popover';
+import { Button } from '~/components/ui/button';
+import { Command, CommandGroup, CommandItem, CommandList } from '~/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
 
 const isOpen = ref(false);
 const globalStore = useGlobalStore();

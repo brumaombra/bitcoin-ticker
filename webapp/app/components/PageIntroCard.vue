@@ -1,6 +1,6 @@
 <script setup>
-import { Card, CardContent, CardHeader } from '~/components/shadcn/card';
-import CardHeaderWithIcon from '~/components/ui/CardHeaderWithIcon.vue';
+import { Card, CardContent, CardHeader } from '~/components/ui/card';
+import CardHeaderWithIcon from '~/components/CardHeaderWithIcon.vue';
 
 // Props
 const props = defineProps({

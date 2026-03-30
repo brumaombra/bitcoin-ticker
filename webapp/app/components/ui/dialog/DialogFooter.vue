@@ -2,7 +2,7 @@
 import type { HTMLAttributes } from "vue"
 import { DialogClose } from "reka-ui"
 import { cn } from "@/lib/utils"
-import { Button } from '@/components/shadcn/button'
+import { Button } from '@/components/ui/button'
 
 const props = withDefaults(defineProps<{
   class?: HTMLAttributes["class"]
@@ -25,3 +25,4 @@ const props = withDefaults(defineProps<{
     </DialogClose>
   </div>
 </template>
+

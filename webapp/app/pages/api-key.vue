@@ -3,12 +3,12 @@ import { Info, KeyRound } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { saveApiKey } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
-import { Alert, AlertDescription, AlertTitle } from '~/components/shadcn/alert';
-import { Button } from '~/components/shadcn/button';
-import { Card, CardContent, CardFooter } from '~/components/shadcn/card';
-import { Field, FieldGroup, FieldLabel } from '~/components/shadcn/field';
-import { Input } from '~/components/shadcn/input';
-import PageIntroCard from '~/components/ui/PageIntroCard.vue';
+import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert';
+import { Button } from '~/components/ui/button';
+import { Card, CardContent, CardFooter } from '~/components/ui/card';
+import { Field, FieldGroup, FieldLabel } from '~/components/ui/field';
+import { Input } from '~/components/ui/input';
+import PageIntroCard from '~/components/PageIntroCard.vue';
 
 const apiKey = ref('');
 const { t } = useI18n();

@@ -1,7 +1,7 @@
 <script setup>
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
-import BitcoinLogo from '~/components/ui/crypto/BitcoinLogo.vue';
-import KaspaLogo from '~/components/ui/crypto/KaspaLogo.vue';
+import BitcoinLogo from '~/components/crypto/BitcoinLogo.vue';
+import KaspaLogo from '~/components/crypto/KaspaLogo.vue';
 
 const globalStore = useGlobalStore();
 </script>
