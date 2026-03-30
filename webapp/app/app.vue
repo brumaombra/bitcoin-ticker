@@ -3,7 +3,7 @@ import { onMounted } from 'vue';
 import { getNetworks, getSettings } from '~/composables/useDeviceApi.js';
 import { closeConfirmDialog, closeMessage, handleBackendErrors, initializeCryptoCoin, initializeTheme, setBusy, setCryptoCoin } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
-import Busy from '~/components/Busy.vue';
+import { Busy } from '~/components/shadcn/busy';
 import ConfirmDialog from '~/components/ui/ConfirmDialog.vue';
 import MessageDialog from '~/components/ui/MessageDialog.vue';
 
@@ -13,7 +13,7 @@ const { t } = useI18n();
 // Load the initial device data once for the app shell
 const loadInitialData = async () => {
     // Exit if already loaded
-    if (globalStore.value.settingsLoaded && globalStore.value.networksList.length > 0) {
+    if (globalStore.value.settingsLoaded && globalStore.value.networksList?.length > 0) {
         setCryptoCoin(globalStore.value.settings.cryptoCoin || 'bitcoin');
         return;
     }
@@ -22,7 +22,7 @@ const loadInitialData = async () => {
         setBusy(true); // Busy on
 
         // Load the networks if needed
-        if (!globalStore.value.networksList.length) {
+        if (!globalStore.value.networksList?.length) {
             const networksData = await getNetworks();
             globalStore.value.networksList = networksData.networks;
             globalStore.value.networksCount = networksData.count;
@@ -102,6 +102,6 @@ onMounted(async () => {
             @update:show="value => { if (!value) closeConfirmDialog(); }" />
 
         <!-- Global busy overlay -->
-        <Busy :show="globalStore.busy" />
+        <Busy :show="globalStore.busy" :label="t('common.syncingDevice')" />
     </div>
 </template>
