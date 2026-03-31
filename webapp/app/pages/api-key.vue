@@ -3,15 +3,17 @@ import { Info, KeyRound } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { saveApiKey } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
+import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert';
 import { Button } from '~/components/ui/button';
 import { Card, CardContent, CardFooter } from '~/components/ui/card';
-import { Field, FieldGroup, FieldLabel } from '~/components/ui/field';
+import { Field, FieldGroup } from '~/components/ui/field';
 import { Input } from '~/components/ui/input';
 import PageIntroCard from '~/components/PageIntroCard.vue';
 
-const apiKey = ref('');
 const { t } = useI18n();
+const globalStore = useGlobalStore();
+const apiKey = ref('');
 
 // Require a non-empty API key before submitting
 const isFormValid = computed(() => {
@@ -23,6 +25,7 @@ const saveCurrentApiKey = async () => {
     try {
         setBusy(true);
         await saveApiKey(apiKey.value);
+        globalStore.value.config.apiKey = apiKey.value;
         showMessage({
             type: 'Success',
             title: t('dialogs.successTitle'),

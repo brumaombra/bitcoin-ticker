@@ -37,6 +37,7 @@ const connectDeviceToWiFi = async () => {
     try {
         setBusy(true);
         const result = await connectToWiFi(ssid.value, password.value);
+        globalStore.value.config.ssid = result.ssid || ssid.value;
         showMessage({
             type: 'Info',
             title: t('pages.wifi.connectedTitle'),
@@ -75,7 +76,6 @@ const refreshSSIDList = async () => {
         const networksData = await getNetworks();
         globalStore.value.networksList = networksData.networks;
         globalStore.value.networksCount = networksData.count;
-        globalStore.value.currentNetworkSsid = networksData.currentSsid;
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.wifi.refreshError'), showDialog: true });
     } finally {

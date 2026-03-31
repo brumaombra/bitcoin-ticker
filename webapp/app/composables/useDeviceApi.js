@@ -23,9 +23,9 @@ export const getNetworks = async () => {
     return response.data || {};
 };
 
-// Fetch the saved device settings
-export const getSettings = async () => {
-    const url = buildDeviceUrl('/api/settings');
+// Fetch the full saved device config
+export const getConfig = async () => {
+    const url = buildDeviceUrl('/api/config');
     const response = await $fetch(url);
     return response.data || {};
 };

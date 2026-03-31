@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from 'vue';
-import { getNetworks, getSettings } from '~/composables/useDeviceApi.js';
+import { getConfig, getNetworks } from '~/composables/useDeviceApi.js';
 import { closeConfirmDialog, closeMessage, handleBackendErrors, initializeCryptoCoin, initializeTheme, setBusy, setCryptoCoin } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import { Busy } from '~/components/ui/busy';
@@ -13,8 +13,8 @@ const { t } = useI18n();
 // Load the initial device data once for the app shell
 const loadInitialData = async () => {
     // Exit if already loaded
-    if (globalStore.value.settingsLoaded && globalStore.value.networksList?.length > 0) {
-        setCryptoCoin(globalStore.value.settings.cryptoCoin || 'bitcoin');
+    if (globalStore.value.configLoaded && globalStore.value.networksList?.length > 0) {
+        setCryptoCoin(globalStore.value.config.cryptoCoin || 'bitcoin');
         return;
     }
 
@@ -26,23 +26,22 @@ const loadInitialData = async () => {
             const networksData = await getNetworks();
             globalStore.value.networksList = networksData.networks;
             globalStore.value.networksCount = networksData.count;
-            globalStore.value.currentNetworkSsid = networksData.currentSsid;
         }
 
-        // Load the settings if needed
-        if (!globalStore.value.settingsLoaded) {
-            // Get the settings
-            const settings = await getSettings();
+        // Load the config if needed
+        if (!globalStore.value.configLoaded) {
+            // Get the full device config
+            const config = await getConfig();
 
-            // Merge with the existing settings
-            globalStore.value.settings = {
-                ...globalStore.value.settings,
-                ...settings
+            // Merge with the existing config
+            globalStore.value.config = {
+                ...globalStore.value.config,
+                ...config
             };
 
             // Set the crypto coin in the global store
-            setCryptoCoin(globalStore.value.settings.cryptoCoin || 'bitcoin');
-            globalStore.value.settingsLoaded = true;
+            setCryptoCoin(globalStore.value.config.cryptoCoin || 'bitcoin');
+            globalStore.value.configLoaded = true;
         }
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('app.loadError'), showDialog: true });

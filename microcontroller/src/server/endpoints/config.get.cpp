@@ -2,17 +2,14 @@
 #include <ArduinoJson.h>
 #include "../../eeprom/eeprom.h"
 
-// Get the current settings
-void setupSettingsGetRoute() {
-	server.on("/api/settings", HTTP_GET, [](AsyncWebServerRequest *request) {
-		// Get the current config
-		const DeviceConfig& config = getDeviceConfig();
-
-		// Build the JSON response
+namespace {
+	// Build the JSON response for the full device config snapshot
+	JsonDocument buildConfigData(const DeviceConfig& config) {
+        // Build the JSON response
 		JsonDocument doc;
 		JsonObject data = doc.to<JsonObject>();
 
-		// Add the settings to the JSON object
+        // Add all config fields to the response
 		data["currentPrice"] = config.currentPriceVisible;
 		data["priceChange"] = config.priceChangeVisible;
 		data["marketCap"] = config.marketCapVisible;
@@ -24,8 +21,19 @@ void setupSettingsGetRoute() {
 		data["formatType"] = config.formatType == FORMAT_US ? "US" : "EU";
 		data["matrixIntensity"] = config.matrixIntensity;
 		data["scrollSpeed"] = config.scrollSpeed;
-		
-		// Send the JSON object
+		data["ssid"] = config.ssid;
+		data["apiKey"] = config.apiKey;
+
+        // Return the built JSON document
+		return doc;
+	}
+}
+
+// Get the full current device config
+void setupConfigGetRoute() {
+	server.on("/api/config", HTTP_GET, [](AsyncWebServerRequest *request) {
+		const DeviceConfig& config = getDeviceConfig();
+		JsonDocument doc = buildConfigData(config);
 		sendSuccessResponse(request, 200, &doc);
 	});
 }

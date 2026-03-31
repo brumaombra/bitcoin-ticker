@@ -18,17 +18,17 @@ const globalStore = useGlobalStore();
 const cryptoCoins = getCryptoCoins();
 const { t } = useI18n();
 
-// Reactive settings payload
-const settings = computed(() => globalStore.value.settings);
+// Reactive config payload
+const config = computed(() => globalStore.value.config);
 
 // Slider percentage for matrix intensity
 const matrixIntensityPercentage = computed(() => {
-    return Math.round((Number(settings.value?.matrixIntensity ?? 0) / 15) * 100);
+    return Math.round((Number(config.value?.matrixIntensity ?? 0) / 15) * 100);
 });
 
 // Slider percentage for scroll speed
 const scrollSpeedPercentage = computed(() => {
-    return Math.round((Number(settings.value?.scrollSpeed ?? 0) / 15) * 100);
+    return Math.round((Number(config.value?.scrollSpeed ?? 0) / 15) * 100);
 });
 
 // Available thousands separator formats
@@ -54,13 +54,14 @@ const cryptoCoinOptions = computed(() => {
 
 // Save the current settings payload
 const saveCurrentSettings = async () => {
-    if (!settings.value) {
+    // If no config, there is nothing to save
+    if (!config.value) {
         return;
     }
 
     try {
         setBusy(true);
-        await saveSettings(settings.value);
+        await saveSettings(config.value);
         showMessage({
             type: 'Success',
             title: t('dialogs.successTitle'),
@@ -155,43 +156,43 @@ definePageMeta({
                     <CardContent class="space-y-3">
                         <!-- Current price -->
                         <SettingToggleItem id="currentPrice"
-                            v-model="settings.currentPrice"
+                            v-model="config.currentPrice"
                             :label="t('pages.settings.visibility.currentPrice.label')"
                             :description="t('pages.settings.visibility.currentPrice.description')" />
 
                         <!-- Price change -->
                         <SettingToggleItem id="priceChange"
-                            v-model="settings.priceChange"
+                            v-model="config.priceChange"
                             :label="t('pages.settings.visibility.priceChange.label')"
                             :description="t('pages.settings.visibility.priceChange.description')" />
 
                         <!-- Market cap -->
                         <SettingToggleItem id="marketCap"
-                            v-model="settings.marketCap"
+                            v-model="config.marketCap"
                             :label="t('pages.settings.visibility.marketCap.label')"
                             :description="t('pages.settings.visibility.marketCap.description')" />
 
                         <!-- 24h volume -->
                         <SettingToggleItem id="dailyHighLow"
-                            v-model="settings.dailyHighLow"
+                            v-model="config.dailyHighLow"
                             :label="t('pages.settings.visibility.dailyHighLow.label')"
                             :description="t('pages.settings.visibility.dailyHighLow.description')" />
 
                         <!-- 24h high / low -->
                         <SettingToggleItem id="yearHighLow"
-                            v-model="settings.yearHighLow"
+                            v-model="config.yearHighLow"
                             :label="t('pages.settings.visibility.yearHighLow.label')"
                             :description="t('pages.settings.visibility.yearHighLow.description')" />
 
                         <!-- Open price -->
                         <SettingToggleItem id="openPrice"
-                            v-model="settings.openPrice"
+                            v-model="config.openPrice"
                             :label="t('pages.settings.visibility.openPrice.label')"
                             :description="t('pages.settings.visibility.openPrice.description')" />
 
                         <!-- Volume -->
                         <SettingToggleItem id="volume"
-                            v-model="settings.volume"
+                            v-model="config.volume"
                             :label="t('pages.settings.visibility.volume.label')"
                             :description="t('pages.settings.visibility.volume.description')" />
                     </CardContent>
@@ -211,7 +212,7 @@ definePageMeta({
                             <!-- Crypto coin -->
                             <Field>
                                 <FieldLabel for="cryptoCoin">{{ t('pages.settings.cryptoCoin.label') }}</FieldLabel>
-                                <Select v-model="settings.cryptoCoin" @update:modelValue="setCryptoCoin">
+                                <Select v-model="config.cryptoCoin" @update:modelValue="setCryptoCoin">
                                     <SelectTrigger id="cryptoCoin" class="w-full">
                                         <SelectValue :placeholder="t('pages.settings.cryptoCoin.placeholder')" />
                                     </SelectTrigger>
@@ -230,7 +231,7 @@ definePageMeta({
                             <!-- Thousands separator format -->
                             <Field>
                                 <FieldLabel for="selectFormatType">{{ t('pages.settings.formatType.label') }}</FieldLabel>
-                                <Select v-model="settings.formatType">
+                                <Select v-model="config.formatType">
                                     <SelectTrigger id="selectFormatType" class="w-full">
                                         <SelectValue :placeholder="t('pages.settings.formatType.placeholder')" />
                                     </SelectTrigger>
@@ -252,7 +253,7 @@ definePageMeta({
                                     <FieldLabel for="matrixIntensity">{{ t('pages.settings.matrixIntensity.label') }}</FieldLabel>
                                     <span class="text-sm font-semibold text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ matrixIntensityPercentage }}%</span>
                                 </div>
-                                <Slider id="matrixIntensity" :model-value="[settings.matrixIntensity]" :min="0" :max="15" @update:model-value="val => settings.matrixIntensity = val[0]" />
+                                <Slider id="matrixIntensity" :model-value="[config.matrixIntensity]" :min="0" :max="15" @update:model-value="val => config.matrixIntensity = val[0]" />
                                 <FieldDescription>{{ t('pages.settings.matrixIntensity.note') }}</FieldDescription>
                             </Field>
 
@@ -262,7 +263,7 @@ definePageMeta({
                                     <FieldLabel for="scrollSpeed">{{ t('pages.settings.scrollSpeed.label') }}</FieldLabel>
                                     <span class="text-sm font-semibold text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ scrollSpeedPercentage }}%</span>
                                 </div>
-                                <Slider id="scrollSpeed" :model-value="[settings.scrollSpeed]" :min="0" :max="15" @update:model-value="val => settings.scrollSpeed = val[0]" />
+                                <Slider id="scrollSpeed" :model-value="[config.scrollSpeed]" :min="0" :max="15" @update:model-value="val => config.scrollSpeed = val[0]" />
                                 <FieldDescription>{{ t('pages.settings.scrollSpeed.note') }}</FieldDescription>
                             </Field>
                         </FieldGroup>

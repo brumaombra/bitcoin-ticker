@@ -127,7 +127,6 @@ namespace {
 
 		// Add the count
 		data["count"] = networks.size();
-		data["currentSsid"] = WiFi.status() == WL_CONNECTED ? WiFi.SSID() : "";
 		data["scanning"] = scanning;
 
 		// Return the JSON document

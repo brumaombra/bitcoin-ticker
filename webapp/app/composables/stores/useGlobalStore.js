@@ -9,10 +9,9 @@ export const useGlobalStore = () => useState('global', () => ({
     // Cached WiFi scan results
     networksList: [],
     networksCount: 0,
-    currentNetworkSsid: '',
 
-    // Cached device settings payload
-    settings: {
+    // Cached full device config payload
+    config: {
         currentPrice: false,
         priceChange: false,
         marketCap: false,
@@ -23,11 +22,13 @@ export const useGlobalStore = () => useState('global', () => ({
         cryptoCoin: 'bitcoin',
         formatType: 'US',
         matrixIntensity: 0,
-        scrollSpeed: 0
+        scrollSpeed: 0,
+        ssid: '',
+        apiKey: ''
     },
 
-    // Flag to track whether the settings have been fetched at least once
-    settingsLoaded: false,
+    // Flag to track whether the config payload has been fetched at least once
+    configLoaded: false,
 
     // Shared message dialog state
     messageDialog: {

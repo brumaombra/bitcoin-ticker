@@ -65,8 +65,8 @@ export const setTheme = theme => {
 export const setCryptoCoin = cryptoCoin => {
     const globalStore = useGlobalStore();
     const isSupportedCryptoCoin = availableCryptoCoins.some(coin => coin.id === cryptoCoin);
-    globalStore.value.settings.cryptoCoin = isSupportedCryptoCoin ? cryptoCoin : 'bitcoin';
-    applyCryptoCoinToDocument(globalStore.value.settings.cryptoCoin);
+    globalStore.value.config.cryptoCoin = isSupportedCryptoCoin ? cryptoCoin : 'bitcoin';
+    applyCryptoCoinToDocument(globalStore.value.config.cryptoCoin);
 };
 
 // Initialize the theme from storage and system preference
@@ -89,7 +89,7 @@ export const initializeTheme = () => {
 // Initialize the crypto coin accent state from the current store value
 export const initializeCryptoCoin = () => {
     const globalStore = useGlobalStore();
-    applyCryptoCoinToDocument(globalStore.value.settings.cryptoCoin || 'bitcoin');
+    applyCryptoCoinToDocument(globalStore.value.config.cryptoCoin || 'bitcoin');
 };
 
 // Toggle the global busy overlay

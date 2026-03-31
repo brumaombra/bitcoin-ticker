@@ -55,7 +55,7 @@ void setupRoutes() {
 	setupCheckConnectionGetRoute();
 	setupNetworksGetRoute();
 	setupApiKeyPostRoute();
-	setupSettingsGetRoute();
+	setupConfigGetRoute();
 	setupSettingsPostRoute();
 	setupResetSettingsGetRoute();
 	setupCaptivePortalRoute();
