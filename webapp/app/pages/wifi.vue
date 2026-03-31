@@ -26,7 +26,7 @@ const currentNetworkLabel = computed(() => {
 
 // Number of scanned networks reported by the ESP
 const scannedNetworksCount = computed(() => {
-    return Number(globalStore.value.networksCount || 0);
+    return Array.isArray(globalStore.value.networksList) ? globalStore.value.networksList.length : 0;
 });
 
 // Available network options
@@ -82,7 +82,6 @@ const refreshSSIDList = async () => {
     try {
         const networksData = await getNetworks();
         globalStore.value.networksList = networksData.networks;
-        globalStore.value.networksCount = networksData.count;
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.wifi.refreshError'), showDialog: true });
     } finally {

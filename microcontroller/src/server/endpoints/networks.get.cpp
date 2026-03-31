@@ -110,7 +110,7 @@ namespace {
 	}
 
 	// Build the JSON payload from the list of scanned networks
-	JsonDocument buildNetworksData(const std::vector<ScannedNetwork>& networks, bool scanning) {
+	JsonDocument buildNetworksData(const std::vector<ScannedNetwork>& networks) {
 		JsonDocument doc;
 		JsonObject data = doc.to<JsonObject>();
 		JsonArray array = data["networks"].to<JsonArray>();
@@ -124,10 +124,6 @@ namespace {
 			item["channel"] = network.channel;
 			item["secured"] = network.secured;
 		}
-
-		// Add the count
-		data["count"] = networks.size();
-		data["scanning"] = scanning;
 
 		// Return the JSON document
 		return doc;
@@ -144,7 +140,7 @@ void setupNetworksGetRoute() {
 		}
 
 		// Build the JSON response with the current scan results
-		JsonDocument doc = buildNetworksData(cachedNetworks, wifiScanInProgress);
+		JsonDocument doc = buildNetworksData(cachedNetworks);
 		sendSuccessResponse(request, 200, &doc);
 	});
 }

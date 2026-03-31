@@ -75,7 +75,6 @@ const refreshSSIDList = async () => {
     try {
         const networksData = await getNetworks();
         globalStore.value.networksList = networksData.networks;
-        globalStore.value.networksCount = networksData.count;
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.wifi.refreshError'), showDialog: true });
     } finally {

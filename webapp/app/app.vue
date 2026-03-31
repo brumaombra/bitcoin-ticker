@@ -25,7 +25,6 @@ const loadInitialData = async () => {
         if (!globalStore.value.networksList?.length) {
             const networksData = await getNetworks();
             globalStore.value.networksList = networksData.networks;
-            globalStore.value.networksCount = networksData.count;
         }
 
         // Load the config if needed

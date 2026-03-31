@@ -8,7 +8,6 @@ export const useGlobalStore = () => useState('global', () => ({
 
     // Cached WiFi scan results
     networksList: [],
-    networksCount: 0,
 
     // Cached full device config payload
     config: {
