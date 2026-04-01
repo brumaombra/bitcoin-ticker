@@ -1,6 +1,7 @@
 #include "../server.h"
 #include <ArduinoJson.h>
 #include "../../eeprom/eeprom.h"
+#include "../../utils/utils.h"
 
 namespace {
 	// Build the JSON response for the full device config snapshot
@@ -22,7 +23,7 @@ namespace {
 		data["matrixIntensity"] = config.matrixIntensity;
 		data["scrollSpeed"] = config.scrollSpeed;
 		data["ssid"] = config.ssid;
-		data["apiKey"] = config.apiKey;
+		data["apiKey"] = maskInternalChars(config.apiKey);
 
         // Return the built JSON document
 		return doc;

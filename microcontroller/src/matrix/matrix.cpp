@@ -116,7 +116,7 @@ void manageLedMatrix() {
 	// Print messages
 	switch (switchText) {
 		case PRINT_PRICE:
-			printLogfln("Section: PRICE");
+			printLogfln("Showing price section...");
 
 			// Check if current price is visible
 			if (config.currentPriceVisible) {
@@ -129,7 +129,7 @@ void manageLedMatrix() {
 			break;
 
 		case PRINT_CHANGE:
-			printLogfln("Section: CHANGE");
+			printLogfln("Showing change section...");
 
 			// Check if price change is visible
 			if (config.priceChangeVisible) {
@@ -142,7 +142,7 @@ void manageLedMatrix() {
 			break;
 		
 		case PRINT_MARKET_CAP:
-			printLogfln("Section: MARKET CAP");
+			printLogfln("Showing market cap section...");
 
 			// Check if market cap is visible
 			if (config.marketCapVisible) {
@@ -155,7 +155,7 @@ void manageLedMatrix() {
 			break;
 
 		case PRINT_DAILY_HIGH_LOW:
-			printLogfln("Section: DAILY HIGHLOW");
+			printLogfln("Showing daily high/low section...");
 
 			// Check if daily high/low is visible
 			if (config.dailyHighLowVisible) {
@@ -168,7 +168,7 @@ void manageLedMatrix() {
 			break;
 
 		case PRINT_YEAR_HIGH_LOW:
-			printLogfln("Section: YEAR HIGHLOW");
+			printLogfln("Showing year high/low section...");
 
 			// Check if year high/low is visible
 			if (config.yearHighLowVisible) {
@@ -181,7 +181,7 @@ void manageLedMatrix() {
 			break;
 
 		case PRINT_OPEN:
-			printLogfln("Section: OPEN");
+			printLogfln("Showing open price section...");
 
 			// Check if open price is visible
 			if (config.openPriceVisible) {
@@ -194,7 +194,7 @@ void manageLedMatrix() {
 			break;
 			
 		case PRINT_VOLUME:
-			printLogfln("Section: VOLUME");
+			printLogfln("Showing volume section...");
 
 			// Check if volume is visible
 			if (config.volumeVisible) {

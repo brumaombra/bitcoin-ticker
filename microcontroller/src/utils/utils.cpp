@@ -1,6 +1,7 @@
 #include "utils.h"
 #include <Arduino.h>
 #include <ESPAsyncWebServer.h>
+#include <math.h>
 #include "../config/config.h"
 
 // Custom string copy function
@@ -10,7 +11,132 @@ void stringCopy(char* destination, const char* text, size_t length) {
     destination[length - 1] = '\0'; // Add the terminating character
 }
 
-// Format a currency - Inspired by the Currency library made by RobTillaart
+// Mask the internal portion of a string while leaving the edges visible
+String maskInternalChars(const char* text, size_t visibleEdgeChars) {
+	// If the input text is null, return an empty string
+	if (text == nullptr) {
+		return String();
+	}
+
+	// Determine how many characters to show
+	const size_t length = strlen(text);
+	const size_t visibleChars = visibleEdgeChars * 2;
+	if (length <= visibleChars) {
+		return String(text);
+	}
+
+	// Build the masked string
+	String masked;
+	masked.reserve(length);
+
+	// Add the starting visible edge characters
+	for (size_t index = 0; index < visibleEdgeChars; index++) {
+		masked += text[index];
+	}
+
+	// Add the masked portion
+	for (size_t index = visibleEdgeChars; index < length - visibleEdgeChars; index++) {
+		masked += '*';
+	}
+
+	// Add the ending visible edge characters
+	for (size_t index = length - visibleEdgeChars; index < length; index++) {
+		masked += text[index];
+	}
+
+	// Return the masked string
+	return masked;
+}
+
+// Format a numeric value with thousands separators and optional decimals
+char* addThousandsSeparators(double value, int decimals, char decimalSeparator, char thousandSeparator, char symbol) {
+	// Prepare the output buffers and normalize the input
+	static char formatted[48];
+	char rawDigits[24];
+	const int safeDecimals = decimals < 0 ? 0 : (decimals > 9 ? 9 : decimals);
+	uint64_t scaleFactor = 1;
+	for (int index = 0; index < safeDecimals; index++) {
+		scaleFactor *= 10;
+	}
+	const int64_t roundedValue = llround(value * static_cast<double>(scaleFactor));
+	const bool negative = roundedValue < 0;
+	const uint64_t magnitude = negative
+		? static_cast<uint64_t>(-(roundedValue + 1)) + 1
+		: static_cast<uint64_t>(roundedValue);
+
+	// Convert the rounded absolute value into a raw digit string
+	snprintf(rawDigits, sizeof(rawDigits), "%llu", static_cast<unsigned long long>(magnitude));
+
+	// Determine how many digits belong to the integer and decimal parts
+	const size_t rawLength = strlen(rawDigits);
+	const size_t integerDigits = rawLength > static_cast<size_t>(safeDecimals)
+		? rawLength - static_cast<size_t>(safeDecimals)
+		: 0;
+	size_t writeIndex = 0;
+
+	// Append a character only when there is enough room left in the output buffer
+	auto appendChar = [&](char character) {
+		if (writeIndex + 1 >= sizeof(formatted)) {
+			return;
+		}
+		formatted[writeIndex++] = character;
+	};
+
+	// Add the optional currency symbol prefix
+	if (symbol != ' ') {
+		appendChar(symbol);
+		appendChar(' ');
+	}
+
+	// Add the negative sign when the original value was below zero
+	if (negative) {
+		appendChar('-');
+	}
+
+	// Write the integer portion with thousands separators
+	if (integerDigits == 0) {
+		appendChar('0');
+	} else {
+		for (size_t index = 0; index < integerDigits; index++) {
+			// Append the next digit
+			appendChar(rawDigits[index]);
+
+			// Append a thousands separator when appropriate
+			const size_t digitsRemaining = integerDigits - index - 1;
+			if (digitsRemaining > 0 && digitsRemaining % 3 == 0) {
+				appendChar(thousandSeparator);
+			}
+		}
+	}
+
+	// Write the decimal portion, padding with zeros when needed
+	if (safeDecimals > 0) {
+		// Append the decimal separator
+		appendChar(decimalSeparator);
+
+		// Append the decimal digits, adding leading zeros if the raw value has fewer decimal digits than requested
+		const size_t zeroPadding = rawLength < static_cast<size_t>(safeDecimals)
+			? static_cast<size_t>(safeDecimals) - rawLength
+			: 0;
+		for (size_t index = 0; index < zeroPadding; index++) {
+			appendChar('0');
+		}
+
+		// Append the existing decimal digits from the raw value
+		const size_t decimalStart = rawLength > static_cast<size_t>(safeDecimals)
+			? rawLength - static_cast<size_t>(safeDecimals)
+			: 0;
+		for (size_t index = decimalStart; index < rawLength; index++) {
+			appendChar(rawDigits[index]);
+		}
+	}
+
+	// Null-terminate the buffer and return the formatted string
+	formatted[writeIndex] = '\0';
+	return formatted;
+}
+
+/* Format a currency - Inspired by the Currency library made by RobTillaart
 char* addThousandsSeparators(double value, int decimals, char decimalSeparator, char thousandSeparator, char symbol) {
 	static char tmp[30]; // Temporary buffer to store the formatted string
 	uint8_t index = 0; // Index for placing characters in tmp
@@ -38,14 +164,15 @@ char* addThousandsSeparators(double value, int decimals, char decimalSeparator, 
 	}
 	return tmp; // Return the pointer to the formatted string
 }
+*/
 
 // Format currency
 void formatCurrency(double value, char* output, const byte length) {
 	const DeviceConfig& config = getDeviceConfig();
 	if (config.formatType == FORMAT_US) {
-		stringCopy(output, addThousandsSeparators(value * 100, 2, '.', ','), length);
+		stringCopy(output, addThousandsSeparators(value, 2, '.', ','), length);
 	} else {
-		stringCopy(output, addThousandsSeparators(value * 100, 2, ',', '.'), length);
+		stringCopy(output, addThousandsSeparators(value, 2, ',', '.'), length);
 	}
 }
 
