@@ -11,7 +11,6 @@ namespace {
 	DNSServer dnsServer; // DNS server for captive portal
 	constexpr byte DNS_PORT = 53; // DNS port for captive portal
 	bool mdnsActive = false;
-	bool wifiStackInitialized = false;
 
 	// Stop mDNS service if active
 	void stopMdns() {
@@ -47,16 +46,13 @@ namespace {
 	}
 }
 
-// Initialize the Wi-Fi stack
-void initializeWiFiStack() {
-	if (wifiStackInitialized) return;
+// Enter access point mode
+void setAccessPointMode() {
 	WiFi.mode(WIFI_AP_STA);
-	wifiStackInitialized = true;
 }
 
 // Connecting to WiFi
 bool connectToWiFi() {
-	initializeWiFiStack();
 	const DeviceConfig& config = getDeviceConfig();
 	WiFi.begin(config.ssid, config.password);
     byte maxTry = 50;
@@ -93,7 +89,6 @@ bool connectToWiFi() {
 
 // Setting up the access point
 bool setupAccessPoint() {
-	initializeWiFiStack();
 	stopMdns();
 
 	// If the access point is already enabled, return success
@@ -116,8 +111,6 @@ bool setupAccessPoint() {
 
 // Manage WiFi connection
 bool manageWiFiConnection() {
-	initializeWiFiStack();
-
 	// Process DNS requests if the access point is enabled
 	if (accessPointEnabled) {
 		dnsServer.processNextRequest();
@@ -137,7 +130,8 @@ bool manageWiFiConnection() {
 
 	// Every 2 seconds
 	if (millis() - timestampWiFiConnection > 2000) {
-		timestampWiFiConnection = millis(); // Save timestamp
+		// Save timestamp
+		timestampWiFiConnection = millis();
 		
 		// Check if I need to disable the access point
 		if (disableAccessPoint && accessPointEnabled) {

@@ -1,7 +1,7 @@
 #ifndef WIFI_H
 #define WIFI_H
 
-void initializeWiFiStack();
+void setAccessPointMode();
 bool connectToWiFi();
 bool setupAccessPoint();
 bool manageWiFiConnection();

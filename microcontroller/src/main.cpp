@@ -9,15 +9,34 @@
 void setup() {
 	initSerial(); // Init serial
 	setupEEPROM(); // Setup EEPROM
-	initializeWiFiStack(); // Init ESP32 TCP/IP stack before AsyncWebServer starts
+	setAccessPointMode(); // Enter access point mode (Do not start the access point)
 	setupServer(); // Setup server
-	manageWiFiConnection(); // Manage WiFi connection
+	manageWiFiConnection(); // Manage the WiFi connection
 	setupWebClient(); // Setup web client
 	setupLedMatrix(); // Setup LED matrix
 }
 
 // Loop
 void loop() {
-	manageWiFiConnection(); // Manage WiFi connection
-	manageLedMatrix(); // Manage the LED matrix
+	// Manage the WiFi connection
+	manageWiFiConnection();
+
+	// Wait until the current matrix animation cycle finishes before preparing the next message
+	if (!isLedMatrixReadyForNextMessage()) {
+		return;
+	}
+
+	// Only render ticker data when the device is connected
+	if (!checkWifiConnection()) {
+		return;
+	}
+
+	// Load or refresh the market data before rendering the next matrix message
+	MarketTickerData marketData;
+	if (!callAPI(marketData)) {
+		return;
+	}
+
+	// Render the next ticker message on the LED matrix
+	renderNextLedMatrixMessage(marketData);
 }

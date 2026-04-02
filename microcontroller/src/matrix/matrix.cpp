@@ -2,7 +2,6 @@
 #include "../config/config.h"
 #include "../utils/utils.h"
 #include "../api/api.h"
-#include "../wifi/wifi.h"
 #include "../serial/serial.h"
 
 namespace {
@@ -89,24 +88,13 @@ void setupLedMatrix() {
 	printOnLedMatrix("Initializing...", BUF_SIZE); // Print the message on the matrix
 }
 
-// Manage the LED matrix
-void manageLedMatrix() {
-	// If currently scrolling, exit
-	if (!P.displayAnimate()) {
-		return;
-	}
-	
-	// Check if connected to WiFi
-	if (!checkWifiConnection()) {
-		return;
-	}
+// Check whether the matrix finished the current animation cycle
+bool isLedMatrixReadyForNextMessage() {
+	return P.displayAnimate();
+}
 
-	// Call the API
-	MarketTickerData marketData;
-	if (!callAPI(marketData)) {
-		return;
-	}
-
+// Manage the LED matrix using already-available market data
+void renderNextLedMatrixMessage(const MarketTickerData& marketData) {
 	// Get the current config
 	const DeviceConfig& config = getDeviceConfig();
 	
