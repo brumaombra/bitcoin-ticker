@@ -12,12 +12,6 @@ const { t } = useI18n();
 
 // Load the initial device data once for the app shell
 const loadInitialData = async () => {
-    // Exit if already loaded
-    if (globalStore.value.configLoaded && globalStore.value.networksList?.length > 0) {
-        setCryptoCoin(globalStore.value.config.cryptoCoin || 'bitcoin');
-        return;
-    }
-
     try {
         setBusy(true); // Busy on
 
@@ -38,10 +32,12 @@ const loadInitialData = async () => {
                 ...config
             };
 
-            // Set the crypto coin in the global store
-            setCryptoCoin(globalStore.value.config.cryptoCoin || 'bitcoin');
+            // Mark config as loaded
             globalStore.value.configLoaded = true;
         }
+
+        // Set the crypto coin in the global store
+        setCryptoCoin(globalStore.value.config?.cryptoCoin || 'bitcoin');
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('app.loadError'), showDialog: true });
     } finally {
