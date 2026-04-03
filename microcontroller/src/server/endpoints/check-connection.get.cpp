@@ -27,6 +27,11 @@ namespace {
 // Check Wi-Fi connection status
 void setupCheckConnectionGetRoute() {
 	server.on("/api/check-connection", HTTP_GET, [](AsyncWebServerRequest *request) {
+		// Validate CORS
+		if (!ensureCorsAllowed(request)) {
+			return;
+		}
+
 		// Create the JSON payload
 		JsonDocument doc = getCheckConnectionData();
 

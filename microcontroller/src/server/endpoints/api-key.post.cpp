@@ -41,6 +41,11 @@ namespace {
 void setupApiKeyPostRoute() {
 	// POST to update the API key
 	server.on("/api/api-key", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+		// Validate CORS
+		if (!ensureCorsAllowed(request)) {
+			return;
+		}
+
 		// Accumulate the request body
 		const RequestBodyResult body = accumulateRequestBody(request, data, len, index, total);
 		if (body.state == RequestBodyState::InProgress) {
@@ -52,9 +57,6 @@ void setupApiKeyPostRoute() {
 			sendErrorResponse(request, 500, "request_body_read_failed", "Failed to read request body");
 			return;
 		}
-
-		// Print the complete request body
-		printLogfln("Complete POST body: %s", body.data);
 
 		// Parse the JSON object and release the request body memory
 		JsonDocument doc;
@@ -91,6 +93,6 @@ void setupApiKeyPostRoute() {
 
     // OPTIONS request for preflighted requests
 	server.on("/api/api-key", HTTP_OPTIONS, [](AsyncWebServerRequest *request) {
-		request->send(200);
+		sendCorsPreflightResponse(request, "POST, OPTIONS");
 	});
 }

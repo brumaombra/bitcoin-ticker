@@ -133,6 +133,11 @@ namespace {
 // Get the list of available Wi-Fi networks
 void setupNetworksGetRoute() {
 	server.on("/api/networks", HTTP_GET, [](AsyncWebServerRequest *request) {
+		// Validate CORS
+		if (!ensureCorsAllowed(request)) {
+			return;
+		}
+
 		// Start a new scan if not already in progress, otherwise return the cached results
 		if (!startAsyncScan()) {
 			sendErrorResponse(request, 500, "wifi_scan_failed", "Unable to scan Wi-Fi networks.");

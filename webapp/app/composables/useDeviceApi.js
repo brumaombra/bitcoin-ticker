@@ -69,23 +69,32 @@ export const saveApiKey = async apiKey => {
 const checkWiFiConnectionPolling = async () => {
     const maxAttempts = 45;
 
+    // Poll the device every second to check the WiFi connection status
     for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
         try {
             const url = buildDeviceUrl('/api/check-connection');
             const response = await $fetch(url, { retry: 0 });
             const status = Number(response.data?.connectionStatus);
 
+            // If the device is still trying to connect, continue polling
             switch (status) {
+                // Trying to connect
                 case connectionStatus.WIFI_TRY:
                     break;
+
+                // Connection successful
                 case connectionStatus.WIFI_OK:
                     return {
                         ssid: response.data?.ssid || '',
                         ip: response.data?.ip || '',
                         hostname: response.data?.hostname || ''
                     };
+
+                // Connection failed
                 case connectionStatus.WIFI_KO:
                     throw new Error(translate('api.wifiWrongCredentials'));
+
+                // Unknown status code
                 default:
                     throw new Error(translate('api.wifiUnknownStatus'));
             }
@@ -95,9 +104,11 @@ const checkWiFiConnectionPolling = async () => {
             }
         }
 
+        // Wait 1 second before the next polling attempt
         await delay(1000);
     }
 
+    // If we exhaust all attempts without a successful connection, throw a timeout error
     throw new Error(translate('api.wifiTimeout'));
 };
 
@@ -105,8 +116,14 @@ const checkWiFiConnectionPolling = async () => {
 export const connectToWiFi = async (ssid, password) => {
     try {
         // Call the device API to start the WiFi connection process
-        const url = buildDeviceUrl('/api/connect', { ssid, password });
-        const response = await $fetch(url);
+        const url = buildDeviceUrl('/api/connect');
+        const response = await $fetch(url, {
+            method: 'POST',
+            body: {
+                ssid,
+                password
+            }
+        });
 
         // If the device is trying to connect, start polling for the result
         if (Number(response.data?.connectionStatus) === connectionStatus.WIFI_TRY) {
@@ -116,10 +133,7 @@ export const connectToWiFi = async (ssid, password) => {
         // If the device returned an immediate failure, throw an error
         throw new Error(translate('api.wifiFailed'));
     } catch (error) {
-        if (error instanceof Error) {
-            throw error;
-        }
-
+        if (error instanceof Error) throw error;
         throw new Error(translate('api.wifiConnectError'));
     }
 };

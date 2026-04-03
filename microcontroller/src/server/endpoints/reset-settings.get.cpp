@@ -7,6 +7,11 @@
 // Clear all saved settings from EEPROM and restart
 void setupResetSettingsGetRoute() {
 	server.on("/api/reset-settings", HTTP_GET, [](AsyncWebServerRequest *request) {
+		// Validate CORS
+		if (!ensureCorsAllowed(request)) {
+			return;
+		}
+
 		// Clear EEPROM
 		if (!clearEEPROM()) {
 			sendErrorResponse(request, 500, "clear_settings_failed", "Failed to clear EEPROM");

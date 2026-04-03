@@ -33,6 +33,12 @@ namespace {
 // Get the full current device config
 void setupConfigGetRoute() {
 	server.on("/api/config", HTTP_GET, [](AsyncWebServerRequest *request) {
+		// Validate CORS
+		if (!ensureCorsAllowed(request)) {
+			return;
+		}
+
+		// Get the current config send the JSON responses
 		const DeviceConfig& config = getDeviceConfig();
 		JsonDocument doc = buildConfigData(config);
 		sendSuccessResponse(request, 200, &doc);

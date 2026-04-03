@@ -112,6 +112,11 @@ namespace {
 void setupSettingsPostRoute() {
 	// POST to update the settings
 	server.on("/api/settings", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+		// Validate CORS
+		if (!ensureCorsAllowed(request)) {
+			return;
+		}
+
 		// Accumulate the request body
 		const RequestBodyResult body = accumulateRequestBody(request, data, len, index, total);
 		if (body.state == RequestBodyState::InProgress) {
@@ -124,9 +129,6 @@ void setupSettingsPostRoute() {
 			return;
 		}
 		
-		// Print the complete request body
-		printLogfln("Complete POST body: %s", body.data);
-
 		// Parse the JSON object and release the request body memory
 		JsonDocument doc;
 		DeserializationError error = deserializeJson(doc, body.data, body.length + 1);
@@ -205,6 +207,6 @@ void setupSettingsPostRoute() {
 
 	// OPTIONS request for preflighted requests
 	server.on("/api/settings", HTTP_OPTIONS, [](AsyncWebServerRequest *request) {
-		request->send(200);
+		sendCorsPreflightResponse(request, "POST, OPTIONS");
 	});
 }
