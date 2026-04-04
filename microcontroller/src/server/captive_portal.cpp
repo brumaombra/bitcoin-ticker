@@ -3,6 +3,8 @@
 #include "../webui/generated_assets.h"
 
 namespace {
+	constexpr const char* NOT_FOUND_ROUTE = "/404.html";
+
 	// Normalize the request path by removing trailing slashes
 	String normalizeAssetPath(const String& requestPath) {
 		if (requestPath.length() <= 1 || !requestPath.endsWith("/")) return requestPath;
@@ -25,7 +27,7 @@ namespace {
 	}
 
 	// Send the embedded asset
-	bool sendEmbeddedAsset(AsyncWebServerRequest *request, const String& requestPath) {
+	bool sendEmbeddedAsset(AsyncWebServerRequest *request, const String& requestPath, uint16_t statusCode = 200) {
 		// Find the asset for the requested path
 		const EmbeddedAsset* asset = findEmbeddedAsset(requestPath);
 		if (asset == NULL) {
@@ -33,7 +35,7 @@ namespace {
 		}
 
 		// Send the asset data as the response
-		AsyncWebServerResponse *response = request->beginResponse_P(200, asset->contentType, asset->data, asset->size);
+		AsyncWebServerResponse *response = request->beginResponse_P(statusCode, asset->contentType, asset->data, asset->size);
 		if (asset->gzip) {
 			response->addHeader("Content-Encoding", "gzip");
 		}
@@ -49,6 +51,26 @@ namespace {
 		if (requestPath == "/ap-setup" || requestPath.startsWith("/_nuxt/") || requestPath.startsWith("/api/")) return false;
 		return true;
 	}
+
+	// Detect whether the request expects an HTML document instead of a static asset or API payload
+	bool shouldServeNotFoundPage(AsyncWebServerRequest *request) {
+		const String requestPath = request->url();
+
+		// Don't serve the 404 page for API or asset requests
+		if (requestPath.startsWith("/api/") || requestPath.startsWith("/_nuxt/")) {
+			return false;
+		}
+
+		// If the request accepts HTML or doesn't have a file extension, serve the 404 page
+		if (request->hasHeader("Accept") && request->getHeader("Accept")->value().indexOf("text/html") >= 0) {
+			return true;
+		}
+
+		// Serve the 404 page for requests without a file extension
+		const int lastSlashIndex = requestPath.lastIndexOf('/');
+		const int lastDotIndex = requestPath.lastIndexOf('.');
+		return lastDotIndex <= lastSlashIndex;
+	}
 }
 
 // Setup the captive portal route to handle all unmatched requests
@@ -61,7 +83,12 @@ void setupCaptivePortalRoute() {
 		}
 
 		// Serve embedded assets
-		if (request->method() == HTTP_GET && sendEmbeddedAsset(request, request->url())) {
+		if ((request->method() == HTTP_GET || request->method() == HTTP_HEAD) && sendEmbeddedAsset(request, request->url())) {
+			return;
+		}
+
+		// Serve the prerendered the 404 page for missing document requests
+		if ((request->method() == HTTP_GET || request->method() == HTTP_HEAD) && shouldServeNotFoundPage(request) && sendEmbeddedAsset(request, NOT_FOUND_ROUTE, 404)) {
 			return;
 		}
 
