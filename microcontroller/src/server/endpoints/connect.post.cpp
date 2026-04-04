@@ -2,6 +2,7 @@
 #include <ArduinoJson.h>
 #include <cstring>
 #include "../../config/config.h"
+#include "../../wifi/wifi.h"
 #include "../../utils/utils.h"
 #include "../../serial/serial.h"
 
@@ -96,7 +97,7 @@ void setupConnectPostRoute() {
 		stringCopy(config.ssid, doc["ssid"].as<const char*>(), sizeof(config.ssid));
 		stringCopy(config.password, doc["password"].as<const char*>(), sizeof(config.password));
 		setDeviceConfig(config);
-		wiFiConnectionStatus = WIFI_TRY;
+		queueWiFiConnectionAttempt();
 
 		// Send the response with the updated connection status
 		JsonDocument responseDoc;

@@ -7,16 +7,104 @@
 #include "../matrix/matrix.h"
 #include "../serial/serial.h"
 
+/*
+The main loop never waits inside a Wi-Fi retry loop.
+Instead it starts a connection attempt, polls its progress across later loop iterations,
+keeps the captive-portal access point available, and only surfaces the current status message.
+*/
+
 namespace {
 	DNSServer dnsServer; // DNS server for captive portal
 	constexpr byte DNS_PORT = 53; // DNS port for captive portal
-	bool mdnsActive = false;
+	constexpr unsigned long WIFI_CONNECT_TIMEOUT = 12500;
+	constexpr unsigned long WIFI_RETRY_INTERVAL = 10000;
+
+	// Shared Wi-Fi struct
+	struct WiFiRuntimeState {
+		bool mdnsActive = false;
+		bool connectInProgress = false;
+		bool persistCredentialsOnSuccess = false;
+		unsigned long connectStartedAt = 0;
+		unsigned long nextReconnectAttemptAt = 0;
+	};
+
+	// Create the shared Wi-Fi state instance
+	WiFiRuntimeState wifiState;
+
+	// Forward declarations for helper functions
+	void stopMdns();
+	void startMdns();
+
+	// Clear the current connection attempt state
+	void resetConnectionAttempt() {
+		wifiState.connectInProgress = false;
+		wifiState.connectStartedAt = 0;
+	}
+
+	// Start a connection attempt if credentials are available
+	bool beginWiFiConnectionAttempt() {
+		const DeviceConfig& config = getDeviceConfig();
+
+		// If the SSID is empty, we cannot start a connection attempt
+		if (config.ssid[0] == '\0') {
+			return false;
+		}
+
+		// Start the connection attempt and mark it as in progress
+		WiFi.disconnect();
+		WiFi.begin(config.ssid, config.password);
+		wifiState.connectInProgress = true;
+		wifiState.connectStartedAt = millis();
+		printLogfln("Connecting to WiFi SSID: %s", config.ssid);
+		return true;
+	}
+
+	// Mark the current Wi-Fi attempt as successful and schedule no further retries
+	void completeWiFiConnectionSuccess() {
+		const bool wasAttemptInProgress = wifiState.connectInProgress;
+		resetConnectionAttempt();
+		wifiState.nextReconnectAttemptAt = 0;
+		wiFiConnectionStatus = WIFI_OK;
+
+		// If we weren't already connected, print the success message and persist the credentials if needed
+		if (wasAttemptInProgress) {
+			printLogln(" connected!");
+			if (wifiState.persistCredentialsOnSuccess) {
+				writeEEPROM();
+				wifiState.persistCredentialsOnSuccess = false;
+			}
+		}
+
+		// Start mDNS service
+		startMdns();
+	}
+
+	// Mark the current Wi-Fi attempt as failed and schedule a future retry
+	void completeWiFiConnectionFailure() {
+		WiFi.disconnect();
+		resetConnectionAttempt();
+		wiFiConnectionStatus = WIFI_KO;
+		wifiState.nextReconnectAttemptAt = millis() + WIFI_RETRY_INTERVAL;
+		printLogfln("Failed to connect to WiFi, retrying in %lu ms", WIFI_RETRY_INTERVAL);
+	}
+
+	// Check whether a fresh connection attempt should start on this loop iteration
+	bool shouldStartWiFiConnectionAttempt(unsigned long currentMillis) {
+		return wiFiConnectionStatus == WIFI_TRY || currentMillis >= wifiState.nextReconnectAttemptAt;
+	}
+
+	// Choose the matrix message for the current Wi-Fi state
+	const char* getWiFiStatusMessage() {
+		const char connectingMessage[] = "Connecting to Wi-Fi...";
+		const char disconnectedMessage[] = "Not connected to Wi-Fi. Use the 'Bitcoin-Ticker' access point to enter the Wi-Fi credentials.";
+		return wiFiConnectionStatus == WIFI_TRY ? connectingMessage : disconnectedMessage;
+	}
 
 	// Stop mDNS service if active
 	void stopMdns() {
-		if (!mdnsActive) return;
+		if (!wifiState.mdnsActive) return;
 		MDNS.end();
-		mdnsActive = false;
+		wifiState.mdnsActive = false;
 		printLogfln("mDNS stopped");
 	}
 
@@ -29,7 +117,7 @@ namespace {
 		}
 
 		// Don't start mDNS if it's already active
-		if (mdnsActive) {
+		if (wifiState.mdnsActive) {
 			return;
 		}
 
@@ -41,7 +129,7 @@ namespace {
 
 		// Advertise the HTTP service on mDNS
 		MDNS.addService("http", "tcp", 80);
-		mdnsActive = true;
+		wifiState.mdnsActive = true;
 		printLogfln("mDNS ready on http://%s.local", mdnsHostname);
 	}
 }
@@ -49,42 +137,6 @@ namespace {
 // Enter access point mode
 void setAccessPointMode() {
 	WiFi.mode(WIFI_AP_STA);
-}
-
-// Connecting to WiFi
-bool connectToWiFi() {
-	const DeviceConfig& config = getDeviceConfig();
-	WiFi.begin(config.ssid, config.password);
-    byte maxTry = 50;
-    byte count = 0;
-    printLog("Connecting to WiFi");
-    
-	// Wait for connection
-    while (WiFi.status() != WL_CONNECTED) {
-		// Check if we have tried enough times
-        if (count >= maxTry) {
-			DeviceConfig nextConfig = getDeviceConfig();
-			nextConfig.ssid[0] = '\0';
-			nextConfig.password[0] = '\0';
-			setDeviceConfig(nextConfig);
-            return false;
-        }
-
-		// Wait a bit before retrying
-        count++;
-        printLog(".");
-        delay(250);
-    }
-
-	// Check if connected
-    if (WiFi.status() == WL_CONNECTED) {
-        printLogln(" connected!");
-		startMdns();
-        return true;
-    }
-
-	// Connection failed
-    return false;
 }
 
 // Setting up the access point
@@ -109,76 +161,84 @@ bool setupAccessPoint() {
 	return true; // Access point enabled
 }
 
+// Queue a new Wi-Fi connection attempt for the next main-loop cycle
+void queueWiFiConnectionAttempt() {
+	resetConnectionAttempt();
+	wifiState.nextReconnectAttemptAt = 0;
+	wiFiConnectionStatus = WIFI_TRY;
+	wifiState.persistCredentialsOnSuccess = true;
+	WiFi.disconnect();
+}
+
 // Manage WiFi connection
 bool manageWiFiConnection() {
+	const unsigned long currentMillis = millis();
+
 	// Process DNS requests if the access point is enabled
 	if (accessPointEnabled) {
 		dnsServer.processNextRequest();
 	}
 
-	// Check if already trying to connect
-	if (wiFiConnectionStatus == WIFI_TRY) {
-		if (connectToWiFi()) { // Connecting to WiFi
-			wiFiConnectionStatus = WIFI_OK; // Update connection status
-			writeEEPROM(); // Save the new credentials
-			return true; // Connection success
-		} else {
-			wiFiConnectionStatus = WIFI_KO; // Update connection status
-			return false; // Connection failed
+	// Check if I need to disable the access point
+	if (disableAccessPoint && accessPointEnabled) {
+		dnsServer.stop();
+		accessPointEnabled = !WiFi.softAPdisconnect(); // Disable access point
+		if (!accessPointEnabled) { // Check if disabled
+			disableAccessPoint = false; // Mark as disabled
 		}
 	}
 
-	// Every 2 seconds
-	if (millis() - timestampWiFiConnection > 2000) {
-		// Save timestamp
-		timestampWiFiConnection = millis();
-		
-		// Check if I need to disable the access point
-		if (disableAccessPoint && accessPointEnabled) {
-			dnsServer.stop();
-			accessPointEnabled = !WiFi.softAPdisconnect(); // Disable access point
-			if (!accessPointEnabled) { // Check if disabled
-				disableAccessPoint = false; // Mark as disabled
-			}
+	// Check if connected to WiFi
+	if (WiFi.status() == WL_CONNECTED) {
+		completeWiFiConnectionSuccess();
+		return true; // Connection success
+	}
+
+	// Stop mDNS if not connected to Wi-Fi
+	stopMdns();
+
+	// Poll the current connection attempt until it succeeds or times out
+	if (wifiState.connectInProgress) {
+		// If timeout, mark the attempt as failed and setup the access point for retries
+		if (currentMillis - wifiState.connectStartedAt >= WIFI_CONNECT_TIMEOUT) {
+			completeWiFiConnectionFailure();
+			setupAccessPoint();
 		}
 
-		// Check if connected to WiFi
-		if (WiFi.status() == WL_CONNECTED) {
-			wiFiConnectionStatus = WIFI_OK; // Update connection status
-			startMdns();
-			return true; // Connection success
-		}
-
-		// Stop mDNS if not connected to Wi-Fi
-		stopMdns();
-		
-		// Check if credentials are already present
-		const DeviceConfig& config = getDeviceConfig();
-		if (config.ssid[0] != '\0' && config.password[0] != '\0') {
-			if (connectToWiFi()) { // Connecting to WiFi
-				return true; // Connection success
-			} else {
-				setupAccessPoint(); // Setup access point
-			}
-		} else {
-			setupAccessPoint(); // Setup access point
-		}
-
-		// Connection failed
+		// Connection still in progress, return false for now
 		return false;
 	}
 
-	// Connection success
-	return true;
+	// Check if credentials are already present
+	const DeviceConfig& config = getDeviceConfig();
+	if (config.ssid[0] != '\0') {
+		// If credentials are present, start connection attempt immediately
+		if (shouldStartWiFiConnectionAttempt(currentMillis)) {
+			timestampWiFiConnection = currentMillis;
+			if (beginWiFiConnectionAttempt()) {
+				return false;
+			}
+		}
+
+		// Keep the access point available while retries happen
+		setupAccessPoint();
+		return false;
+	}
+
+	// Setup access point
+	setupAccessPoint();
+
+	// Connection failed
+	return false;
 }
 
 // Check if connected to WiFi
 bool checkWifiConnection() {
 	// If not connected, show a notice on the matrix
 	if (WiFi.status() != WL_CONNECTED) {
-		const char errorMessage[] = "Not connected to Wi-Fi. Use the 'Bitcoin-Ticker' access point to enter the Wi-Fi credentials.";
+		const char* errorMessage = getWiFiStatusMessage();
 		printLogfln(errorMessage);
-		printOnLedMatrix(errorMessage, sizeof(errorMessage)); // Print the message on the matrix
+		printOnLedMatrix(errorMessage, strlen(errorMessage) + 1); // Print the message on the matrix
 
 		// Not connected
 		return false;
