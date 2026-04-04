@@ -40,7 +40,7 @@ const { t } = useI18n();
                     <!-- Networks count info -->
                     <div class="min-w-0 flex-1">
                         <div class="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ t('pages.wifi.networkCountLabel') }}</div>
-                        <div class="mt-1 text-2xl font-bold leading-none text-[var(--text-primary-light)] dark:text-[var(--text-primary-dark)]">{{ props.scannedNetworksCount }}</div>
+                        <div class="mt-1 truncate text-base font-semibold text-[var(--text-primary-light)] dark:text-[var(--text-primary-dark)]">{{ props.scannedNetworksCount }}</div>
                     </div>
                 </div>
             </div>

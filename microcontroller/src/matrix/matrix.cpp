@@ -104,10 +104,9 @@ void renderNextLedMatrixMessage(const MarketTickerData& marketData) {
 	// Print messages
 	switch (switchText) {
 		case PRINT_PRICE:
-			printLogfln("Showing price section...");
-
-			// Check if current price is visible
+			// Show the data only if enabled
 			if (config.currentPriceVisible) {
+				printLogfln("Showing price section...");
 				formatPriceMessage(message, sizeof(message), marketData);
 				printOnLedMatrix(message, sizeof(message), PRICE_MESSAGE_PAUSE); // Print the message on the matrix
 			}
@@ -117,10 +116,9 @@ void renderNextLedMatrixMessage(const MarketTickerData& marketData) {
 			break;
 
 		case PRINT_CHANGE:
-			printLogfln("Showing change section...");
-
-			// Check if price change is visible
+			// Show the data only if enabled
 			if (config.priceChangeVisible) {
+				printLogfln("Showing change section...");
 				formatChangeMessage(message, sizeof(message), marketData);
 				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
 			}
@@ -130,10 +128,9 @@ void renderNextLedMatrixMessage(const MarketTickerData& marketData) {
 			break;
 		
 		case PRINT_MARKET_CAP:
-			printLogfln("Showing market cap section...");
-
-			// Check if market cap is visible
+			// Show the data only if enabled
 			if (config.marketCapVisible) {
+				printLogfln("Showing market cap section...");
 				formatMarketCapMessage(message, sizeof(message), marketData);
 				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
 			}
@@ -143,10 +140,9 @@ void renderNextLedMatrixMessage(const MarketTickerData& marketData) {
 			break;
 
 		case PRINT_DAILY_HIGH_LOW:
-			printLogfln("Showing daily high/low section...");
-
-			// Check if daily high/low is visible
+			// Show the data only if enabled
 			if (config.dailyHighLowVisible) {
+				printLogfln("Showing daily high/low section...");
 				formatDailyHighLowMessage(message, sizeof(message), marketData);
 				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
 			}
@@ -156,10 +152,9 @@ void renderNextLedMatrixMessage(const MarketTickerData& marketData) {
 			break;
 
 		case PRINT_YEAR_HIGH_LOW:
-			printLogfln("Showing year high/low section...");
-
-			// Check if year high/low is visible
+			// Show the data only if enabled
 			if (config.yearHighLowVisible) {
+				printLogfln("Showing year high/low section...");
 				formatYearHighLowMessage(message, sizeof(message), marketData);
 				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
 			}
@@ -169,10 +164,9 @@ void renderNextLedMatrixMessage(const MarketTickerData& marketData) {
 			break;
 
 		case PRINT_OPEN:
-			printLogfln("Showing open price section...");
-
-			// Check if open price is visible
+			// Show the data only if enabled
 			if (config.openPriceVisible) {
+				printLogfln("Showing open price section...");
 				formatOpenMessage(message, sizeof(message), marketData);
 				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
 			}
@@ -182,10 +176,9 @@ void renderNextLedMatrixMessage(const MarketTickerData& marketData) {
 			break;
 			
 		case PRINT_VOLUME:
-			printLogfln("Showing volume section...");
-
-			// Check if volume is visible
+			// Show the data only if enabled
 			if (config.volumeVisible) {
+				printLogfln("Showing volume section...");
 				formatVolumeMessage(message, sizeof(message), marketData);
 				printOnLedMatrix(message, sizeof(message)); // Print the message on the matrix
 			}

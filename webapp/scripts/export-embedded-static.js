@@ -34,17 +34,11 @@ const contentTypes = new Map([
 const walkFiles = directoryPath => {
     const entries = readdirSync(directoryPath, { withFileTypes: true });
 
+    // Recursively flatten the file tree into a list of file paths
     return entries.flatMap(entry => {
         const fullPath = path.join(directoryPath, entry.name);
-
-        if (entry.isDirectory()) {
-            return walkFiles(fullPath);
-        }
-
-        if (entry.isFile()) {
-            return [fullPath];
-        }
-
+        if (entry.isDirectory()) return walkFiles(fullPath);
+        if (entry.isFile()) return [fullPath];
         return [];
     });
 };
@@ -52,15 +46,8 @@ const walkFiles = directoryPath => {
 // Map generated files back to the routes the ESP should serve
 const getRoutePath = relativePath => {
     const normalizedPath = relativePath.split(path.sep).join('/');
-
-    if (normalizedPath === 'index.html') {
-        return '/';
-    }
-
-    if (normalizedPath.endsWith('/index.html')) {
-        return `/${normalizedPath.slice(0, -'/index.html'.length)}`;
-    }
-
+    if (normalizedPath === 'index.html') return '/';
+    if (normalizedPath.endsWith('/index.html')) return `/${normalizedPath.slice(0, -'/index.html'.length)}`;
     return `/${normalizedPath}`;
 };
 
@@ -82,10 +69,12 @@ const escapeCppString = value => {
 
 // Export the generated Nuxt site into PROGMEM-ready assets
 const generate = () => {
+    // Ensure the Nuxt static output exists before proceeding
     if (!statSync(generatedPublicDir, { throwIfNoEntry: false })?.isDirectory()) {
         throw new Error(`Nuxt static output not found at ${generatedPublicDir}. Run \"npm run build\" first.`);
     }
 
+    // Collect all generated files and sort them for consistent symbol generation
     const files = walkFiles(generatedPublicDir).sort((left, right) => left.localeCompare(right));
     mkdirSync(firmwareWebUiDir, { recursive: true });
 
@@ -97,6 +86,7 @@ const generate = () => {
         const fileContents = readFileSync(filePath);
         const gzippedContents = gzipSync(fileContents, { level: 9 });
 
+        // Return the asset metadata
         return {
             symbolName: `embedded_asset_${index}`,
             sourcePath: relativePath.split(path.sep).join('/'),
@@ -141,6 +131,7 @@ const generate = () => {
         'const size_t EMBEDDED_ASSET_COUNT = sizeof(EMBEDDED_ASSETS) / sizeof(EMBEDDED_ASSETS[0]);'
     ].join('\n');
 
+    // Write the generated assets to the firmware source directory
     writeFileSync(headerPath, headerContents, 'utf8');
     writeFileSync(sourcePath, sourceSections, 'utf8');
 
@@ -149,4 +140,5 @@ const generate = () => {
     process.stdout.write(`Generated ${assets.length} embedded assets.\n${manifestSummary}\n`);
 };
 
+// Run the export process
 generate();
