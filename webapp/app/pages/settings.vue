@@ -1,6 +1,7 @@
 <script setup>
 import { Settings } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { setBusy } from 'theme-vintage/busy-indicator';
 import { Button } from 'theme-vintage/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'theme-vintage/card';
 import { showConfirmDialog } from 'theme-vintage/confirm-dialog';
@@ -9,7 +10,7 @@ import { Field, FieldDescription, FieldGroup, FieldLabel } from 'theme-vintage/f
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'theme-vintage/select';
 import { Slider } from 'theme-vintage/slider';
 import { resetSettings, saveSettings } from '~/composables/useDeviceApi.js';
-import { getCryptoCoins, handleBackendErrors, setBusy, setCryptoCoin } from '~/composables/useUtils.js';
+import { getCryptoCoins, handleBackendErrors, setCryptoCoin } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import PageIntroCard from '~/components/PageIntroCard.vue';
 import SettingToggleItem from '~/components/SettingToggleItem.vue';

@@ -93,13 +93,6 @@ export const initializeCryptoCoin = () => {
     applyCryptoCoinToDocument(globalStore.value.config.cryptoCoin || 'bitcoin');
 };
 
-// Toggle the global busy overlay
-export const setBusy = busy => {
-    const globalStore = useGlobalStore();
-    if (globalStore.value.busy === busy) return; // If already in the desired state, do nothing
-    globalStore.value.busy = busy;
-};
-
 // Pause execution for a short delay
 export const delay = timeout => {
     return new Promise(resolve => setTimeout(resolve, timeout));

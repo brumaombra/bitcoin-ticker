@@ -1,8 +1,8 @@
 <script setup>
 import { onMounted } from 'vue';
-import { Busy } from 'theme-vintage/busy';
+import { setBusy } from 'theme-vintage/busy-indicator';
 import { getConfig, getNetworks } from '~/composables/useDeviceApi.js';
-import { handleBackendErrors, initializeCryptoCoin, initializeTheme, setBusy, setCryptoCoin } from '~/composables/useUtils.js';
+import { handleBackendErrors, initializeCryptoCoin, initializeTheme, setCryptoCoin } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 
 const globalStore = useGlobalStore();
@@ -11,7 +11,7 @@ const { t } = useI18n();
 // Load the initial device data once for the app shell
 const loadInitialData = async () => {
     try {
-        setBusy(true); // Busy on
+        setBusy(true, { label: t('common.syncingDevice') });
 
         // Load the networks if needed
         if (!globalStore.value.networksList?.length) {
@@ -39,7 +39,7 @@ const loadInitialData = async () => {
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('app.loadError'), showDialog: true });
     } finally {
-        setBusy(false); // Busy off
+        setBusy(false);
     }
 };
 
@@ -57,8 +57,5 @@ onMounted(async () => {
         <NuxtLayout>
             <NuxtPage />
         </NuxtLayout>
-
-        <!-- Global busy overlay -->
-        <Busy :show="globalStore.busy" :label="t('common.syncingDevice')" />
     </div>
 </template>

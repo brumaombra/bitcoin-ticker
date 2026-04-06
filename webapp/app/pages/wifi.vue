@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue';
 import { Info, Wifi } from 'lucide-vue-next';
 import { Alert, AlertDescription, AlertTitle } from 'theme-vintage/alert';
+import { setBusy } from 'theme-vintage/busy-indicator';
 import { Button } from 'theme-vintage/button';
 import { Card, CardContent, CardFooter } from 'theme-vintage/card';
 import { showConfirmDialog } from 'theme-vintage/confirm-dialog';
@@ -10,7 +11,7 @@ import { Field, FieldGroup, FieldLabel } from 'theme-vintage/field';
 import { Input } from 'theme-vintage/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'theme-vintage/select';
 import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
-import { handleBackendErrors, setBusy } from '~/composables/useUtils.js';
+import { handleBackendErrors } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import PageIntroCard from '~/components/PageIntroCard.vue';
 import WifiStatusPanel from '~/components/WifiStatusPanel.vue';

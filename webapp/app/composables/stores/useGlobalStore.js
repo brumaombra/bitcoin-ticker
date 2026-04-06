@@ -1,8 +1,5 @@
 // Shared device and UI state for the webapp
 export const useGlobalStore = () => useState('global', () => ({
-    // Busy overlay state
-    busy: false,
-
     // Shared UI theme mode
     themeMode: 'system',
 
