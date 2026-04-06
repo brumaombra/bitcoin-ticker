@@ -1,5 +1,5 @@
 <script setup>
-import { Card, CardContent, CardHeader } from 'theme-vintage';
+import { Card, CardContent, CardHeader } from 'theme-vintage/card';
 import CardHeaderWithIcon from '~/components/CardHeaderWithIcon.vue';
 
 // Props

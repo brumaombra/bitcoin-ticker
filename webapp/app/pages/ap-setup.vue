@@ -1,17 +1,17 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Info, Wifi } from 'lucide-vue-next';
+import { Alert, AlertDescription, AlertTitle } from 'theme-vintage/alert';
+import { Button } from 'theme-vintage/button';
+import { Card, CardContent, CardHeader, CardFooter } from 'theme-vintage/card';
+import { Field, FieldGroup, FieldLabel } from 'theme-vintage/field';
+import { Input } from 'theme-vintage/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'theme-vintage/select';
 import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import BackgroundGrid from '~/components/BackgroundGrid.vue';
 import BrandLogo from '~/components/BrandLogo.vue';
-import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert';
-import { Button } from '~/components/ui/button';
-import { Card, CardContent, CardHeader, CardFooter } from '~/components/ui/card';
-import { Field, FieldGroup, FieldLabel } from '~/components/ui/field';
-import { Input } from '~/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
 import CardHeaderWithIcon from '~/components/CardHeaderWithIcon.vue';
 import LanguageSelector from '~/components/LanguageSelector.vue';
 import ThemeSelector from '~/components/ThemeSelector.vue';

@@ -1,18 +1,18 @@
 <script setup>
 import { Settings } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { Button } from 'theme-vintage/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'theme-vintage/card';
+import { Field, FieldDescription, FieldGroup, FieldLabel } from 'theme-vintage/field';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'theme-vintage/select';
+import { Slider } from 'theme-vintage/slider';
 import { resetSettings, saveSettings } from '~/composables/useDeviceApi.js';
 import { getCryptoCoins, handleBackendErrors, setBusy, setCryptoCoin, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
-import { Button } from '~/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card';
-import { Field, FieldDescription, FieldGroup, FieldLabel } from '~/components/ui/field';
 import PageIntroCard from '~/components/PageIntroCard.vue';
 import SettingToggleItem from '~/components/SettingToggleItem.vue';
 import BitcoinLogo from '~/components/crypto/BitcoinLogo.vue';
 import KaspaLogo from '~/components/crypto/KaspaLogo.vue';
-import { Slider } from '~/components/ui/slider';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
 
 const globalStore = useGlobalStore();
 const cryptoCoins = getCryptoCoins();

@@ -2,9 +2,9 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { KeyRound, Settings, Wifi } from 'lucide-vue-next';
-import { Separator } from '~/components/ui/separator';
+import { Separator } from 'theme-vintage/separator';
 import {
-    Sidebar as ShadcnSidebar,
+    Sidebar,
     SidebarContent,
     SidebarFooter,
     SidebarGroup,
@@ -17,7 +17,7 @@ import {
     SidebarMenuItem,
     SidebarProvider,
     SidebarTrigger
-} from '~/components/ui/sidebar';
+} from 'theme-vintage/sidebar';
 import BackgroundGrid from '~/components/BackgroundGrid.vue';
 import CryptoLogo from '~/components/crypto/CryptoLogo.vue';
 import LanguageSelector from '~/components/LanguageSelector.vue';
@@ -55,7 +55,7 @@ const activeItem = computed(() => {
 
 <template>
     <SidebarProvider>
-        <ShadcnSidebar collapsible="offcanvas">
+        <Sidebar collapsible="offcanvas">
             <SidebarHeader class="h-16 justify-center border-b border-sidebar-border">
                 <SidebarMenu>
                     <SidebarMenuItem>
@@ -106,7 +106,7 @@ const activeItem = computed(() => {
                     <ThemeSelector />
                 </div>
             </SidebarFooter>
-        </ShadcnSidebar>
+        </Sidebar>
 
         <SidebarInset class="relative min-h-screen min-w-0 bg-background text-foreground">
             <BackgroundGrid />
