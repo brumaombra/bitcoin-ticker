@@ -48,7 +48,6 @@ export default defineNuxtConfig({
         ],
         optimizeDeps: {
             include: [
-                '@vueuse/core',
                 'lucide-vue-next'
             ]
         }
