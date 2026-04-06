@@ -1,24 +1,9 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, resolveComponent } from 'vue';
 import { useRoute } from 'vue-router';
 import { KeyRound, Settings, Wifi } from 'lucide-vue-next';
-import { Separator } from 'theme-vintage/separator';
-import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarGroup,
-    SidebarGroupContent,
-    SidebarGroupLabel,
-    SidebarHeader,
-    SidebarInset,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    SidebarProvider,
-    SidebarTrigger
-} from 'theme-vintage/sidebar';
-import BackgroundGrid from 'theme-vintage/background-grid';
+import { DashboardShell } from 'theme-vintage/dashboard-shell';
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from 'theme-vintage/sidebar';
 import CryptoLogo from '~/components/crypto/CryptoLogo.vue';
 import LanguageSelector from '~/components/LanguageSelector.vue';
 import ThemeSelector from '~/components/ThemeSelector.vue';
@@ -26,112 +11,78 @@ import ThemeSelector from '~/components/ThemeSelector.vue';
 const { t } = useI18n();
 const route = useRoute();
 const localePath = useLocalePath();
+const nuxtLinkComponent = resolveComponent('NuxtLink');
 
-// Navigation items for the private control panel
-const sidebarItems = computed(() => ([{
-    id: 'wifi',
-    path: '/wifi',
-    label: t('nav.wifi.label'),
-    description: t('nav.wifi.description'),
-    icon: Wifi
-}, {
-    id: 'settings',
-    path: '/settings',
-    label: t('nav.settings.label'),
-    description: t('nav.settings.description'),
-    icon: Settings
-}, {
-    id: 'api-key',
-    path: '/api-key',
-    label: t('nav.apiKey.label'),
-    description: t('nav.apiKey.description'),
-    icon: KeyRound
+// Sidebar sections and items configuration
+const sidebarSections = computed(() => ([{
+    id: 'control-panel',
+    label: t('common.controlPanel'),
+    items: [{
+        id: 'wifi',
+        label: t('nav.wifi.label'),
+        description: t('nav.wifi.description'),
+        icon: Wifi,
+        to: localePath('/wifi'),
+        active: route.path === localePath('/wifi')
+    }, {
+        id: 'settings',
+        label: t('nav.settings.label'),
+        description: t('nav.settings.description'),
+        icon: Settings,
+        to: localePath('/settings'),
+        active: route.path === localePath('/settings')
+    }, {
+        id: 'api-key',
+        label: t('nav.apiKey.label'),
+        description: t('nav.apiKey.description'),
+        icon: KeyRound,
+        to: localePath('/api-key'),
+        active: route.path === localePath('/api-key')
+    }]
 }]));
 
+// The currently active sidebar item
 const activeItem = computed(() => {
-    return sidebarItems.value.find(item => route.path === localePath(item.path)) || null;
+    return sidebarSections.value.flatMap(section => section.items).find(item => item.active) || null;
 });
 </script>
 
 <template>
-    <SidebarProvider>
-        <Sidebar collapsible="offcanvas">
-            <SidebarHeader class="h-16 justify-center border-b border-sidebar-border">
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton as-child size="lg" class="rounded">
-                            <NuxtLink :to="localePath('/')">
-                                <div class="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded">
-                                    <CryptoLogo class="size-5 rounded" />
-                                </div>
+    <DashboardShell :title="activeItem?.label || t('common.controlPanel')" :description="activeItem?.description || ''" :sidebar-sections="sidebarSections" :sidebar-link-component="nuxtLinkComponent">
+        <!-- Sidebar header slot -->
+        <template #sidebar-header>
+            <SidebarMenu>
+                <SidebarMenuItem>
+                    <SidebarMenuButton as-child size="lg" class="rounded">
+                        <NuxtLink :to="localePath('/')">
+                            <!-- Crypto logo -->
+                            <div class="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded">
+                                <CryptoLogo class="size-5 rounded" />
+                            </div>
 
-                                <div class="grid min-w-0 flex-1 text-left text-sm leading-tight">
-                                    <span class="truncate font-semibold">{{ t('app.title') }}</span>
-                                    <span class="truncate text-xs text-sidebar-foreground/70">{{ t('common.deviceUi') }}</span>
-                                </div>
-                            </NuxtLink>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarHeader>
+                            <!-- Brand name and tagline -->
+                            <div class="grid min-w-0 flex-1 text-left text-sm leading-tight">
+                                <span class="truncate font-semibold">{{ t('app.title') }}</span>
+                                <span class="truncate text-xs text-sidebar-foreground/70">{{ t('common.deviceUi') }}</span>
+                            </div>
+                        </NuxtLink>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+            </SidebarMenu>
+        </template>
 
-            <SidebarContent>
-                <SidebarGroup>
-                    <SidebarGroupLabel>{{ t('common.controlPanel') }}</SidebarGroupLabel>
+        <!-- Sidebar footer slot -->
+        <template #sidebar-footer>
+            <div class="flex items-center gap-2 px-2">
+                <!-- Language selector -->
+                <LanguageSelector />
 
-                    <SidebarGroupContent>
-                        <SidebarMenu class="gap-3">
-                            <SidebarMenuItem v-for="item in sidebarItems" :key="item.id">
-                                <SidebarMenuButton as-child :is-active="route.path === localePath(item.path)" class="group h-auto min-h-12 items-start rounded border border-[var(--border-light)] px-3 py-2.5 text-[var(--text-secondary-light)] transition-all duration-200 hover:border-[var(--border-hover-light)] hover:bg-[var(--bg-selected-light)] hover:text-[var(--text-primary-light)] data-[active=true]:border-[var(--border-hover-light)] data-[active=true]:bg-[var(--bg-selected-light)] data-[active=true]:text-[var(--text-primary-light)] dark:border-[var(--border-dark)] dark:text-[var(--text-secondary-dark)] dark:hover:border-[var(--border-hover-dark)] dark:hover:bg-[var(--bg-selected-dark)] dark:hover:text-[var(--text-primary-dark)] dark:data-[active=true]:border-[var(--border-hover-dark)] dark:data-[active=true]:bg-[var(--bg-selected-dark)] dark:data-[active=true]:text-[var(--text-primary-dark)] sm:px-4 sm:py-3">
-                                    <NuxtLink :to="localePath(item.path)">
-                                        <component :is="item.icon" :stroke-width="1.8" class="mt-0.5 h-4 w-4 shrink-0 opacity-90 transition-opacity duration-200 group-hover:opacity-100 sm:h-5 sm:w-5" />
+                <!-- Theme selector -->
+                <ThemeSelector />
+            </div>
+        </template>
 
-                                        <div class="grid min-w-0 flex-1 text-left leading-tight">
-                                            <span class="truncate font-semibold">{{ item.label }}</span>
-                                            <span v-if="item.description" class="mt-0.5 text-[11px] leading-4 text-sidebar-foreground/65">
-                                                {{ item.description }}
-                                            </span>
-                                        </div>
-                                    </NuxtLink>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
-            </SidebarContent>
-
-            <SidebarFooter class="border-t border-sidebar-border">
-                <div class="flex items-center gap-2 px-2">
-                    <LanguageSelector />
-                    <ThemeSelector />
-                </div>
-            </SidebarFooter>
-        </Sidebar>
-
-        <SidebarInset class="relative min-h-screen min-w-0 bg-background text-foreground">
-            <BackgroundGrid />
-
-            <header class="sticky top-0 z-20 flex h-16 shrink-0 items-center gap-2 border-b border-sidebar-border bg-sidebar px-4 backdrop-blur">
-                <SidebarTrigger class="-ml-1" />
-                <Separator orientation="vertical" class="mr-2 data-[orientation=vertical]:h-4" />
-
-                <div class="min-w-0 flex-1">
-                    <div class="truncate text-sm font-medium">
-                        {{ activeItem?.label || t('common.controlPanel') }}
-                    </div>
-                    <div v-if="activeItem?.description" class="truncate text-xs text-muted-foreground">
-                        {{ activeItem.description }}
-                    </div>
-                </div>
-            </header>
-
-            <main class="relative z-10 min-w-0 flex-1">
-                <div class="mx-auto flex w-full min-w-0 max-w-6xl flex-col gap-6 p-3 sm:p-6 lg:p-8">
-                    <div class="pb-4">
-                        <slot />
-                    </div>
-                </div>
-            </main>
-        </SidebarInset>
-    </SidebarProvider>
+        <!-- Main page slot -->
+        <slot />
+    </DashboardShell>
 </template>
