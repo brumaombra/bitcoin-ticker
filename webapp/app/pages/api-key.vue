@@ -4,10 +4,12 @@ import { computed, ref } from 'vue';
 import { Alert, AlertDescription, AlertTitle } from 'theme-vintage/alert';
 import { Button } from 'theme-vintage/button';
 import { Card, CardContent, CardFooter } from 'theme-vintage/card';
+import { showConfirmDialog } from 'theme-vintage/confirm-dialog';
+import { showMessageDialog } from 'theme-vintage/message-dialog';
 import { Field, FieldGroup, FieldLabel } from 'theme-vintage/field';
 import { Input } from 'theme-vintage/input';
 import { saveApiKey } from '~/composables/useDeviceApi.js';
-import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
+import { handleBackendErrors, setBusy } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import PageIntroCard from '~/components/PageIntroCard.vue';
 
@@ -26,10 +28,11 @@ const saveCurrentApiKey = async () => {
         setBusy(true);
         await saveApiKey(apiKey.value);
         globalStore.value.config.apiKey = apiKey.value;
-        showMessage({
+        showMessageDialog({
             type: 'Success',
             title: t('dialogs.successTitle'),
-            message: t('pages.apiKey.saveSuccess')
+            message: t('pages.apiKey.saveSuccess'),
+            closeText: t('common.close')
         });
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.apiKey.saveError'), showDialog: true });
@@ -44,14 +47,10 @@ const handleSavePress = () => {
     showConfirmDialog({
         title: t('pages.apiKey.confirmTitle'),
         message: t('pages.apiKey.confirmMessage'),
-        confirmButton: {
-            text: t('pages.apiKey.saveAction'),
-            type: 'default'
-        },
-        cancelButton: {
-            text: t('common.keepEditing'),
-            type: 'outline'
-        },
+        confirmText: t('pages.apiKey.saveAction'),
+        cancelText: t('common.keepEditing'),
+        confirmButtonType: 'default',
+        cancelButtonType: 'outline',
         onConfirm: saveCurrentApiKey
     });
 };

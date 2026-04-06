@@ -3,11 +3,13 @@ import { Settings } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { Button } from 'theme-vintage/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'theme-vintage/card';
+import { showConfirmDialog } from 'theme-vintage/confirm-dialog';
+import { showMessageDialog } from 'theme-vintage/message-dialog';
 import { Field, FieldDescription, FieldGroup, FieldLabel } from 'theme-vintage/field';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'theme-vintage/select';
 import { Slider } from 'theme-vintage/slider';
 import { resetSettings, saveSettings } from '~/composables/useDeviceApi.js';
-import { getCryptoCoins, handleBackendErrors, setBusy, setCryptoCoin, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
+import { getCryptoCoins, handleBackendErrors, setBusy, setCryptoCoin } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import PageIntroCard from '~/components/PageIntroCard.vue';
 import SettingToggleItem from '~/components/SettingToggleItem.vue';
@@ -62,10 +64,11 @@ const saveCurrentSettings = async () => {
     try {
         setBusy(true);
         await saveSettings(config.value);
-        showMessage({
+        showMessageDialog({
             type: 'Success',
             title: t('dialogs.successTitle'),
-            message: t('pages.settings.saveSuccess')
+            message: t('pages.settings.saveSuccess'),
+            closeText: t('common.close')
         });
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.settings.saveError'), showDialog: true });
@@ -79,10 +82,11 @@ const resetSavedSettings = async () => {
     try {
         setBusy(true);
         const result = await resetSettings();
-        showMessage({
+        showMessageDialog({
             type: 'Info',
             title: t('pages.settings.resetInfoTitle'),
-            message: result.message || t('pages.settings.resetInfoMessage')
+            message: result.message || t('pages.settings.resetInfoMessage'),
+            closeText: t('common.close')
         });
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.settings.resetError'), showDialog: true });
@@ -96,14 +100,10 @@ const handleSavePress = () => {
     showConfirmDialog({
         title: t('pages.settings.saveConfirmTitle'),
         message: t('pages.settings.saveConfirmMessage'),
-        confirmButton: {
-            text: t('pages.settings.saveAction'),
-            type: 'default'
-        },
-        cancelButton: {
-            text: t('common.keepEditing'),
-            type: 'outline'
-        },
+        confirmText: t('pages.settings.saveAction'),
+        cancelText: t('common.keepEditing'),
+        confirmButtonType: 'default',
+        cancelButtonType: 'outline',
         onConfirm: saveCurrentSettings
     });
 };
@@ -113,14 +113,10 @@ const handleResetPress = () => {
     showConfirmDialog({
         title: t('pages.settings.resetConfirmTitle'),
         message: t('pages.settings.resetConfirmMessage'),
-        confirmButton: {
-            text: t('pages.settings.resetAction'),
-            type: 'default'
-        },
-        cancelButton: {
-            text: t('common.cancel'),
-            type: 'outline'
-        },
+        confirmText: t('pages.settings.resetAction'),
+        cancelText: t('common.cancel'),
+        confirmButtonType: 'default',
+        cancelButtonType: 'outline',
         onConfirm: resetSavedSettings
     });
 };

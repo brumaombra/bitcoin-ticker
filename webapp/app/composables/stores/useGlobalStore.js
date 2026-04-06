@@ -27,31 +27,5 @@ export const useGlobalStore = () => useState('global', () => ({
     },
 
     // Flag to track whether the config payload has been fetched at least once
-    configLoaded: false,
-
-    // Shared message dialog state
-    messageDialog: {
-        visible: false,
-        type: 'Info',
-        title: '',
-        message: ''
-    },
-
-    // Shared confirm dialog state
-    confirmDialog: {
-        visible: false,
-        title: '',
-        message: '',
-        icon: null,
-        onConfirm: null,
-        onCancel: null,
-        confirmButton: {
-            type: 'default',
-            text: ''
-        },
-        cancelButton: {
-            type: 'outline',
-            text: ''
-        }
-    }
+    configLoaded: false
 }));

@@ -1,4 +1,5 @@
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
+import { showMessageDialog } from 'theme-vintage/message-dialog';
 
 // Available theme modes for the webapp
 const availableThemes = [
@@ -104,70 +105,6 @@ export const delay = timeout => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
-// Open the shared message dialog
-export const showMessage = ({ type = 'Error', title = '', message = '' }) => {
-    const globalStore = useGlobalStore();
-    const defaultTitles = {
-        Error: translate('dialogs.errorTitle'),
-        Success: translate('dialogs.successTitle'),
-        Info: translate('dialogs.infoTitle')
-    };
-
-    // Set the dialog properties
-    globalStore.value.messageDialog = {
-        visible: true,
-        type,
-        title: title || defaultTitles[type] || translate('dialogs.messageTitle'),
-        message: message || translate('common.genericError')
-    };
-};
-
-// Close the shared message dialog
-export const closeMessage = () => {
-    const globalStore = useGlobalStore();
-    globalStore.value.messageDialog.visible = false;
-};
-
-// Open the shared confirm dialog
-export const showConfirmDialog = ({
-    title = '',
-    message = '',
-    icon = null,
-    onConfirm = null,
-    onCancel = null,
-    confirmButton = {},
-    cancelButton = {}
-}) => {
-    const globalStore = useGlobalStore();
-    globalStore.value.confirmDialog = {
-        ...globalStore.value.confirmDialog,
-        visible: true,
-        title: title || translate('dialogs.confirmTitle'),
-        message: message || translate('dialogs.confirmMessage'),
-        icon,
-        onConfirm,
-        onCancel,
-        confirmButton: {
-            ...globalStore.value.confirmDialog.confirmButton,
-            text: translate('dialogs.confirm'),
-            ...confirmButton
-        },
-        cancelButton: {
-            ...globalStore.value.confirmDialog.cancelButton,
-            text: translate('common.cancel'),
-            ...cancelButton
-        }
-    };
-};
-
-// Close the shared confirm dialog
-export const closeConfirmDialog = () => {
-    const globalStore = useGlobalStore();
-    globalStore.value.confirmDialog.visible = false;
-    globalStore.value.confirmDialog.onConfirm = null;
-    globalStore.value.confirmDialog.onCancel = null;
-};
-
 // Handle backend errors with a shared message strategy
 export const handleBackendErrors = ({ error, defaultMessage = '', showDialog = false }) => {
     const backendErrorPayload = error?.response?._data || error?.data || error?.response?.data || null;
@@ -181,10 +118,11 @@ export const handleBackendErrors = ({ error, defaultMessage = '', showDialog = f
 
     // Show a user-friendly error dialog if requested
     if (showDialog) {
-        showMessage({
+        showMessageDialog({
             type: 'Error',
             title: translate('dialogs.errorTitle'),
-            message: resolvedMessage
+            message: resolvedMessage,
+            closeText: translate('common.close')
         });
     }
 

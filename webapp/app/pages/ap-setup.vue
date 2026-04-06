@@ -4,11 +4,13 @@ import { Info, Wifi } from 'lucide-vue-next';
 import { Alert, AlertDescription, AlertTitle } from 'theme-vintage/alert';
 import { Button } from 'theme-vintage/button';
 import { Card, CardContent, CardHeader, CardFooter } from 'theme-vintage/card';
+import { showConfirmDialog } from 'theme-vintage/confirm-dialog';
+import { showMessageDialog } from 'theme-vintage/message-dialog';
 import { Field, FieldGroup, FieldLabel } from 'theme-vintage/field';
 import { Input } from 'theme-vintage/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'theme-vintage/select';
 import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
-import { handleBackendErrors, setBusy, showConfirmDialog, showMessage } from '~/composables/useUtils.js';
+import { handleBackendErrors, setBusy } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import BackgroundGrid from '~/components/BackgroundGrid.vue';
 import BrandLogo from '~/components/BrandLogo.vue';
@@ -38,10 +40,11 @@ const connectDeviceToWiFi = async () => {
         setBusy(true);
         const result = await connectToWiFi(ssid.value, password.value);
         globalStore.value.config.ssid = result.ssid || ssid.value;
-        showMessage({
+        showMessageDialog({
             type: 'Info',
             title: t('pages.wifi.connectedTitle'),
-            message: t('pages.wifi.connectedMessage', { ssid: result.ssid || ssid.value, hostname: result.hostname, ip: result.ip })
+            message: t('pages.wifi.connectedMessage', { ssid: result.ssid || ssid.value, hostname: result.hostname, ip: result.ip }),
+            closeText: t('common.close')
         });
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.wifi.connectError'), showDialog: true });
@@ -56,14 +59,10 @@ const handleConnectPress = () => {
     showConfirmDialog({
         title: t('pages.apSetup.connectConfirmTitle'),
         message: t('pages.apSetup.connectConfirmMessage', { ssid: ssid.value }),
-        confirmButton: {
-            text: t('pages.wifi.connectAction'),
-            type: 'primary'
-        },
-        cancelButton: {
-            text: t('common.cancel'),
-            type: 'secondary'
-        },
+        confirmText: t('pages.wifi.connectAction'),
+        cancelText: t('common.cancel'),
+        confirmButtonType: 'default',
+        cancelButtonType: 'outline',
         onConfirm: connectDeviceToWiFi
     });
 };
