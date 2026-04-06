@@ -18,7 +18,7 @@ import {
     SidebarProvider,
     SidebarTrigger
 } from 'theme-vintage/sidebar';
-import BackgroundGrid from '~/components/BackgroundGrid.vue';
+import BackgroundGrid from 'theme-vintage/background-grid';
 import CryptoLogo from '~/components/crypto/CryptoLogo.vue';
 import LanguageSelector from '~/components/LanguageSelector.vue';
 import ThemeSelector from '~/components/ThemeSelector.vue';

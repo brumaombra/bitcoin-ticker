@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue';
 import { Info, Wifi } from 'lucide-vue-next';
 import { Alert, AlertDescription, AlertTitle } from 'theme-vintage/alert';
+import BackgroundGrid from 'theme-vintage/background-grid';
 import { setBusy } from 'theme-vintage/busy-indicator';
 import { Button } from 'theme-vintage/button';
 import { Card, CardContent, CardHeader, CardFooter } from 'theme-vintage/card';
@@ -13,7 +14,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 't
 import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
-import BackgroundGrid from '~/components/BackgroundGrid.vue';
 import BrandLogo from '~/components/BrandLogo.vue';
 import CardHeaderWithIcon from '~/components/CardHeaderWithIcon.vue';
 import LanguageSelector from '~/components/LanguageSelector.vue';

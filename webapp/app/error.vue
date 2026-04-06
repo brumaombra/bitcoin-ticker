@@ -1,8 +1,8 @@
 <script setup>
 import { computed } from 'vue';
+import BackgroundGrid from 'theme-vintage/background-grid';
 import { Button } from 'theme-vintage/button';
 import { Card, CardContent, CardFooter } from 'theme-vintage/card';
-import BackgroundGrid from '~/components/BackgroundGrid.vue';
 import BrandLogo from '~/components/BrandLogo.vue';
 import LanguageSelector from '~/components/LanguageSelector.vue';
 import ThemeSelector from '~/components/ThemeSelector.vue';
