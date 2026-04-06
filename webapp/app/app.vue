@@ -1,8 +1,6 @@
 <script setup>
 import { onMounted } from 'vue';
 import { Busy } from 'theme-vintage/busy';
-import { ConfirmDialog } from 'theme-vintage/confirm-dialog';
-import { MessageDialog } from 'theme-vintage/message-dialog';
 import { getConfig, getNetworks } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, initializeCryptoCoin, initializeTheme, setBusy, setCryptoCoin } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
@@ -59,12 +57,6 @@ onMounted(async () => {
         <NuxtLayout>
             <NuxtPage />
         </NuxtLayout>
-
-        <!-- Confirm dialog -->
-        <ConfirmDialog />
-
-        <!-- Message dialog -->
-        <MessageDialog />
 
         <!-- Global busy overlay -->
         <Busy :show="globalStore.busy" :label="t('common.syncingDevice')" />
