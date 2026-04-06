@@ -1,8 +1,8 @@
 <script setup>
 import { computed } from 'vue';
 import { Info } from 'lucide-vue-next';
-import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '~/components/ui/alert-dialog';
-import { Button } from '~/components/ui/button';
+import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from 'theme-vintage/alert-dialog';
+import { Button } from 'theme-vintage/button';
 
 // Props
 const props = defineProps({

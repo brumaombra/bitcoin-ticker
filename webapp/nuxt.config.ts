@@ -22,8 +22,7 @@ export default defineNuxtConfig({
     ],
 
     modules: [
-        '@nuxtjs/i18n',
-        'shadcn-nuxt'
+        '@nuxtjs/i18n'
     ],
 
     i18n: {
@@ -43,11 +42,6 @@ export default defineNuxtConfig({
         ]
     },
 
-    shadcn: {
-        prefix: '',
-        componentDir: './app/components/ui'
-    },
-
     vite: {
         plugins: [
             tailwindcss()
@@ -55,11 +49,7 @@ export default defineNuxtConfig({
         optimizeDeps: {
             include: [
                 '@vueuse/core',
-                'clsx',
-                'tailwind-merge',
-                'lucide-vue-next',
-                'reka-ui',
-                'class-variance-authority'
+                'lucide-vue-next'
             ]
         }
     },

@@ -1,6 +1,6 @@
 <script setup>
-import { Label } from '~/components/ui/label';
-import { Switch } from '~/components/ui/switch';
+import { Label } from 'theme-vintage/label';
+import { Switch } from 'theme-vintage/switch';
 
 // Props
 const props = defineProps({

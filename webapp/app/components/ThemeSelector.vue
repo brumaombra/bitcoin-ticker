@@ -1,11 +1,11 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Check, Monitor, Moon, Sun } from 'lucide-vue-next';
+import { Button } from 'theme-vintage/button';
+import { Command, CommandGroup, CommandItem, CommandList } from 'theme-vintage/command';
+import { Popover, PopoverContent, PopoverTrigger } from 'theme-vintage/popover';
 import { getThemes, setTheme } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
-import { Button } from '~/components/ui/button';
-import { Command, CommandGroup, CommandItem, CommandList } from '~/components/ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
 
 const isOpen = ref(false);
 const globalStore = useGlobalStore();
