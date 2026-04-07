@@ -1,5 +1,5 @@
 <script setup>
-import { RotateCcw, Save, Settings } from 'lucide-vue-next';
+import { CheckCircle2, Info, RotateCcw, Save, Settings, X } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { setBusy } from 'theme-vintage/busy-indicator';
 import { Button } from 'theme-vintage/button';
@@ -9,11 +9,11 @@ import { showMessageDialog } from 'theme-vintage/message-dialog';
 import { Field, FieldDescription, FieldGroup, FieldLabel } from 'theme-vintage/field';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'theme-vintage/select';
 import { Slider } from 'theme-vintage/slider';
+import { SwitchFormComponent } from 'theme-vintage/switch-form-component';
 import { resetSettings, saveSettings } from '~/composables/useDeviceApi.js';
 import { getCryptoCoins, handleBackendErrors, setCryptoCoin } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import PageIntroCard from '~/components/PageIntroCard.vue';
-import SettingToggleItem from '~/components/SettingToggleItem.vue';
 import BitcoinLogo from '~/components/crypto/BitcoinLogo.vue';
 import KaspaLogo from '~/components/crypto/KaspaLogo.vue';
 
@@ -67,9 +67,11 @@ const saveCurrentSettings = async () => {
         await saveSettings(config.value);
         showMessageDialog({
             type: 'Success',
+            icon: CheckCircle2,
             title: t('dialogs.successTitle'),
             message: t('pages.settings.saveSuccess'),
-            closeText: t('common.close')
+            closeText: t('common.close'),
+            closeButtonIcon: X
         });
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.settings.saveError'), showDialog: true });
@@ -85,9 +87,11 @@ const resetSavedSettings = async () => {
         const result = await resetSettings();
         showMessageDialog({
             type: 'Info',
+            icon: Info,
             title: t('pages.settings.resetInfoTitle'),
             message: result.message || t('pages.settings.resetInfoMessage'),
-            closeText: t('common.close')
+            closeText: t('common.close'),
+            closeButtonIcon: X
         });
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.settings.resetError'), showDialog: true });
@@ -99,12 +103,15 @@ const resetSavedSettings = async () => {
 // Ask for confirmation before saving the current settings
 const handleSavePress = () => {
     showConfirmDialog({
+        icon: Save,
         title: t('pages.settings.saveConfirmTitle'),
         message: t('pages.settings.saveConfirmMessage'),
         confirmText: t('pages.settings.saveAction'),
         cancelText: t('common.keepEditing'),
         confirmButtonType: 'default',
         cancelButtonType: 'outline',
+        confirmButtonIcon: Save,
+        cancelButtonIcon: X,
         onConfirm: saveCurrentSettings
     });
 };
@@ -112,12 +119,15 @@ const handleSavePress = () => {
 // Ask for confirmation before resetting the saved settings
 const handleResetPress = () => {
     showConfirmDialog({
+        icon: RotateCcw,
         title: t('pages.settings.resetConfirmTitle'),
         message: t('pages.settings.resetConfirmMessage'),
         confirmText: t('pages.settings.resetAction'),
         cancelText: t('common.cancel'),
         confirmButtonType: 'default',
         cancelButtonType: 'outline',
+        confirmButtonIcon: RotateCcw,
+        cancelButtonIcon: X,
         onConfirm: resetSavedSettings
     });
 };
@@ -152,43 +162,43 @@ definePageMeta({
                     <!-- Visibility toggles -->
                     <CardContent class="space-y-3">
                         <!-- Current price -->
-                        <SettingToggleItem id="currentPrice"
+                        <SwitchFormComponent id="currentPrice"
                             v-model="config.currentPrice"
                             :label="t('pages.settings.visibility.currentPrice.label')"
                             :description="t('pages.settings.visibility.currentPrice.description')" />
 
                         <!-- Price change -->
-                        <SettingToggleItem id="priceChange"
+                        <SwitchFormComponent id="priceChange"
                             v-model="config.priceChange"
                             :label="t('pages.settings.visibility.priceChange.label')"
                             :description="t('pages.settings.visibility.priceChange.description')" />
 
                         <!-- Market cap -->
-                        <SettingToggleItem id="marketCap"
+                        <SwitchFormComponent id="marketCap"
                             v-model="config.marketCap"
                             :label="t('pages.settings.visibility.marketCap.label')"
                             :description="t('pages.settings.visibility.marketCap.description')" />
 
                         <!-- 24h volume -->
-                        <SettingToggleItem id="dailyHighLow"
+                        <SwitchFormComponent id="dailyHighLow"
                             v-model="config.dailyHighLow"
                             :label="t('pages.settings.visibility.dailyHighLow.label')"
                             :description="t('pages.settings.visibility.dailyHighLow.description')" />
 
                         <!-- 24h high / low -->
-                        <SettingToggleItem id="yearHighLow"
+                        <SwitchFormComponent id="yearHighLow"
                             v-model="config.yearHighLow"
                             :label="t('pages.settings.visibility.yearHighLow.label')"
                             :description="t('pages.settings.visibility.yearHighLow.description')" />
 
                         <!-- Open price -->
-                        <SettingToggleItem id="openPrice"
+                        <SwitchFormComponent id="openPrice"
                             v-model="config.openPrice"
                             :label="t('pages.settings.visibility.openPrice.label')"
                             :description="t('pages.settings.visibility.openPrice.description')" />
 
                         <!-- Volume -->
-                        <SettingToggleItem id="volume"
+                        <SwitchFormComponent id="volume"
                             v-model="config.volume"
                             :label="t('pages.settings.visibility.volume.label')"
                             :description="t('pages.settings.visibility.volume.description')" />

@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Info, RefreshCw, Wifi } from 'lucide-vue-next';
+import { CheckCircle2, Info, RefreshCw, Wifi, X } from 'lucide-vue-next';
 import { Alert, AlertDescription, AlertTitle } from 'theme-vintage/alert';
 import BackgroundGrid from 'theme-vintage/background-grid';
 import { setBusy } from 'theme-vintage/busy-indicator';
@@ -43,9 +43,11 @@ const connectDeviceToWiFi = async () => {
         globalStore.value.config.ssid = result.ssid || ssid.value;
         showMessageDialog({
             type: 'Info',
+            icon: CheckCircle2,
             title: t('pages.wifi.connectedTitle'),
             message: t('pages.wifi.connectedMessage', { ssid: result.ssid || ssid.value, hostname: result.hostname, ip: result.ip }),
-            closeText: t('common.close')
+            closeText: t('common.close'),
+            closeButtonIcon: X
         });
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.wifi.connectError'), showDialog: true });
@@ -58,12 +60,15 @@ const connectDeviceToWiFi = async () => {
 // Ask for confirmation before disabling AP mode and joining the selected WiFi network
 const handleConnectPress = () => {
     showConfirmDialog({
+        icon: Wifi,
         title: t('pages.apSetup.connectConfirmTitle'),
         message: t('pages.apSetup.connectConfirmMessage', { ssid: ssid.value }),
         confirmText: t('pages.wifi.connectAction'),
         cancelText: t('common.cancel'),
         confirmButtonType: 'default',
         cancelButtonType: 'outline',
+        confirmButtonIcon: Wifi,
+        cancelButtonIcon: X,
         onConfirm: connectDeviceToWiFi
     });
 };

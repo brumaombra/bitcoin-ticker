@@ -1,5 +1,5 @@
 <script setup>
-import { Info, KeyRound, Save } from 'lucide-vue-next';
+import { CheckCircle2, Info, KeyRound, Save, X } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { Alert, AlertDescription, AlertTitle } from 'theme-vintage/alert';
 import { setBusy } from 'theme-vintage/busy-indicator';
@@ -31,9 +31,11 @@ const saveCurrentApiKey = async () => {
         globalStore.value.config.apiKey = apiKey.value;
         showMessageDialog({
             type: 'Success',
+            icon: CheckCircle2,
             title: t('dialogs.successTitle'),
             message: t('pages.apiKey.saveSuccess'),
-            closeText: t('common.close')
+            closeText: t('common.close'),
+            closeButtonIcon: X
         });
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.apiKey.saveError'), showDialog: true });
@@ -46,12 +48,15 @@ const saveCurrentApiKey = async () => {
 // Ask for confirmation before overwriting the stored API key
 const handleSavePress = () => {
     showConfirmDialog({
+        icon: KeyRound,
         title: t('pages.apiKey.confirmTitle'),
         message: t('pages.apiKey.confirmMessage'),
         confirmText: t('pages.apiKey.saveAction'),
         cancelText: t('common.keepEditing'),
         confirmButtonType: 'default',
         cancelButtonType: 'outline',
+        confirmButtonIcon: Save,
+        cancelButtonIcon: X,
         onConfirm: saveCurrentApiKey
     });
 };

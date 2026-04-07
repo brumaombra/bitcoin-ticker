@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Info, RefreshCw, Wifi } from 'lucide-vue-next';
+import { CheckCircle2, Info, RefreshCw, Wifi, X } from 'lucide-vue-next';
 import { Alert, AlertDescription, AlertTitle } from 'theme-vintage/alert';
 import { setBusy } from 'theme-vintage/busy-indicator';
 import { Button } from 'theme-vintage/button';
@@ -50,9 +50,11 @@ const connectDeviceToWiFi = async () => {
         globalStore.value.config.ssid = result.ssid || ssid.value;
         showMessageDialog({
             type: 'Info',
+            icon: CheckCircle2,
             title: t('pages.wifi.connectedTitle'),
             message: t('pages.wifi.connectedMessage', { ssid: result.ssid || ssid.value, hostname: result.hostname, ip: result.ip }),
-            closeText: t('common.close')
+            closeText: t('common.close'),
+            closeButtonIcon: X
         });
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.wifi.connectError'), showDialog: true });
@@ -65,12 +67,15 @@ const connectDeviceToWiFi = async () => {
 // Ask for confirmation before replacing the device WiFi connection
 const handleConnectPress = () => {
     showConfirmDialog({
+        icon: Wifi,
         title: t('pages.wifi.connectConfirmTitle'),
         message: t('pages.wifi.connectConfirmMessage', { ssid: ssid.value }),
         confirmText: t('pages.wifi.connectAction'),
         cancelText: t('common.cancel'),
         confirmButtonType: 'default',
         cancelButtonType: 'outline',
+        confirmButtonIcon: Wifi,
+        cancelButtonIcon: X,
         onConfirm: connectDeviceToWiFi
     });
 };
