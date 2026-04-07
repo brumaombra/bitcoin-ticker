@@ -7,8 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'theme
 import { showConfirmDialog } from 'theme-vintage/confirm-dialog';
 import { showMessageDialog } from 'theme-vintage/message-dialog';
 import { Field, FieldDescription, FieldGroup, FieldLabel } from 'theme-vintage/field';
+import { SliderFormComponent } from 'theme-vintage/slider-form-component';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'theme-vintage/select';
-import { Slider } from 'theme-vintage/slider';
 import { SwitchFormComponent } from 'theme-vintage/switch-form-component';
 import { resetSettings, saveSettings } from '~/composables/useDeviceApi.js';
 import { getCryptoCoins, handleBackendErrors, setCryptoCoin } from '~/composables/useUtils.js';
@@ -255,24 +255,22 @@ definePageMeta({
                             </Field>
 
                             <!-- Matrix intensity -->
-                            <Field class="gap-4">
-                                <div class="flex items-center justify-between">
-                                    <FieldLabel for="matrixIntensity">{{ t('pages.settings.matrixIntensity.label') }}</FieldLabel>
-                                    <span class="text-sm font-semibold text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ matrixIntensityPercentage }}%</span>
-                                </div>
-                                <Slider id="matrixIntensity" :model-value="[config.matrixIntensity]" :min="0" :max="15" @update:model-value="val => config.matrixIntensity = val[0]" />
-                                <FieldDescription>{{ t('pages.settings.matrixIntensity.note') }}</FieldDescription>
-                            </Field>
+                            <SliderFormComponent id="matrixIntensity"
+                                v-model="config.matrixIntensity"
+                                :label="t('pages.settings.matrixIntensity.label')"
+                                :description="t('pages.settings.matrixIntensity.note')"
+                                :min="0"
+                                :max="15"
+                                :value-text="`${matrixIntensityPercentage}%`" />
 
                             <!-- Scroll speed -->
-                            <Field class="gap-4">
-                                <div class="flex items-center justify-between">
-                                    <FieldLabel for="scrollSpeed">{{ t('pages.settings.scrollSpeed.label') }}</FieldLabel>
-                                    <span class="text-sm font-semibold text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">{{ scrollSpeedPercentage }}%</span>
-                                </div>
-                                <Slider id="scrollSpeed" :model-value="[config.scrollSpeed]" :min="0" :max="15" @update:model-value="val => config.scrollSpeed = val[0]" />
-                                <FieldDescription>{{ t('pages.settings.scrollSpeed.note') }}</FieldDescription>
-                            </Field>
+                            <SliderFormComponent id="scrollSpeed"
+                                v-model="config.scrollSpeed"
+                                :label="t('pages.settings.scrollSpeed.label')"
+                                :description="t('pages.settings.scrollSpeed.note')"
+                                :min="0"
+                                :max="15"
+                                :value-text="`${scrollSpeedPercentage}%`" />
                         </FieldGroup>
                     </CardContent>
                 </Card>
