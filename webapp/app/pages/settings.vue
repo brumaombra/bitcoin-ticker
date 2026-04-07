@@ -1,5 +1,5 @@
 <script setup>
-import { Settings } from 'lucide-vue-next';
+import { RotateCcw, Save, Settings } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { setBusy } from 'theme-vintage/busy-indicator';
 import { Button } from 'theme-vintage/button';
@@ -269,8 +269,17 @@ definePageMeta({
 
                 <!-- Action buttons -->
                 <div class="flex flex-col gap-3 md:flex-row md:justify-end">
-                    <Button variant="default" type="submit" class="w-full md:w-auto">{{ t('pages.settings.saveAction') }}</Button>
-                    <Button variant="outline" type="button" class="w-full md:w-auto" @click="handleResetPress">{{ t('pages.settings.resetAction') }}</Button>
+                    <!-- Save button -->
+                    <Button variant="default" type="submit" class="w-full md:w-auto">
+                        <Save :stroke-width="1.8" class="size-4" />
+                        {{ t('pages.settings.saveAction') }}
+                    </Button>
+                    
+                    <!-- Reset button -->
+                    <Button variant="outline" type="button" class="w-full md:w-auto" @click="handleResetPress">
+                        <RotateCcw :stroke-width="1.8" class="size-4" />
+                        {{ t('pages.settings.resetAction') }}
+                    </Button>
                 </div>
             </form>
         </div>

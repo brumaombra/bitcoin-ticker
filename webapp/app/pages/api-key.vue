@@ -1,5 +1,5 @@
 <script setup>
-import { Info, KeyRound } from 'lucide-vue-next';
+import { Info, KeyRound, Save } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { Alert, AlertDescription, AlertTitle } from 'theme-vintage/alert';
 import { setBusy } from 'theme-vintage/busy-indicator';
@@ -100,7 +100,11 @@ definePageMeta({
 
                 <!-- Card footer -->
                 <CardFooter>
-                    <Button variant="default" type="button" class="w-full" :disabled="!isFormValid" @click="handleSavePress">{{ t('pages.apiKey.saveAction') }}</Button>
+                    <!-- Save button -->
+                    <Button variant="default" type="button" class="w-full" :disabled="!isFormValid" @click="handleSavePress">
+                        <Save :stroke-width="1.8" class="size-4" />
+                        {{ t('pages.apiKey.saveAction') }}
+                    </Button>
                 </CardFooter>
             </Card>
         </div>

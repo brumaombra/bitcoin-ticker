@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Info, Wifi } from 'lucide-vue-next';
+import { Info, RefreshCw, Wifi } from 'lucide-vue-next';
 import { Alert, AlertDescription, AlertTitle } from 'theme-vintage/alert';
 import BackgroundGrid from 'theme-vintage/background-grid';
 import { setBusy } from 'theme-vintage/busy-indicator';
@@ -122,6 +122,7 @@ const refreshSSIDList = async () => {
 
                                         <!-- Refresh button -->
                                         <Button type="button" variant="outline" :disabled="isLoading" @click="refreshSSIDList">
+                                            <RefreshCw :stroke-width="1.8" class="size-4" :class="isLoading ? 'animate-spin' : ''" />
                                             <span v-if="isLoading">{{ t('common.refreshing') }}</span>
                                             <span v-else>{{ t('common.refresh') }}</span>
                                         </Button>
@@ -163,7 +164,11 @@ const refreshSSIDList = async () => {
 
                     <!-- Card footer -->
                     <CardFooter>
-                        <Button variant="default" type="button" class="w-full" :disabled="!ssid || !password" @click="handleConnectPress">{{ t('pages.wifi.connectAction') }}</Button>
+                        <!-- Connect button -->
+                        <Button variant="default" type="button" class="w-full" :disabled="!ssid || !password" @click="handleConnectPress">
+                            <Wifi :stroke-width="1.8" class="size-4" />
+                            {{ t('pages.wifi.connectAction') }}
+                        </Button>
                     </CardFooter>
                 </Card>
             </div>

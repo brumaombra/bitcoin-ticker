@@ -1,4 +1,5 @@
 <script setup>
+import { ArrowLeft } from 'lucide-vue-next';
 import { computed } from 'vue';
 import BackgroundGrid from 'theme-vintage/background-grid';
 import { Button } from 'theme-vintage/button';
@@ -87,6 +88,7 @@ const handleBackHome = async () => {
                     <CardFooter class="items-start flex-col gap-3 sm:flex-row sm:items-center">
                         <!-- Back home button -->
                         <Button variant="default" @click="handleBackHome">
+                            <ArrowLeft class="size-4" :stroke-width="1.8" />
                             {{ t('errors.backToSetup') }}
                         </Button>
                     </CardFooter>
