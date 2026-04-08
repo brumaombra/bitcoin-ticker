@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from 'vue';
-import { setBusy } from 'ui-vintage/busy-indicator';
+import { setBusy } from '@brumaombra/ui-vintage/busy-indicator';
 import { getConfig, getNetworks } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors, initializeCryptoCoin, initializeTheme, setCryptoCoin } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';

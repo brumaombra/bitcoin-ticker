@@ -1,9 +1,9 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Check } from 'lucide-vue-next';
-import { Button } from 'ui-vintage/button';
-import { Command, CommandGroup, CommandItem, CommandList } from 'ui-vintage/command';
-import { Popover, PopoverContent, PopoverTrigger } from 'ui-vintage/popover';
+import { Button } from '@brumaombra/ui-vintage/button';
+import { Command, CommandGroup, CommandItem, CommandList } from '@brumaombra/ui-vintage/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@brumaombra/ui-vintage/popover';
 import EnglishFlag from '~/components/flags/EnglishFlag.vue';
 import ItalianFlag from '~/components/flags/ItalianFlag.vue';
 

@@ -1,14 +1,14 @@
 <script setup>
 import { CheckCircle2, Info, KeyRound, Save, X } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
-import { Alert, AlertDescription, AlertTitle } from 'ui-vintage/alert';
-import { setBusy } from 'ui-vintage/busy-indicator';
-import { Button } from 'ui-vintage/button';
-import { Card, CardContent, CardFooter } from 'ui-vintage/card';
-import { showConfirmDialog } from 'ui-vintage/confirm-dialog';
-import { showMessageDialog } from 'ui-vintage/message-dialog';
-import { Field, FieldGroup, FieldLabel } from 'ui-vintage/field';
-import { Input } from 'ui-vintage/input';
+import { Alert, AlertDescription, AlertTitle } from '@brumaombra/ui-vintage/alert';
+import { setBusy } from '@brumaombra/ui-vintage/busy-indicator';
+import { Button } from '@brumaombra/ui-vintage/button';
+import { Card, CardContent, CardFooter } from '@brumaombra/ui-vintage/card';
+import { showConfirmDialog } from '@brumaombra/ui-vintage/confirm-dialog';
+import { showMessageDialog } from '@brumaombra/ui-vintage/message-dialog';
+import { Field, FieldGroup, FieldLabel } from '@brumaombra/ui-vintage/field';
+import { Input } from '@brumaombra/ui-vintage/input';
 import { saveApiKey } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';

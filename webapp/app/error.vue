@@ -1,9 +1,9 @@
 <script setup>
 import { ArrowLeft } from 'lucide-vue-next';
 import { computed } from 'vue';
-import BackgroundGrid from 'ui-vintage/background-grid';
-import { Button } from 'ui-vintage/button';
-import { Card, CardContent, CardFooter } from 'ui-vintage/card';
+import BackgroundGrid from '@brumaombra/ui-vintage/background-grid';
+import { Button } from '@brumaombra/ui-vintage/button';
+import { Card, CardContent, CardFooter } from '@brumaombra/ui-vintage/card';
 import BrandLogo from '~/components/BrandLogo.vue';
 import LanguageSelector from '~/components/LanguageSelector.vue';
 import ThemeSelector from '~/components/ThemeSelector.vue';

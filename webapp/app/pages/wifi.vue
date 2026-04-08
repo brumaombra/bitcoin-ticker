@@ -1,15 +1,15 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { CheckCircle2, Info, RefreshCw, Wifi, X } from 'lucide-vue-next';
-import { Alert, AlertDescription, AlertTitle } from 'ui-vintage/alert';
-import { setBusy } from 'ui-vintage/busy-indicator';
-import { Button } from 'ui-vintage/button';
-import { Card, CardContent, CardFooter } from 'ui-vintage/card';
-import { showConfirmDialog } from 'ui-vintage/confirm-dialog';
-import { showMessageDialog } from 'ui-vintage/message-dialog';
-import { Field, FieldGroup, FieldLabel } from 'ui-vintage/field';
-import { Input } from 'ui-vintage/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'ui-vintage/select';
+import { Alert, AlertDescription, AlertTitle } from '@brumaombra/ui-vintage/alert';
+import { setBusy } from '@brumaombra/ui-vintage/busy-indicator';
+import { Button } from '@brumaombra/ui-vintage/button';
+import { Card, CardContent, CardFooter } from '@brumaombra/ui-vintage/card';
+import { showConfirmDialog } from '@brumaombra/ui-vintage/confirm-dialog';
+import { showMessageDialog } from '@brumaombra/ui-vintage/message-dialog';
+import { Field, FieldGroup, FieldLabel } from '@brumaombra/ui-vintage/field';
+import { Input } from '@brumaombra/ui-vintage/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@brumaombra/ui-vintage/select';
 import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
 import { handleBackendErrors } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';

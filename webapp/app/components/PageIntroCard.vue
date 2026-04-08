@@ -1,5 +1,5 @@
 <script setup>
-import { Card, CardContent, CardHeader } from 'ui-vintage/card';
+import { Card, CardContent, CardHeader } from '@brumaombra/ui-vintage/card';
 import CardHeaderWithIcon from '~/components/CardHeaderWithIcon.vue';
 
 // Props

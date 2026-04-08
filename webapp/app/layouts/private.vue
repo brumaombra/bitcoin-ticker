@@ -2,8 +2,8 @@
 import { computed, resolveComponent } from 'vue';
 import { useRoute } from 'vue-router';
 import { KeyRound, Settings, Wifi } from 'lucide-vue-next';
-import { DashboardShell } from 'ui-vintage/dashboard-shell';
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from 'ui-vintage/sidebar';
+import { DashboardShell } from '@brumaombra/ui-vintage/dashboard-shell';
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@brumaombra/ui-vintage/sidebar';
 import CryptoLogo from '~/components/crypto/CryptoLogo.vue';
 import LanguageSelector from '~/components/LanguageSelector.vue';
 import ThemeSelector from '~/components/ThemeSelector.vue';

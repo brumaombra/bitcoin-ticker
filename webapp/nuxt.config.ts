@@ -48,7 +48,14 @@ export default defineNuxtConfig({
         ],
         optimizeDeps: {
             include: [
-                'lucide-vue-next'
+                'lucide-vue-next',
+                '@brumaombra/ui-vintage/busy-indicator',
+                '@brumaombra/ui-vintage/background-grid',
+                '@brumaombra/ui-vintage/button',
+                '@brumaombra/ui-vintage/card',
+                '@brumaombra/ui-vintage/message-dialog',
+                '@brumaombra/ui-vintage/command',
+                '@brumaombra/ui-vintage/popover'
             ]
         }
     },

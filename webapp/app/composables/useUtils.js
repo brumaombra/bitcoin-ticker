@@ -1,6 +1,6 @@
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import { CircleAlert, X } from 'lucide-vue-next';
-import { showMessageDialog } from 'ui-vintage/message-dialog';
+import { showMessageDialog } from '@brumaombra/ui-vintage/message-dialog';
 
 // Available theme modes for the webapp
 const availableThemes = [
