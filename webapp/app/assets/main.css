@@ -1,4 +1,4 @@
-@import "theme-vintage/style.css";
+@import "ui-vintage/style.css";
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 

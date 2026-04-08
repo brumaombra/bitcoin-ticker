@@ -1,15 +1,15 @@
 <script setup>
 import { CheckCircle2, Info, RotateCcw, Save, Settings, X } from 'lucide-vue-next';
 import { computed } from 'vue';
-import { setBusy } from 'theme-vintage/busy-indicator';
-import { Button } from 'theme-vintage/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'theme-vintage/card';
-import { showConfirmDialog } from 'theme-vintage/confirm-dialog';
-import { showMessageDialog } from 'theme-vintage/message-dialog';
-import { Field, FieldDescription, FieldGroup, FieldLabel } from 'theme-vintage/field';
-import { SliderFormComponent } from 'theme-vintage/slider-form-component';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'theme-vintage/select';
-import { SwitchFormComponent } from 'theme-vintage/switch-form-component';
+import { setBusy } from 'ui-vintage/busy-indicator';
+import { Button } from 'ui-vintage/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'ui-vintage/card';
+import { showConfirmDialog } from 'ui-vintage/confirm-dialog';
+import { showMessageDialog } from 'ui-vintage/message-dialog';
+import { Field, FieldDescription, FieldGroup, FieldLabel } from 'ui-vintage/field';
+import { SliderFormComponent } from 'ui-vintage/slider-form-component';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'ui-vintage/select';
+import { SwitchFormComponent } from 'ui-vintage/switch-form-component';
 import { resetSettings, saveSettings } from '~/composables/useDeviceApi.js';
 import { getCryptoCoins, handleBackendErrors, setCryptoCoin } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
