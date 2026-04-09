@@ -39,7 +39,7 @@ Bitcoin Ticker is designed for a simple hardware-to-web workflow: the ESP32 fetc
 - Web-based configuration for WiFi credentials, API key, and display settings
 - Adjustable scroll speed, selected metrics, and matrix behavior
 - Nuxt 4 interface that mirrors the firmware configuration flow
-- Reusable frontend UI primitives, shared dialogs, and confirmation flows
+- `@brumaombra/ui-vintage` UI system shared across layout, forms, dialogs, and overlays
 - English and Italian localization with browser language detection
 - Captive-portal setup flow in AP mode and `ticker.local` hostname access after joining WiFi
 
@@ -50,7 +50,7 @@ Bitcoin Ticker is built around three cooperating parts:
 
 - 🔌 **ESP32 firmware** handles WiFi, data fetching, settings storage, and the embedded HTTP server
 - 📺 **MAX7219 LED matrix** displays the live Bitcoin ticker output
-- 🌐 **Nuxt web app** provides the browser-based setup and configuration interface with theme and language support
+- 🌐 **Nuxt web app** provides the browser-based setup and configuration interface with theme, language, and shared UI-system support
 
 ### 🔄 Data Flow
 
@@ -118,17 +118,31 @@ The Nuxt app provides the browser-based device configuration interface.
 - Lets users configure WiFi and API credentials
 - Controls display behavior and matrix preferences
 - Supports English and Italian localization
-- Includes confirm and message dialogs for critical actions
-- Uses reusable UI primitives under `webapp/app/components/ui/`
-- Shares device API helpers and theme utilities in `webapp/app/composables/`
+- Uses the `@brumaombra/ui-vintage` package for the shared design system
+- Includes library-managed busy, confirm, and message flows for critical actions
+- Keeps device API helpers, theme state, and crypto-accent logic in `webapp/app/composables/`
 - Uses static generation for the embedded web UI bundle that is packaged into firmware assets
+
+### 🎨 UI System
+
+The web app now splits UI responsibilities between the shared package and the app itself.
+
+- `@brumaombra/ui-vintage` provides the reusable UI system
+- `webapp/app/components/` contains app-specific pieces such as branding, crypto logos, language/theme selectors, and page intro wrappers
+- `webapp/app/layouts/private.vue` composes the shared `DashboardShell` with app-defined navigation, branding, and toolbar controls
+- `webapp/app/assets/main.css` imports the shared library stylesheet and then layers the app-specific crypto accent tokens on top
+- `webapp/app/composables/useUtils.js` and `webapp/app/composables/stores/useGlobalStore.js` keep theme mode, crypto coin selection, and device-backed UI state local to the app
 
 Important web app areas:
 
 - `webapp/app/pages/` for the main setup screens
-- `webapp/app/components/ui/` for shared interface elements
+- `@brumaombra/ui-vintage` for shared layout, form, dialog, and overlay primitives
+- `webapp/app/components/` for app-specific presentation components and selectors
+- `webapp/app/assets/main.css` for shared-style import and app-level design tokens
+- `webapp/app/layouts/private.vue` for the dashboard shell adapter
 - `webapp/app/composables/useDeviceApi.js` for device communication
-- `webapp/app/composables/useUtils.js` for theme, dialog, and app helpers
+- `webapp/app/composables/useUtils.js` for theme, crypto accent, dialog, and app helpers
+- `webapp/app/composables/stores/useGlobalStore.js` for shared device/UI state
 - `webapp/i18n/locales/` for translations
 
 <a id="build-and-deploy"></a>
@@ -147,6 +161,7 @@ Important web app areas:
 - Run `npm run dev` for local work.
 - Run `npm run build` for a production static build.
 - Run `npm run build:embedded` to export the embedded web UI bundle used by the firmware.
+- The web app consumes the `@brumaombra/ui-vintage` package.
 
 ### 📦 Embedded Web UI
 
