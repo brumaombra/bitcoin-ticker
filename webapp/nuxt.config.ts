@@ -58,7 +58,9 @@ export default defineNuxtConfig({
                 '@brumaombra/ui-vintage/command',
                 '@brumaombra/ui-vintage/popover',
                 '@brumaombra/ui-vintage/dashboard-shell',
-                '@brumaombra/ui-vintage/sidebar'
+                '@brumaombra/ui-vintage/sidebar',
+                '@brumaombra/ui-vintage/alert',
+                '@brumaombra/ui-vintage/input'
             ]
         }
     },
