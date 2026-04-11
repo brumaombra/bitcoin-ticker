@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Check } from 'lucide-vue-next';
+import { HugeiconsIcon } from '@hugeicons/vue';
+import { Tick02Icon } from '@hugeicons/core-free-icons';
 import { Button } from '@brumaombra/ui-vintage/button';
 import { Command, CommandGroup, CommandItem, CommandList } from '@brumaombra/ui-vintage/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@brumaombra/ui-vintage/popover';
@@ -58,7 +59,7 @@ const handleSelectLanguage = async language => {
                         <CommandItem v-for="option in languageOptions" :key="option.key" :value="option.key" @select="handleSelectLanguage(option.key)">
                             <component :is="getFlagComponent(option.flagCode)" class="h-4 w-[1.35rem] rounded-[2px]" />
                             <span class="flex-1">{{ option.label }}</span>
-                            <Check :stroke-width="1.8" class="ml-auto h-4 w-4 shrink-0" :class="locale === option.key ? 'opacity-100' : 'opacity-0'" />
+                            <HugeiconsIcon :icon="Tick02Icon" :stroke-width="1.8" class="ml-auto h-4 w-4 shrink-0" :class="locale === option.key ? 'opacity-100' : 'opacity-0'" />
                         </CommandItem>
                     </CommandGroup>
                 </CommandList>

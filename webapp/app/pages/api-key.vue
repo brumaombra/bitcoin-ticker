@@ -1,6 +1,7 @@
 <script setup>
-import { CheckCircle2, Info, KeyRound, Save, X } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import { Cancel01Icon, CheckmarkCircle02Icon, InformationCircleIcon, Key01Icon, SaveIcon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/vue';
 import { Alert, AlertDescription, AlertTitle } from '@brumaombra/ui-vintage/alert';
 import { setBusy } from '@brumaombra/ui-vintage/busy-indicator';
 import { Button } from '@brumaombra/ui-vintage/button';
@@ -10,13 +11,19 @@ import { showMessageDialog } from '@brumaombra/ui-vintage/message-dialog';
 import { Field, FieldGroup, FieldLabel } from '@brumaombra/ui-vintage/field';
 import { Input } from '@brumaombra/ui-vintage/input';
 import { saveApiKey } from '~/composables/useDeviceApi.js';
-import { handleBackendErrors } from '~/composables/useUtils.js';
+import { createIconComponent, handleBackendErrors } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import PageIntroCard from '~/components/PageIntroCard.vue';
 
 const { t } = useI18n();
 const globalStore = useGlobalStore();
 const apiKey = ref('');
+
+// Icon components
+const successDialogIcon = createIconComponent(CheckmarkCircle02Icon);
+const keyDialogIcon = createIconComponent(Key01Icon);
+const saveDialogIcon = createIconComponent(SaveIcon);
+const closeDialogIcon = createIconComponent(Cancel01Icon);
 
 // Require a non-empty API key before submitting
 const isFormValid = computed(() => {
@@ -31,11 +38,11 @@ const saveCurrentApiKey = async () => {
         globalStore.value.config.apiKey = apiKey.value;
         showMessageDialog({
             type: 'Success',
-            icon: CheckCircle2,
+            icon: successDialogIcon,
             title: t('dialogs.successTitle'),
             message: t('pages.apiKey.saveSuccess'),
             closeText: t('common.close'),
-            closeButtonIcon: X
+            closeButtonIcon: closeDialogIcon
         });
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.apiKey.saveError'), showDialog: true });
@@ -48,15 +55,15 @@ const saveCurrentApiKey = async () => {
 // Ask for confirmation before overwriting the stored API key
 const handleSavePress = () => {
     showConfirmDialog({
-        icon: KeyRound,
+        icon: keyDialogIcon,
         title: t('pages.apiKey.confirmTitle'),
         message: t('pages.apiKey.confirmMessage'),
         confirmText: t('pages.apiKey.saveAction'),
         cancelText: t('common.keepEditing'),
         confirmButtonType: 'default',
         cancelButtonType: 'outline',
-        confirmButtonIcon: Save,
-        cancelButtonIcon: X,
+        confirmButtonIcon: saveDialogIcon,
+        cancelButtonIcon: closeDialogIcon,
         onConfirm: saveCurrentApiKey
     });
 };
@@ -74,7 +81,7 @@ definePageMeta({
             <PageIntroCard :eyebrow="t('pages.apiKey.eyebrow')"
                 :title="t('pages.apiKey.title')"
                 :description="t('pages.apiKey.description')"
-                :icon="KeyRound"
+                :icon="Key01Icon"
                 :icon-label="t('pages.apiKey.label')" />
         </div>
 
@@ -93,7 +100,7 @@ definePageMeta({
 
                             <!-- API key guidance -->
                             <Alert>
-                                <Info :stroke-width="1.8" />
+                                <HugeiconsIcon :icon="InformationCircleIcon" :stroke-width="1.8" />
                                 <AlertTitle>{{ t('common.note') }}</AlertTitle>
                                 <AlertDescription>
                                     {{ t('pages.apiKey.note') }}
@@ -107,7 +114,7 @@ definePageMeta({
                 <CardFooter>
                     <!-- Save button -->
                     <Button variant="default" type="button" class="w-full" :disabled="!isFormValid" @click="handleSavePress">
-                        <Save :stroke-width="1.8" class="size-4" />
+                        <HugeiconsIcon :icon="SaveIcon" :stroke-width="1.8" class="size-4" />
                         {{ t('pages.apiKey.saveAction') }}
                     </Button>
                 </CardFooter>

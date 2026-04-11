@@ -1,6 +1,7 @@
 <script setup>
-import { CheckCircle2, Info, RotateCcw, Save, Settings, X } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { Cancel01Icon, CheckmarkCircle02Icon, InformationCircleIcon, RefreshIcon, SaveIcon, Settings01Icon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/vue';
 import { setBusy } from '@brumaombra/ui-vintage/busy-indicator';
 import { Button } from '@brumaombra/ui-vintage/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@brumaombra/ui-vintage/card';
@@ -11,7 +12,7 @@ import { SliderFormComponent } from '@brumaombra/ui-vintage/slider-form-componen
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@brumaombra/ui-vintage/select';
 import { SwitchFormComponent } from '@brumaombra/ui-vintage/switch-form-component';
 import { resetSettings, saveSettings } from '~/composables/useDeviceApi.js';
-import { getCryptoCoins, handleBackendErrors, setCryptoCoin } from '~/composables/useUtils.js';
+import { createIconComponent, getCryptoCoins, handleBackendErrors, setCryptoCoin } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import PageIntroCard from '~/components/PageIntroCard.vue';
 import BitcoinLogo from '~/components/crypto/BitcoinLogo.vue';
@@ -20,6 +21,13 @@ import KaspaLogo from '~/components/crypto/KaspaLogo.vue';
 const globalStore = useGlobalStore();
 const cryptoCoins = getCryptoCoins();
 const { t } = useI18n();
+
+// Icon components
+const successDialogIcon = createIconComponent(CheckmarkCircle02Icon);
+const infoDialogIcon = createIconComponent(InformationCircleIcon);
+const resetDialogIcon = createIconComponent(RefreshIcon);
+const saveDialogIcon = createIconComponent(SaveIcon);
+const closeDialogIcon = createIconComponent(Cancel01Icon);
 
 // Reactive config payload
 const config = computed(() => globalStore.value.config);
@@ -67,11 +75,11 @@ const saveCurrentSettings = async () => {
         await saveSettings(config.value);
         showMessageDialog({
             type: 'Success',
-            icon: CheckCircle2,
+            icon: successDialogIcon,
             title: t('dialogs.successTitle'),
             message: t('pages.settings.saveSuccess'),
             closeText: t('common.close'),
-            closeButtonIcon: X
+            closeButtonIcon: closeDialogIcon
         });
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.settings.saveError'), showDialog: true });
@@ -87,11 +95,11 @@ const resetSavedSettings = async () => {
         const result = await resetSettings();
         showMessageDialog({
             type: 'Info',
-            icon: Info,
+            icon: infoDialogIcon,
             title: t('pages.settings.resetInfoTitle'),
             message: result.message || t('pages.settings.resetInfoMessage'),
             closeText: t('common.close'),
-            closeButtonIcon: X
+            closeButtonIcon: closeDialogIcon
         });
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.settings.resetError'), showDialog: true });
@@ -103,15 +111,15 @@ const resetSavedSettings = async () => {
 // Ask for confirmation before saving the current settings
 const handleSavePress = () => {
     showConfirmDialog({
-        icon: Save,
+        icon: saveDialogIcon,
         title: t('pages.settings.saveConfirmTitle'),
         message: t('pages.settings.saveConfirmMessage'),
         confirmText: t('pages.settings.saveAction'),
         cancelText: t('common.keepEditing'),
         confirmButtonType: 'default',
         cancelButtonType: 'outline',
-        confirmButtonIcon: Save,
-        cancelButtonIcon: X,
+        confirmButtonIcon: saveDialogIcon,
+        cancelButtonIcon: closeDialogIcon,
         onConfirm: saveCurrentSettings
     });
 };
@@ -119,15 +127,15 @@ const handleSavePress = () => {
 // Ask for confirmation before resetting the saved settings
 const handleResetPress = () => {
     showConfirmDialog({
-        icon: RotateCcw,
+        icon: resetDialogIcon,
         title: t('pages.settings.resetConfirmTitle'),
         message: t('pages.settings.resetConfirmMessage'),
         confirmText: t('pages.settings.resetAction'),
         cancelText: t('common.cancel'),
         confirmButtonType: 'default',
         cancelButtonType: 'outline',
-        confirmButtonIcon: RotateCcw,
-        cancelButtonIcon: X,
+        confirmButtonIcon: resetDialogIcon,
+        cancelButtonIcon: closeDialogIcon,
         onConfirm: resetSavedSettings
     });
 };
@@ -146,7 +154,7 @@ definePageMeta({
                 :eyebrow="t('pages.settings.eyebrow')"
                 :title="t('pages.settings.title')"
                 :description="t('pages.settings.description')"
-                :icon="Settings"
+                :icon="Settings01Icon"
                 :icon-label="t('nav.settings.label')" />
 
             <!-- Settings form -->
@@ -279,13 +287,13 @@ definePageMeta({
                 <div class="flex flex-col gap-3 md:flex-row md:justify-end">
                     <!-- Save button -->
                     <Button variant="default" type="submit" class="w-full md:w-auto">
-                        <Save :stroke-width="1.8" class="size-4" />
+                        <HugeiconsIcon :icon="SaveIcon" :stroke-width="1.8" class="size-4" />
                         {{ t('pages.settings.saveAction') }}
                     </Button>
                     
                     <!-- Reset button -->
                     <Button variant="outline" type="button" class="w-full md:w-auto" @click="handleResetPress">
-                        <RotateCcw :stroke-width="1.8" class="size-4" />
+                        <HugeiconsIcon :icon="RefreshIcon" :stroke-width="1.8" class="size-4" />
                         {{ t('pages.settings.resetAction') }}
                     </Button>
                 </div>

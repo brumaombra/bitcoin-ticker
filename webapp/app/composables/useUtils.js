@@ -1,6 +1,26 @@
+import { defineComponent, h } from 'vue';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
-import { CircleAlert, X } from 'lucide-vue-next';
+import { HugeiconsIcon } from '@hugeicons/vue';
+import { Alert02Icon, Cancel01Icon } from '@hugeicons/core-free-icons';
 import { showMessageDialog } from '@brumaombra/ui-vintage/message-dialog';
+
+// Create the icon component (to pass as a prop)
+export const createIconComponent = icon => defineComponent({
+    name: icon?.name || icon?.iconName || 'DialogIcon',
+    inheritAttrs: false,
+    setup(_, { attrs }) {
+        return () => h(HugeiconsIcon, {
+            icon,
+            color: 'currentColor',
+            strokeWidth: attrs.strokeWidth ?? attrs['stroke-width'] ?? 1.8,
+            ...attrs
+        });
+    }
+});
+
+// Icon components
+const circleAlertIconComponent = createIconComponent(Alert02Icon);
+const closeIconComponent = createIconComponent(Cancel01Icon);
 
 // Available theme modes for the webapp
 const availableThemes = [
@@ -114,11 +134,11 @@ export const handleBackendErrors = ({ error, defaultMessage = '', showDialog = f
     if (showDialog) {
         showMessageDialog({
             type: 'Error',
-            icon: CircleAlert,
+            icon: circleAlertIconComponent,
             title: translate('dialogs.errorTitle'),
             message: resolvedMessage,
             closeText: translate('common.close'),
-            closeButtonIcon: X
+            closeButtonIcon: closeIconComponent
         });
     }
 

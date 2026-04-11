@@ -11,10 +11,11 @@
         "postinstall": "nuxt prepare"
     },
     "dependencies": {
+        "@brumaombra/ui-vintage": "0.2.2",
+        "@hugeicons/core-free-icons": "4.1.1",
+        "@hugeicons/vue": "1.0.5",
         "@nuxtjs/i18n": "10.2.3",
-        "lucide-vue-next": "1.0.0",
-        "nuxt": "4.4.2",
-        "@brumaombra/ui-vintage": "0.2.2"
+        "nuxt": "4.4.2"
     },
     "devDependencies": {
         "@tailwindcss/vite": "4.2.2",

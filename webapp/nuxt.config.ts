@@ -48,14 +48,17 @@ export default defineNuxtConfig({
         ],
         optimizeDeps: {
             include: [
-                'lucide-vue-next',
+                '@hugeicons/vue',
+                '@hugeicons/core-free-icons',
                 '@brumaombra/ui-vintage/busy-indicator',
                 '@brumaombra/ui-vintage/background-grid',
                 '@brumaombra/ui-vintage/button',
                 '@brumaombra/ui-vintage/card',
                 '@brumaombra/ui-vintage/message-dialog',
                 '@brumaombra/ui-vintage/command',
-                '@brumaombra/ui-vintage/popover'
+                '@brumaombra/ui-vintage/popover',
+                '@brumaombra/ui-vintage/dashboard-shell',
+                '@brumaombra/ui-vintage/sidebar'
             ]
         }
     },

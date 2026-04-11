@@ -1,6 +1,7 @@
 <script setup>
-import { ArrowLeft } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { HugeiconsIcon } from '@hugeicons/vue';
+import { ArrowLeft01Icon } from '@hugeicons/core-free-icons';
 import BackgroundGrid from '@brumaombra/ui-vintage/background-grid';
 import { Button } from '@brumaombra/ui-vintage/button';
 import { Card, CardContent, CardFooter } from '@brumaombra/ui-vintage/card';
@@ -88,7 +89,7 @@ const handleBackHome = async () => {
                     <CardFooter class="items-start flex-col gap-3 sm:flex-row sm:items-center">
                         <!-- Back home button -->
                         <Button variant="default" @click="handleBackHome">
-                            <ArrowLeft class="size-4" :stroke-width="1.8" />
+                            <HugeiconsIcon :icon="ArrowLeft01Icon" class="size-4" :stroke-width="1.8" />
                             {{ t('errors.backToSetup') }}
                         </Button>
                     </CardFooter>

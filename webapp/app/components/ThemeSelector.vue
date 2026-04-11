@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Check, Monitor, Moon, Sun } from 'lucide-vue-next';
+import { HugeiconsIcon } from '@hugeicons/vue';
+import { ComputerSettingsIcon, Moon02Icon, Sun03Icon, Tick02Icon } from '@hugeicons/core-free-icons';
 import { Button } from '@brumaombra/ui-vintage/button';
 import { Command, CommandGroup, CommandItem, CommandList } from '@brumaombra/ui-vintage/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@brumaombra/ui-vintage/popover';
@@ -24,11 +25,11 @@ const themeOptions = computed(() => {
 // Resolve the icon for each theme mode
 const getThemeIcon = theme => {
     if (theme === 'light') {
-        return Sun;
+        return Sun03Icon;
     } else if (theme === 'dark') {
-        return Moon;
+        return Moon02Icon;
     } else {
-        return Monitor;
+        return ComputerSettingsIcon;
     }
 };
 
@@ -48,7 +49,7 @@ const handleSelectTheme = theme => {
     <Popover v-model:open="isOpen">
         <PopoverTrigger as-child>
             <Button variant="outline" size="icon" :aria-label="t('theme.toggleMenu')">
-                <component :is="currentThemeIcon" :stroke-width="1.8" class="h-5 w-5" />
+                <HugeiconsIcon :icon="currentThemeIcon" :stroke-width="1.8" class="h-5 w-5" />
             </Button>
         </PopoverTrigger>
 
@@ -58,9 +59,9 @@ const handleSelectTheme = theme => {
                 <CommandList>
                     <CommandGroup :heading="t('theme.title')">
                         <CommandItem v-for="option in themeOptions" :key="option.key" :value="option.key" @select="handleSelectTheme(option.key)">
-                            <component :is="option.icon" :stroke-width="1.8" class="h-4 w-4" />
+                            <HugeiconsIcon :icon="option.icon" :stroke-width="1.8" class="h-4 w-4" />
                             <span class="flex-1">{{ option.label }}</span>
-                            <Check :stroke-width="1.8" class="ml-auto h-4 w-4 shrink-0" :class="globalStore.themeMode === option.key ? 'opacity-100' : 'opacity-0'" />
+                            <HugeiconsIcon :icon="Tick02Icon" :stroke-width="1.8" class="ml-auto h-4 w-4 shrink-0" :class="globalStore.themeMode === option.key ? 'opacity-100' : 'opacity-0'" />
                         </CommandItem>
                     </CommandGroup>
                 </CommandList>

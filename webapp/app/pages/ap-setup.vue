@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { CheckCircle2, Info, RefreshCw, Wifi, X } from 'lucide-vue-next';
+import { Cancel01Icon, CheckmarkCircle02Icon, InformationCircleIcon, RefreshIcon, WifiFullSignalIcon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/vue';
 import { Alert, AlertDescription, AlertTitle } from '@brumaombra/ui-vintage/alert';
 import BackgroundGrid from '@brumaombra/ui-vintage/background-grid';
 import { setBusy } from '@brumaombra/ui-vintage/busy-indicator';
@@ -12,7 +13,7 @@ import { Field, FieldGroup, FieldLabel } from '@brumaombra/ui-vintage/field';
 import { Input } from '@brumaombra/ui-vintage/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@brumaombra/ui-vintage/select';
 import { connectToWiFi, getNetworks } from '~/composables/useDeviceApi.js';
-import { handleBackendErrors } from '~/composables/useUtils.js';
+import { createIconComponent, handleBackendErrors } from '~/composables/useUtils.js';
 import { useGlobalStore } from '~/composables/stores/useGlobalStore.js';
 import BrandLogo from '~/components/BrandLogo.vue';
 import CardHeaderWithIcon from '~/components/CardHeaderWithIcon.vue';
@@ -24,6 +25,11 @@ const ssid = ref('');
 const password = ref('');
 const isLoading = ref(false);
 const { t } = useI18n();
+
+// Icon components
+const successDialogIcon = createIconComponent(CheckmarkCircle02Icon);
+const wifiDialogIcon = createIconComponent(WifiFullSignalIcon);
+const closeDialogIcon = createIconComponent(Cancel01Icon);
 
 // Available network options
 const networkOptions = computed(() => {
@@ -43,11 +49,11 @@ const connectDeviceToWiFi = async () => {
         globalStore.value.config.ssid = result.ssid || ssid.value;
         showMessageDialog({
             type: 'Info',
-            icon: CheckCircle2,
+            icon: successDialogIcon,
             title: t('pages.wifi.connectedTitle'),
             message: t('pages.wifi.connectedMessage', { ssid: result.ssid || ssid.value, hostname: result.hostname, ip: result.ip }),
             closeText: t('common.close'),
-            closeButtonIcon: X
+            closeButtonIcon: closeDialogIcon
         });
     } catch (error) {
         handleBackendErrors({ error, defaultMessage: t('pages.wifi.connectError'), showDialog: true });
@@ -60,15 +66,15 @@ const connectDeviceToWiFi = async () => {
 // Ask for confirmation before disabling AP mode and joining the selected WiFi network
 const handleConnectPress = () => {
     showConfirmDialog({
-        icon: Wifi,
+        icon: wifiDialogIcon,
         title: t('pages.apSetup.connectConfirmTitle'),
         message: t('pages.apSetup.connectConfirmMessage', { ssid: ssid.value }),
         confirmText: t('pages.wifi.connectAction'),
         cancelText: t('common.cancel'),
         confirmButtonType: 'default',
         cancelButtonType: 'outline',
-        confirmButtonIcon: Wifi,
-        cancelButtonIcon: X,
+        confirmButtonIcon: wifiDialogIcon,
+        cancelButtonIcon: closeDialogIcon,
         onConfirm: connectDeviceToWiFi
     });
 };
@@ -110,7 +116,7 @@ const refreshSSIDList = async () => {
                     <CardHeader>
                         <CardHeaderWithIcon :eyebrow="t('pages.apSetup.eyebrow')"
                             :title="t('pages.apSetup.title')"
-                            :icon="Wifi"
+                            :icon="WifiFullSignalIcon"
                             :icon-label="t('nav.wifi.label')" />
                     </CardHeader>
 
@@ -127,7 +133,7 @@ const refreshSSIDList = async () => {
 
                                         <!-- Refresh button -->
                                         <Button type="button" variant="outline" :disabled="isLoading" @click="refreshSSIDList">
-                                            <RefreshCw :stroke-width="1.8" class="size-4" :class="isLoading ? 'animate-spin' : ''" />
+                                            <HugeiconsIcon :icon="RefreshIcon" :stroke-width="1.8" class="size-4" :class="isLoading ? 'animate-spin' : ''" />
                                             <span v-if="isLoading">{{ t('common.refreshing') }}</span>
                                             <span v-else>{{ t('common.refresh') }}</span>
                                         </Button>
@@ -157,7 +163,7 @@ const refreshSSIDList = async () => {
 
                                 <!-- Connection note -->
                                 <Alert>
-                                    <Info :stroke-width="1.8" />
+                                    <HugeiconsIcon :icon="InformationCircleIcon" :stroke-width="1.8" />
                                     <AlertTitle>{{ t('common.note') }}</AlertTitle>
                                     <AlertDescription>
                                         {{ t('pages.wifi.note') }}
@@ -171,7 +177,7 @@ const refreshSSIDList = async () => {
                     <CardFooter>
                         <!-- Connect button -->
                         <Button variant="default" type="button" class="w-full" :disabled="!ssid || !password" @click="handleConnectPress">
-                            <Wifi :stroke-width="1.8" class="size-4" />
+                            <HugeiconsIcon :icon="WifiFullSignalIcon" :stroke-width="1.8" class="size-4" />
                             {{ t('pages.wifi.connectAction') }}
                         </Button>
                     </CardFooter>

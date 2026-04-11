@@ -1,17 +1,23 @@
 <script setup>
 import { computed, resolveComponent } from 'vue';
 import { useRoute } from 'vue-router';
-import { KeyRound, Settings, Wifi } from 'lucide-vue-next';
+import { Key01Icon, Settings01Icon, WifiFullSignalIcon } from '@hugeicons/core-free-icons';
 import { DashboardShell } from '@brumaombra/ui-vintage/dashboard-shell';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@brumaombra/ui-vintage/sidebar';
 import CryptoLogo from '~/components/crypto/CryptoLogo.vue';
 import LanguageSelector from '~/components/LanguageSelector.vue';
 import ThemeSelector from '~/components/ThemeSelector.vue';
+import { createIconComponent } from '~/composables/useUtils.js';
 
 const { t } = useI18n();
 const route = useRoute();
 const localePath = useLocalePath();
 const nuxtLinkComponent = resolveComponent('NuxtLink');
+
+// Icon components
+const wifiSidebarIcon = createIconComponent(WifiFullSignalIcon);
+const settingsSidebarIcon = createIconComponent(Settings01Icon);
+const apiKeySidebarIcon = createIconComponent(Key01Icon);
 
 // Sidebar sections and items configuration
 const sidebarSections = computed(() => ([{
@@ -21,21 +27,21 @@ const sidebarSections = computed(() => ([{
         id: 'wifi',
         label: t('nav.wifi.label'),
         description: t('nav.wifi.description'),
-        icon: Wifi,
+        icon: wifiSidebarIcon,
         to: localePath('/wifi'),
         active: route.path === localePath('/wifi')
     }, {
         id: 'settings',
         label: t('nav.settings.label'),
         description: t('nav.settings.description'),
-        icon: Settings,
+        icon: settingsSidebarIcon,
         to: localePath('/settings'),
         active: route.path === localePath('/settings')
     }, {
         id: 'api-key',
         label: t('nav.apiKey.label'),
         description: t('nav.apiKey.description'),
-        icon: KeyRound,
+        icon: apiKeySidebarIcon,
         to: localePath('/api-key'),
         active: route.path === localePath('/api-key')
     }]
